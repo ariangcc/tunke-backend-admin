@@ -16,40 +16,43 @@ ma = Marshmallow()
 locales = ['es_ES', 'es']
 
 class AddUpdateDelete():
-	def add(self, resource):
-		db.session.add(resource)
-		return db.session.commit()
-	
-	def update(self):
-		return db.session.commit()
-	
-	def delete(self, resource):
-		db.session.delete(resource)
-		return db.session.commit()
+    def add(self, resource):
+        db.session.add(resource)
+        return db.session.commit()
+    
+    def update(self):
+        return db.session.commit()
+    
+    def delete(self, resource):
+        db.session.delete(resource)
+        return db.session.commit()
 
 class User(UserMixin, AddUpdateDelete, db.Model):
-	id = db.Column(db.Integer, primary_key=True)
-	email = db.Column(db.String(100), unique=True)
-	password = db.Column(db.String(100))
+    __tablename__ = 'user'
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(100), unique=True)
+    name = db.Column(db.String(100))
+    password = db.Column(db.String(100))
+    id_profile = db.Column('id_profile', db.ForeignKey('profile.id'))
 
-	def generate_auth_token(self, expiration = 600):
-		s = Serializer(SECRET_KEY, expires_in = expiration)
-		return s.dumps({ 'id': self.id })
+    def generate_auth_token(self, expiration = 600):
+        s = Serializer(SECRET_KEY, expires_in = expiration)
+        return s.dumps({ 'id': self.id })
 
-	@staticmethod
-	def verify_auth_token(token):
-		print("Verificando token...")
-		s = Serializer(SECRET_KEY)
-		try:
-			data = s.loads(token)
-		except SignatureExpired:
-			return None # valid token, but expired
-		except BadSignature:
-			return None # invalid token
-		user = User.query.get(data['id'])
-		return user
+    @staticmethod
+    def verify_auth_token(token):
+        print("Verificando token...")
+        s = Serializer(SECRET_KEY)
+        try:
+            data = s.loads(token)
+        except SignatureExpired:
+            return None # valid token, but expired
+        except BadSignature:
+            return None # invalid token
+        user = User.query.get(data['id'])
+        return user
 
 class UserSchema(ma.Schema):
-	id = fields.Integer(dump_only=True)
-	email = fields.String(required=True, validate=from_wtforms([Email()], locales=locales))
-	url = ma.URLFor('api.userresource', id='<id>', _external=True)
+    id = fields.Integer(dump_only=True)
+    email = fields.String(required=True, validate=from_wtforms([Email()], locales=locales))
+    url = ma.URLFor('api.userresource', id='<id>', _external=True)
