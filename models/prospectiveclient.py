@@ -26,3 +26,4 @@ class ProspectiveClient(db.Model, AddUpdateDelete):
     cellphone1 = db.Column(db.String(20))
     cellphone2 = db.Column(db.String(20))
     id_person = db.Column('id_person', db.ForeignKey('person.id'))
+    clients = db.relationship("Client")

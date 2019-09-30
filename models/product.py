@@ -18,9 +18,9 @@ class AddUpdateDelete():
         return db.session.commit()
 
 class Product(db.Model, AddUpdateDelete):
-    id_salesrecord = db.Column('id_salesrecord', db.ForeignKey(SalesRecord.id)) 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
     description = db.Column(db.String(100))
     active = db.Column(db.Boolean)
     accounts = db.relationship('Account', backref = 'account')
+    id_salesrecord = db.Column('id_salesrecord', db.ForeignKey(SalesRecord.id)) 

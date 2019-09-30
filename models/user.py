@@ -7,7 +7,6 @@ from flask_login import UserMixin
 from flask_marshmallow import Marshmallow
 from flask_sqlalchemy import SQLAlchemy
 from app import db
-from config import SECRET_KEY
 from passlib.apps import custom_app_context as password_context
 import re
 from itsdangerous import (TimedJSONWebSignatureSerializer as Serializer, BadSignature, SignatureExpired)
@@ -36,13 +35,13 @@ class User(UserMixin, AddUpdateDelete, db.Model):
     id_profile = db.Column('id_profile', db.ForeignKey('profile.id'))
 
     def generate_auth_token(self, expiration = 600):
-        s = Serializer(SECRET_KEY, expires_in = expiration)
+        s = Serializer('hola', expires_in = expiration)
         return s.dumps({ 'id': self.id })
 
     @staticmethod
     def verify_auth_token(token):
         print("Verificando token...")
-        s = Serializer(SECRET_KEY)
+        s = Serializer('hola')
         try:
             data = s.loads(token)
         except SignatureExpired:

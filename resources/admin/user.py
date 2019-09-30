@@ -1,5 +1,5 @@
 from models.user import User, UserSchema
-from resources.security import AuthRequiredResource
+from resources.admin.security import AuthRequiredResource
 from flask_restful import Resource
 import status
 

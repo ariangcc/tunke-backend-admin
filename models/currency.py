@@ -22,3 +22,4 @@ class Currency(db.Model, AddUpdateDelete):
     currency_name = db.Column(db.String(100), unique=True)
     currency_symbol = db.Column(db.String(5), unique=True)
     currency_code = db.Column(db.String(3), unique=True)
+    accounts = db.relationship("Account")

@@ -1,6 +1,6 @@
 from models.transaction import Transaction
 from models.account import Account
-from resources.security import AuthRequiredResource
+from resources.admin.security import AuthRequiredResource
 from flask_restful import Resource
 import status
 

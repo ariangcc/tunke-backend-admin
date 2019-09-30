@@ -3,8 +3,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from resources.utils import password_policy
 from flask import request, jsonify, make_response, g
 from app import db
-from resources.user import user_schema
-from resources.security import verify_password
+from resources.admin.user import user_schema
+from resources.admin.security import verify_password
 import status
 from flask_restful import Resource
 from sqlalchemy.exc import SQLAlchemyError

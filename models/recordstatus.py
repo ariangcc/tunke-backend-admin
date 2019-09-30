@@ -20,3 +20,4 @@ class RecordStatus(db.Model, AddUpdateDelete):
     __tablename__ = 'recordstatus'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
+    salesrecords = db.relationship("SalesRecord")

@@ -1,6 +1,6 @@
 from models.account import Account
 from models.accounttype import AccountType
-from resources.security import AuthRequiredResource
+from resources.admin.security import AuthRequiredResource
 from flask_restful import Resource
 import status
 

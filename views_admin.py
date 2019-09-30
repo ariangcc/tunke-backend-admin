@@ -2,11 +2,11 @@ from flask import Blueprint
 from flask_restful import Api, Resource
 
 # Importing Resources from resources/
-from resources.user import UserListResource, UserResource
-from resources.authentication import LoginResource
-from resources.authentication import SignupResource
-from resources.account import AccountListResource, AccountResource
-from resources.transaction import TransactionListResource, TransactionResource
+from resources.admin.user import UserListResource, UserResource
+from resources.admin.authentication import LoginResource
+from resources.admin.authentication import SignupResource
+from resources.admin.account import AccountListResource, AccountResource
+from resources.admin.transaction import TransactionListResource, TransactionResource
 
 api_bp = Blueprint('api', __name__)
 api = Api(api_bp)

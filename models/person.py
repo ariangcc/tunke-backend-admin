@@ -30,4 +30,5 @@ class Person(db.Model, AddUpdateDelete):
     nationality = db.Column(db.String(100))
     vehicle1_plate = db.Column(db.String(100))
     vehicle2_plate = db.Column(db.String(100))
+    prospectiveclients = db.relationship("ProspectiveClient")
 
