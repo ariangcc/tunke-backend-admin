@@ -1,5 +1,5 @@
 from models.person import Person
-from models.prospectiveclient import ProspectiveClient
+from models.prospectiveClient import ProspectiveClient
 from models.client import Client
 from models.blacklist import Blacklist
 from models.account import Account
@@ -11,41 +11,41 @@ import status
 
 class DniValidationResource(Resource):
     def get(self):
-        request_dict = request.get_json()
-        if not request_dict:
+        requestDict = request.get_json()
+        if not requestDict:
             response = {'error': 'No input data provided'}
             return response, status.HTTP_400_BAD_REQUEST
         
-        document_number = request_dict['document_number']
+        documentNumber = requestDict['documentNumber']
         try:
-            blacklisted = (Blacklist.query.filter_by(document_number=document_number).first())
+            blacklisted = (Blacklist.query.filter_by(documentNumber=documentNumber).first())
             d = {}
             if(blacklisted):
                 d['tipo'] = 3
                 return d, status.HTTP_200_OK
             else:
-                person = (Person.query.filter_by(document_number=document_number).first())
+                person = (Person.query.filter_by(documentNumber=documentNumber).first())
                 if not person:
                     d['error'] = "La persona ingresada no existe en los registros"
                     return d, status.HTTP_400_BAD_REQUEST
 
-                prospectiveclient = (ProspectiveClient.query.filter_by(id_person=person.id).first())
+                prospectiveClient = (ProspectiveClient.query.filter_by(idPerson=person.id).first())
 
-                if not prospectiveclient:
+                if not prospectiveClient:
                     d['tipo'] = 2 #Es no cliente, aun no es prospecto
-                    d.update(person.get_json())
+                    d.update(person.toJson())
                     return d, status.HTTP_200_OK
                 
-                client = (Client.query.filter_by(id_prospectiveclient=prospectiveclient.id).first())
+                client = (Client.query.filter_by(idProspectiveClient=prospectiveClient.id).first())
 
                 if not client:
                     d['tipo'] = 2 #Es no cliente, ya es prospecto
-                    d.update(person.get_json())
+                    d.update(person.toJson())
                     return d, status.HTTP_200_OK
                 
                 d['tipo'] = 1
-                d.update(person.get_json())
-                d.update(prospectiveclient.get_json())
+                d.update(person.toJson())
+                d.update(prospectiveClient.toJson())
                 return d, status.HTTP_200_OK
             
         except SQLAlchemyError as e:

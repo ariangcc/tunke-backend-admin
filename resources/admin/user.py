@@ -1,9 +1,7 @@
-from models.user import User, UserSchema
+from models.user import User
 from resources.admin.security import AuthRequiredResource
 from flask_restful import Resource
 import status
-
-user_schema = UserSchema()
 
 class UserResource(AuthRequiredResource):
     def get(self, id):

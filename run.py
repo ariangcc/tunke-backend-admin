@@ -1,16 +1,16 @@
 import sys
-from app import create_app
+from app import CreateApp
 
 app = None
 if(sys.argv[1] == "db"):
-    app_type = 0
+    appType = 0
 else:
-    app_type = int(sys.argv[1])
-print(app_type)
-if app_type == 0:
-    app = create_app('configclient', app_type)
+    appType = int(sys.argv[1])
+print(appType)
+if appType == 0:
+    app = CreateApp('configclient', appType)
 else:
-    app = create_app('configadmin', app_type)
+    app = CreateApp('configadmin', appType)
 
 print(app.config['PORT'])
 

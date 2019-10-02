@@ -10,16 +10,7 @@ class AccountResource(AuthRequiredResource):
         try:
             account = Account.get_or_404(id)
             d = {}
-            d['id'] = account.id
-            d['account_number'] = account.account_number
-            d['balance'] = account.balance
-            d['opening_date'] = account.opening_date
-            d['closing_date'] = account.closing_date
-            d['card_number'] = account.card_number
-            d['account_type'] =  AccountType.get_or_404(account.id_account_type).type_name
-            #d['product_name'] = account.name
-            #d['product_description'] = account.description 
-            #d['active'] = account.active
+            #getjson for account
             return d, status.HTTP_200_OK
         except SQLAlchemyError as e:
             db.session.rollback()
@@ -33,16 +24,7 @@ class AccountListResource(AuthRequiredResource):
             l = []
             for account in accounts:
                 d = {}
-                d['id'] = account.id
-                d['account_number'] = account.account_number
-                d['balance'] = account.balance
-                d['opening_date'] = account.opening_date
-                d['closing_date'] = account.closing_date
-                d['card_number'] = account.card_number
-                d['account_type'] =  AccountType.get_or_404(account.id_account_type).type_name
-                #d['product_name'] = account.name
-                #d['product_description'] = account.description 
-                #d['active'] = account.active
+                #getjson for account
                 l.append(d)
             
             return l, status.HTTP_200_OK

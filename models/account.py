@@ -1,34 +1,15 @@
-from marshmallow import Schema, fields, pre_load
-from marshmallow import Schema, fields
-from models.product import Product
-from flask_marshmallow import Marshmallow
-from flask_sqlalchemy import SQLAlchemy
 from app import db
-
-ma = Marshmallow()
-locales = ['es_ES', 'es']
-
-class AddUpdateDelete():
-    def add(self, resource):
-        db.session.add(resource)
-        return db.session.commit()
-    
-    def update(self):
-        return db.session.commit()
-    
-    def delete(self, resource):
-        db.session.delete(resource)
-        return db.session.commit()
+from models.utils import AddUpdateDelete
 
 class Account(db.Model, AddUpdateDelete):
     __tablename__ = 'account'
     id = db.Column(db.Integer, primary_key=True)
-    account_number = db.Column(db.String(100), unique=True)
+    accountNumber = db.Column(db.String(100), unique=True)
     balance = db.Column(db.Float)
-    opening_date = db.Column(db.DateTime)
-    closing_date = db.Column(db.DateTime)
-    card_number = db.Column(db.String(100))
-    id_account_type = db.Column(db.Integer, db.ForeignKey('accounttype.id'))
-    id_product = db.Column(db.Integer, db.ForeignKey('product.id'))
-    id_currency = db.Column('id_currency', db.ForeignKey('currency.id'))
+    openingDate = db.Column(db.DateTime)
+    closingDate = db.Column(db.DateTime)
+    cardNumber = db.Column(db.String(100))
+    idAccountType = db.Column(db.Integer, db.ForeignKey('accountType.id'))
+    idProduct = db.Column(db.Integer, db.ForeignKey('product.id'))
+    idCurrency = db.Column('idCurrency', db.ForeignKey('currency.id'))
     transactions = db.relationship("Transaction")

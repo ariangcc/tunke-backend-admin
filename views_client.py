@@ -2,13 +2,13 @@ from flask import Blueprint
 from flask_restful import Api, Resource
 
 # Importing Resources from resources/
-from resources.client.openaccount import OpenAccountResource
-from resources.client.dnivalidation import DniValidationResource
-from resources.admin.prospectiveclient import ProspectiveClientListResource
+from resources.client.openAccount import OpenAccountResource
+from resources.client.dniValidation import DniValidationResource
+from resources.admin.prospectiveClient import ProspectiveClientListResource
 
-api_bp = Blueprint('api', __name__)
-api = Api(api_bp)
+apiBp = Blueprint('api', __name__)
+api = Api(apiBp)
 
-api.add_resource(OpenAccountResource, '/openaccount/')
-api.add_resource(DniValidationResource, '/dnivalidation/')
-api.add_resource(ProspectiveClientListResource, '/prospectiveclients/')
+api.add_resource(OpenAccountResource, '/openAccount/')
+api.add_resource(DniValidationResource, '/dniValidation/')
+api.add_resource(ProspectiveClientListResource, '/prospectiveClients/')

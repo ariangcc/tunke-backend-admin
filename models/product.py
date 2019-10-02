@@ -1,26 +1,12 @@
-from marshmallow import Schema, fields, pre_load
-from marshmallow import Schema, fields
-from models.salesrecord import SalesRecord
-from flask_marshmallow import Marshmallow
-from flask_sqlalchemy import SQLAlchemy
 from app import db
-
-class AddUpdateDelete():
-    def add(self, resource):
-        db.session.add(resource)
-        return db.session.commit()
-    
-    def update(self):
-        return db.session.commit()
-    
-    def delete(self, resource):
-        db.session.delete(resource)
-        return db.session.commit()
-
+from models.utils import AddUpdateDelete
+from models.account import Account
+from models.salesRecord import SalesRecord
 class Product(db.Model, AddUpdateDelete):
+    __tablename__ = 'product'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
     description = db.Column(db.String(100))
     active = db.Column(db.Boolean)
-    accounts = db.relationship('Account', backref = 'account')
-    salesrecords = db.relationship("SalesRecord")
+    accounts = db.relationship(Account)
+    salesRecords = db.relationship(SalesRecord)

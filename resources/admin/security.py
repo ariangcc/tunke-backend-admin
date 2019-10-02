@@ -7,15 +7,15 @@ from werkzeug.security import check_password_hash
 auth = HTTPBasicAuth()
 
 @auth.verify_password
-def verify_password(email_or_token, password):
+def VerifyPassword(emailOrToken, password):
     # first try to authenticate by token
-    user = User.verify_auth_token(email_or_token)
+    user = User.VerifyAuthToken(emailOrToken)
     if user:
         print("Token valido!")
     if not user:
         # try to authenticate with email/password
         print("Token invalido, chekeando password")
-        user = User.query.filter_by(email=email_or_token).first()
+        user = User.query.filter_by(email=emailOrToken).first()
         if not user or not check_password_hash(user.password, password):
             return False
     

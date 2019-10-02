@@ -2,7 +2,7 @@
 from password_strength import PasswordPolicy
 from random import randint
 
-password_policy = PasswordPolicy.from_names(
+passwordPolicy = PasswordPolicy.from_names(
     length=5,  # min length: 8
     uppercase=1,  # need min. 2 uppercase letters
     numbers=1,  # need min. 2 digits

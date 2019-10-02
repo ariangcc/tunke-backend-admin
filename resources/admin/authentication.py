@@ -1,45 +1,44 @@
 from models.user import User
 from werkzeug.security import generate_password_hash, check_password_hash
-from resources.utils import password_policy
+from resources.utils import passwordPolicy
 from flask import request, jsonify, make_response, g
 from app import db
-from resources.admin.user import user_schema
-from resources.admin.security import verify_password
+from resources.admin.security import VerifyPassword
 import status
 from flask_restful import Resource
 from sqlalchemy.exc import SQLAlchemyError
 
 class SignupResource(Resource):
     def post(self):
-        request_dict = request.get_json()
-        if not request_dict:
+        requestDict = request.get_json()
+        if not requestDict:
             response = {'error': 'No input data provided'}
             return response, status.HTTP_400_BAD_REQUEST
 
-        email = request_dict['email']
-        password = request_dict['password']
+        email = requestDict['email']
+        password = requestDict['password']
 
-        user_email = User.query.filter_by(email=email).first()
+        user = User.query.filter_by(email=email).first()
         
         #Check if user with same email exists
-        if user_email:
+        if user:
             resp = {"error": "Email address already exists."}
             return resp, status.HTTP_400_BAD_REQUEST
 
         #Check password strength
-        if len(password_policy.test(password)):
+        if len(passwordPolicy.test(password)):
             resp = {"error": "Please check password strength. It should have at least 5 characters, 1 uppercase letter, 1 number and 1 special character."}
             return resp, status.HTTP_400_BAD_REQUEST
 
-        new_user = User(email=email, password=generate_password_hash(password, method='sha256'))
+        newUser = User(email=email, password=generate_password_hash(password, method='sha256'))
 
         try:
-            db.session.add(new_user)
+            db.session.add(newUser)
             db.session.commit()
 
             user = User.query.filter_by(email=email).first()
             g.user = user
-            token = g.user.generate_auth_token()
+            token = g.user.GenerateAuthToken()
             
             d = {}
             
@@ -56,14 +55,14 @@ class SignupResource(Resource):
 
 class LoginResource(Resource):
     def post(self):
-        request_dict = request.get_json()
-        if not request_dict:
+        requestDict = request.get_json()
+        if not requestDict:
             response = {'error': 'No input data provided'}
             return response, status.HTTP_400_BAD_REQUEST
 
-        email = request_dict['email']
-        password = request_dict['password']
-        remember = True if request_dict['remember'] else False
+        email = requestDict['email']
+        password = requestDict['password']
+        remember = True if requestDict['remember'] else False
 
         user = User.query.filter_by(email=email).first()
 
@@ -72,7 +71,7 @@ class LoginResource(Resource):
             return resp, status.HTTP_400_BAD_REQUEST
 
         g.user = user
-        token = g.user.generate_auth_token()
+        token = g.user.GenerateAuthToken()
         d = {}
         d['email'] = user.email
         d['id'] = user.id
@@ -83,12 +82,12 @@ class LoginResource(Resource):
 
 class VerifyTokenResource(Resource):
     def get(self):
-        request_dict = request.get_json()
-        if not request_dict:
+        requestDict = request.get_json()
+        if not requestDict:
             response = {'error': 'No input data provided'}
             return response, status.HTTP_400_BAD_REQUEST
         
-        token = request_dict['token']
-        valid = verify_password(token, "unused")
+        token = requestDict['token']
+        valid = VerifyPassword(token, "unused")
         resp = {'valid': valid}
         return resp, status.HTTP_200_OK

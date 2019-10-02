@@ -12,7 +12,7 @@ class TransactionResource(AuthRequiredResource):
             d['id'] = transaction.id
             d['datetime'] = transaction.datetime
             d['amount'] = transaction.amount
-            d['account_number'] = Account.get_or_404(transaction.id_account).account_number
+            d['accountNumber'] = Account.get_or_404(transaction.idAccount).accountNumber
             return d, status.HTTP_200_OK
         except SQLAlchemyError as e:
             db.session.rollback()
@@ -29,7 +29,7 @@ class TransactionListResource(AuthRequiredResource):
                 d['id'] = transaction.id
                 d['datetime'] = transaction.datetime
                 d['amount'] = transaction.amount
-                d['account_number'] = Account.get_or_404(transaction.id_account).account_number
+                d['accountNumber'] = Account.get_or_404(transaction.idAccount).accountNumber
                 l.append(d)
             return l, status.HTTP_200_OK
         except SQLAlchemyError as e:
