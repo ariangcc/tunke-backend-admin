@@ -23,11 +23,11 @@ class AddUpdateDelete():
 class Account(db.Model, AddUpdateDelete):
     __tablename__ = 'account'
     id = db.Column(db.Integer, primary_key=True)
-    account_number = db.Column(db.String(20), unique=True)
+    account_number = db.Column(db.String(100), unique=True)
     balance = db.Column(db.Float)
     opening_date = db.Column(db.DateTime)
     closing_date = db.Column(db.DateTime)
-    card_number = db.Column(db.String(16))
+    card_number = db.Column(db.String(100))
     id_account_type = db.Column(db.Integer, db.ForeignKey('accounttype.id'))
     id_product = db.Column(db.Integer, db.ForeignKey('product.id'))
     id_currency = db.Column('id_currency', db.ForeignKey('currency.id'))

@@ -24,4 +24,5 @@ class SalesRecord(db.Model, AddUpdateDelete):
     request_date = db.Column(db.DateTime)
     active = db.Column(db.Boolean)
     id_recordstatus = db.Column('id_recordstatus', db.ForeignKey(RecordStatus.id))
-    products = db.relationship("Product")
+    id_client = db.Column('id_client', db.ForeignKey('client.id'))
+    id_product = db.Column('id_product', db.ForeignKey('product.id'))

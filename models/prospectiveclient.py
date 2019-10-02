@@ -1,6 +1,3 @@
-from marshmallow import Schema, fields, pre_load
-from marshmallow import Schema, fields
-from flask_marshmallow import Marshmallow
 from flask_sqlalchemy import SQLAlchemy
 from app import db
 
@@ -27,3 +24,15 @@ class ProspectiveClient(db.Model, AddUpdateDelete):
     cellphone2 = db.Column(db.String(20))
     id_person = db.Column('id_person', db.ForeignKey('person.id'))
     clients = db.relationship("Client")
+
+    def get_json(self):
+        d = {}
+        d['id_prospectiveclient'] = self.id
+        d['last_enter_date'] = self.last_enter_date.strftime('%d-%m-%Y')
+        d['enter_count'] = self.enter_count
+        d['email1'] = self.email1
+        d['email2'] = self.email2
+        d['cellphone1'] = self.cellphone1
+        d['cellphone2'] = self.cellphone2
+
+        return d

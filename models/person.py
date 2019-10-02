@@ -32,3 +32,19 @@ class Person(db.Model, AddUpdateDelete):
     vehicle2_plate = db.Column(db.String(100))
     prospectiveclients = db.relationship("ProspectiveClient")
 
+    def get_json(self):
+        d = {}
+        d['id_person'] = self.id
+        d['document_type'] = self.document_type
+        d['document_number'] = self.document_number
+        d['first_name'] = self.first_name
+        d['middle_name'] = self.middle_name
+        d['father_lastname'] = self.father_lastname
+        d['mother_lastname'] = self.mother_lastname
+        d['birthdate'] = self.birthdate.strftime('%d-%m-%Y')
+        d['address'] = self.address
+        d['nationality'] = self.nationality
+        d['vehicle1_plate'] = self.vehicle1_plate
+        d['vehicle2_plate'] = self.vehicle2_plate
+        
+        return d

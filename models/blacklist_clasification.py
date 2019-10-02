@@ -1,6 +1,5 @@
 from marshmallow import Schema, fields, pre_load
 from marshmallow import Schema, fields
-from flask_marshmallow import Marshmallow
 from flask_sqlalchemy import SQLAlchemy
 from app import db
 
@@ -16,12 +15,10 @@ class AddUpdateDelete():
         db.session.delete(resource)
         return db.session.commit()
 
-class Client(db.Model, AddUpdateDelete):
-    __tablename__ = 'client'
+class Blacklist_clasification(db.Model, AddUpdateDelete):
+    __tablename__ = 'blacklist_clasification'
     id = db.Column(db.Integer, primary_key=True)
-    register_date = db.Column(db.DateTime)
-    total_accounts = db.Column(db.Integer)
-    active_loans = db.Column(db.Boolean)
+    name = db.Column(db.String(100))
+    description = db.Column(db.String(100))
     active = db.Column(db.Boolean)
-    id_prospectiveclient = db.Column('id_prospectiveclient', db.ForeignKey('prospectiveclient.id'))
-    salesrecords = db.relationship('SalesRecord')
+    blacklists = db.relationship("Blacklist")

@@ -16,12 +16,6 @@ class SignupResource(Resource):
             response = {'error': 'No input data provided'}
             return response, status.HTTP_400_BAD_REQUEST
 
-        errors = user_schema.validate(request_dict)
-        print(request_dict['email'])
-        if errors:
-            errors.update({'error':'Some fields are invalid'})
-            return errors, status.HTTP_400_BAD_REQUEST
-
         email = request_dict['email']
         password = request_dict['password']
 

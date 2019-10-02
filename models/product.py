@@ -23,4 +23,4 @@ class Product(db.Model, AddUpdateDelete):
     description = db.Column(db.String(100))
     active = db.Column(db.Boolean)
     accounts = db.relationship('Account', backref = 'account')
-    id_salesrecord = db.Column('id_salesrecord', db.ForeignKey(SalesRecord.id)) 
+    salesrecords = db.relationship("SalesRecord")
