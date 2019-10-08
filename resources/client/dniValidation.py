@@ -8,6 +8,7 @@ from flask_restful import Resource
 from flask import request, jsonify
 from sqlalchemy.exc import SQLAlchemyError
 import status
+from app import db
 
 class DniValidationResource(Resource):
     def post(self):

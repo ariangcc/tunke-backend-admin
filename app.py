@@ -14,6 +14,7 @@ from models.currency import Currency
 from models.transaction import Transaction
 from models.blacklist import Blacklist
 from models.blacklistClassification import BlacklistClassification
+from models.securityQuestion import SecurityQuestion
 
 from flask.json import JSONEncoder
 from datetime import date

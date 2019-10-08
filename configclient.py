@@ -4,7 +4,7 @@ import os
 # You need to replace the next values with the appropriate values for your configuration
 basedir = os.path.abspath(os.path.dirname(__file__))
 DEBUG = True
-PORT = 9993
+PORT = 9995
 HOST = "0.0.0.0"
 SQLALCHEMY_ECHO = False
 SQLALCHEMY_TRACK_MODIFICATIONS = True
