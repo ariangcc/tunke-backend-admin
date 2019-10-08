@@ -10,7 +10,7 @@ from sqlalchemy.exc import SQLAlchemyError
 import status
 
 class DniValidationResource(Resource):
-    def get(self):
+    def post(self):
         requestDict = request.get_json()
         if not requestDict:
             response = {'error': 'No input data provided'}
@@ -21,7 +21,7 @@ class DniValidationResource(Resource):
             blacklisted = (Blacklist.query.filter_by(documentNumber=documentNumber).first())
             d = {}
             if(blacklisted):
-                d['tipo'] = 3
+                d['type'] = 3
                 return d, status.HTTP_200_OK
             else:
                 person = (Person.query.filter_by(documentNumber=documentNumber).first())
@@ -32,18 +32,18 @@ class DniValidationResource(Resource):
                 prospectiveClient = (ProspectiveClient.query.filter_by(idPerson=person.id).first())
 
                 if not prospectiveClient:
-                    d['tipo'] = 2 #Es no cliente, aun no es prospecto
+                    d['type'] = 2 #Es no cliente, aun no es prospecto
                     d.update(person.toJson())
                     return d, status.HTTP_200_OK
                 
                 client = (Client.query.filter_by(idProspectiveClient=prospectiveClient.id).first())
 
                 if not client:
-                    d['tipo'] = 2 #Es no cliente, ya es prospecto
+                    d['type'] = 2 #Es no cliente, ya es prospecto
                     d.update(person.toJson())
                     return d, status.HTTP_200_OK
                 
-                d['tipo'] = 1
+                d['type'] = 1
                 d.update(person.toJson())
                 d.update(prospectiveClient.toJson())
                 return d, status.HTTP_200_OK

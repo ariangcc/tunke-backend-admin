@@ -8,6 +8,7 @@ from resources.admin.security import AuthRequiredResource
 from sqlalchemy.exc import SQLAlchemyError
 from flask_restful import Resource
 from flask import request
+from app import db
 import status
 
 class ProspectiveClientListResource(Resource):
