@@ -33,6 +33,7 @@ class ProspectiveClientListResource(Resource):
                                                   lastEnterDate=lastEnterDate)
                 prospectiveClient.enterCount = 1
                 prospectiveClient.add(prospectiveClient)
+                db.session.commit()
                 query = ProspectiveClient.query.get(prospectiveClient.id)
                 result = query.toJson()
                 return result, status.HTTP_201_CREATED
@@ -44,7 +45,7 @@ class ProspectiveClientListResource(Resource):
                 prospectiveClient.lastEnterDate = lastEnterDate
                 prospectiveClient.enterCount += 1
                 prospectiveClient.update()
-                
+                db.session.commit()
                 query = ProspectiveClient.query.get(prospectiveClient.id)
                 result = query.toJson()
                 return result, status.HTTP_200_OK

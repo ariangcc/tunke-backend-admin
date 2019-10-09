@@ -10,7 +10,8 @@ from resources.admin.security import AuthRequiredResource
 from flask_restful import Resource
 from sqlalchemy.exc import SQLAlchemyError
 import status
-from flask import request
+from flask import request, render_template
+from flask_mail import Message
 from app import db
 
 class OpenAccountResource(Resource):
@@ -28,16 +29,19 @@ class OpenAccountResource(Resource):
             
             salesRecord = SalesRecord(origin="Origen default", active=1,requestDate=curdatetime,idClient=client.id)
             salesRecord.add(salesRecord)
-
             currency = requestDict['currency']
             account = Account(accountNumber=GenerateAccount(), balance=0.0, openingDate=curdatetime, 
                               closingDate=None, cardNumber="1234-5678-1234-5678", idAccountType=1,
                               idProduct=1, idCurrency=currency)
             account.add(account)
 
+            #Commit changes
+            db.session.commit()
+
             regClient = Client.query.get(client.id)
             regAccount = Account.query.get(account.id)
             person = Person.query.get(prospectiveClient.idPerson)
+            print("xd")
             d = {}
             d['name'] = " ".join([person.firstName, person.middleName, person.fatherLastname, person.motherLastname])
             d['accountNumber'] = regAccount.accountNumber
@@ -46,7 +50,13 @@ class OpenAccountResource(Resource):
             d['openingDate'] = regAccount.openingDate.strftime('%d-%m-%Y')
             d['currency'] = ('Soles' if regAccount.idCurrency == 1 else 'Dolares')
             d['email'] = prospectiveClient.email1
-            db.session.commit()
+
+            from mailing import mail
+            msg = Message("Tunke - Apertura de cuenta exitosa", sender="tunkestaff@gmail.com", recipients=[d['email']])
+            msg.body = 'Hola'
+            msg.html = render_template('ejemplo.html', name=d['name'], accountNumber=d['accountNumber'], cci=d['cci'], accountDetail=d['accountDetail'],
+                                        openingDate=d['openingDate'], currency=d['currency'])
+            mail.send(msg)
             return d, status.HTTP_201_CREATED
         except SQLAlchemyError as e:
             db.session.rollback()

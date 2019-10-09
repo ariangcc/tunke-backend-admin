@@ -5,8 +5,9 @@ from models.blacklist import Blacklist
 from models.account import Account
 from resources.admin.security import AuthRequiredResource
 from flask_restful import Resource
-from flask import request, jsonify
+from flask import request, jsonify, render_template
 from sqlalchemy.exc import SQLAlchemyError
+from flask_mail import Message
 import status
 from app import db
 

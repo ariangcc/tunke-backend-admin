@@ -2,10 +2,9 @@ from app import db
 class AddUpdateDelete():
     def add(self, resource):
         db.session.add(resource)
-        return db.session.commit()
     
     def update(self):
-        return db.session.commit()
+        pass
     
     def delete(self, resource):
         db.session.delete(resource)
