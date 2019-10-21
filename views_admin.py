@@ -6,6 +6,7 @@ from resources.admin.user import UserListResource, UserResource
 from resources.admin.authentication import LoginResource
 from resources.admin.authentication import SignupResource
 from resources.admin.person import PersonListResource, PersonResource
+from resources.admin.client import ClientListResource, ClientResource
 
 apiBp = Blueprint('api', __name__)
 api = Api(apiBp)
@@ -16,3 +17,5 @@ api.add_resource(SignupResource, '/signup')
 api.add_resource(LoginResource, '/login')
 api.add_resource(PersonResource, '/persons/<int:id>')
 api.add_resource(PersonListResource, '/persons/')
+api.add_resource(ClientResource, '/persons/<int:id>')
+api.add_resource(ClientListResource, '/clients/')

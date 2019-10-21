@@ -10,3 +10,13 @@ class Client(db.Model, AddUpdateDelete):
     active = db.Column(db.Boolean)
     idProspectiveClient = db.Column('idProspectiveClient', db.ForeignKey('prospectiveClient.id'))
     salesRecords = db.relationship('SalesRecord')
+
+    def toJson(self):
+        d = {}
+        d['idClient'] = self.id
+        d['registerDate'] = self.registerDate.strftime('%d-%m-%Y')
+        d['totalAccount'] = self.totalAccounts
+        d['activeLoans'] = self.activeLoans
+        d['active'] = self.active
+        d['idProspectiveClient'] = self.idProspectiveClient
+        return d
