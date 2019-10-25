@@ -17,7 +17,7 @@ class DniValidationResource(Resource):
         if not requestDict:
             response = {'error': 'No input data provided'}
             return response, status.HTTP_400_BAD_REQUEST
-        
+
         documentNumber = requestDict['documentNumber']
         try:
             blacklisted = (Blacklist.query.filter_by(documentNumber=documentNumber).first())

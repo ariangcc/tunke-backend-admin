@@ -11,7 +11,32 @@ from flask import request
 from app import db
 import status
 
+class ProspectiveClientResource(Resource):
+    def get(self, id):
+        try:
+            prospectiveClient = ProspectiveClient.query.get_or_404(id)
+            d = prospectiveClient.toJson()
+            return d, status.HTTP_200_OK
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            response = {'error', str(e)}
+            return response, status.HTTP_400_BAD_REQUEST
+
 class ProspectiveClientListResource(Resource):
+    def get(self):
+        try:
+            prospectiveClients = ProspectiveClient.query.all()
+            d = []
+            for prospectiveClient in prospectiveClients:
+                e = prospectiveClient.toJson()
+                d.append(e)
+            
+            return d, status.HTTP_200_OK
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            response = {'error', str(e)}
+            return response, status.HTTP_400_BAD_REQUEST
+
     def post(self):
         requestDict = request.get_json()
         if not requestDict:

@@ -8,3 +8,11 @@ class Currency(db.Model, AddUpdateDelete):
     currencySymbol = db.Column(db.String(5), unique=True)
     currencyCode = db.Column(db.String(3), unique=True)
     accounts = db.relationship("Account")
+
+    def toJson(self):
+        d = {}
+        d['idCurrency'] = self.id
+        d['currencyName'] = self.currencyName
+        d['currencySymbol'] = self.currencySymbol
+        d['currencyCode'] = self.currencyCode
+        return d

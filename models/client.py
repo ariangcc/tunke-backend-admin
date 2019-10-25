@@ -10,6 +10,7 @@ class Client(db.Model, AddUpdateDelete):
     active = db.Column(db.Boolean)
     idProspectiveClient = db.Column('idProspectiveClient', db.ForeignKey('prospectiveClient.id'))
     salesRecords = db.relationship('SalesRecord')
+    accounts = db.relationship('Account')
 
     def toJson(self):
         d = {}

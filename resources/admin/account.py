@@ -1,16 +1,32 @@
 from models.account import Account
-from models.accounttype import AccountType
+from models.accountType import AccountType
+from models.client import Client
+from models.prospectiveClient import ProspectiveClient
+from models.person import Person
+from models.currency import Currency
 from resources.admin.security import AuthRequiredResource
 from flask_restful import Resource
+from sqlalchemy.exc import SQLAlchemyError
 import status
 
 
 class AccountResource(AuthRequiredResource):
     def get(self, id):
         try:
-            account = Account.get_or_404(id)
+            account = Account.query.get_or_404(id)
+            client = Client.query.get_or_404(account.idClient)
+            prospectiveClient = ProspectiveClient.query.get_or_404(client.idProspectiveClient)
+            person = Person.query.get_or_404(prospectiveClient.idPerson)
+            currency = Currency.query.get_or_404(account.idCurrency)
+            accountType = AccountType.query.get_or_404(account.idAccountType)
             d = {}
-            #getjson for account
+            d['firstName'] = person.firstName
+            d['middleName'] = person.middleName
+            d['fatherLastname'] = person.fatherLastname
+            d['motherLastname'] = person.motherLastname
+            d.update(account.toJson())
+            d.update(currency.toJson())
+            d.update(accountType.toJson())
             return d, status.HTTP_200_OK
         except SQLAlchemyError as e:
             db.session.rollback()
@@ -20,14 +36,25 @@ class AccountResource(AuthRequiredResource):
 class AccountListResource(AuthRequiredResource):
     def get(self):
         try:
-            accounts = Accounts.query.all()
-            l = []
+            accounts = Account.query.all()
+            d = {}
+            d['accounts'] = []
             for account in accounts:
-                d = {}
-                #getjson for account
-                l.append(d)
-            
-            return l, status.HTTP_200_OK
+                client = Client.query.get_or_404(account.idClient)
+                prospectiveClient = ProspectiveClient.query.get_or_404(client.idProspectiveClient)
+                person = Person.query.get_or_404(prospectiveClient.idPerson)
+                currency = Currency.query.get_or_404(account.idCurrency)
+                accountType = AccountType.query.get_or_404(account.idAccountType)
+                e = {}
+                e['firstName'] = person.firstName
+                e['middleName'] = person.middleName
+                e['fatherLastname'] = person.fatherLastname
+                e['motherLastname'] = person.motherLastname
+                e.update(account.toJson())
+                e.update(currency.toJson())
+                e.update(accountType.toJson())
+                d['accounts'].append(e)
+            return d, status.HTTP_200_OK
         except SQLAlchemyError as e:
             db.session.rollback()
             response = {'error', str(e)}
