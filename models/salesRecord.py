@@ -10,3 +10,14 @@ class SalesRecord(db.Model, AddUpdateDelete):
     idRecordStatus = db.Column('idRecordStatus', db.ForeignKey('recordStatus.id'))
     idClient = db.Column('idClient', db.ForeignKey('client.id'))
     idProduct = db.Column('idProduct', db.ForeignKey('product.id'))
+
+    def toJson(self):
+        d = {}
+        d['idSalesRecord'] = self.id
+        d['origin'] = self.origin
+        d['requestDate'] = self.requestDate.strftime('%d-%m-%Y')
+        d['active'] = self.active
+        d['idRecordStatus'] = self.idRecordStatus
+        d['idClient'] = self.idClient
+        d['idProduct'] = self.idProduct
+        return d

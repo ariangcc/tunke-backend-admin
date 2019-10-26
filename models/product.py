@@ -10,3 +10,11 @@ class Product(db.Model, AddUpdateDelete):
     active = db.Column(db.Boolean)
     accounts = db.relationship(Account)
     salesRecords = db.relationship(SalesRecord)
+
+    def toJson(self):
+        d = {}
+        d['idProduct'] = self.id
+        d['name'] = self.name
+        d['description'] = self.description
+        d['active'] = self.active
+        return d

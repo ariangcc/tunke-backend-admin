@@ -6,3 +6,9 @@ class RecordStatus(db.Model, AddUpdateDelete):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
     salesRecords = db.relationship("SalesRecord")
+
+    def toJson(self):
+        d = {}
+        d['idRecordStatus'] = self.id
+        d['name'] = self.name
+        return d

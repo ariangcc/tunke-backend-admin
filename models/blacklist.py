@@ -8,3 +8,12 @@ class Blacklist(db.Model, AddUpdateDelete):
     documentNumber = db.Column(db.String(20), unique=True)
     active = db.Column(db.Boolean)
     idBlacklistClassification = db.Column('idBlacklistClassification', db.ForeignKey('blacklistClassification.id'))
+
+    def toJson(self):
+        d = {}
+        d['idBlacklist'] = self.id
+        d['documentType'] = self.documentType
+        d['documentNumber'] = self.documentNumber
+        d['active'] = self.active
+        d['idBlacklistClassification'] = self.idBlacklistClassification
+        return d
