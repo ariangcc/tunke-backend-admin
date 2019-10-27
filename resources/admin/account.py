@@ -1,3 +1,5 @@
+from app import db
+from datetime import datetime
 from models.account import Account
 from models.accountType import AccountType
 from models.client import Client
@@ -24,6 +26,7 @@ class AccountResource(AuthRequiredResource):
             d['middleName'] = person.middleName
             d['fatherLastname'] = person.fatherLastname
             d['motherLastname'] = person.motherLastname
+            d['active'] = account.active and client.active
             d.update(account.toJson())
             d.update(currency.toJson())
             d.update(accountType.toJson())
@@ -31,6 +34,24 @@ class AccountResource(AuthRequiredResource):
         except SQLAlchemyError as e:
             db.session.rollback()
             response = {'error', str(e)}
+            return response, status.HTTP_400_BAD_REQUEST
+    
+    def delete(self, id):
+        try:
+            account = Account.query.get_or_404(id)
+            account.active = 0
+            account.closingDate = datetime.now()
+            account.update()
+            db.session.commit()
+            resp = {'ok': 'Cuenta borrada satisfactoriamente.'}
+            return resp, status.HTTP_204_NO_CONTENT
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            response = {'error', str(e)}
+            return response, status.HTTP_400_BAD_REQUEST
+        except Exception as e:
+            db.session.rollback()
+            response = {'error': 'An error ocurred. Contact cat-support asap. ' + str(e)}
             return response, status.HTTP_400_BAD_REQUEST
 
 class AccountListResource(AuthRequiredResource):
@@ -50,6 +71,7 @@ class AccountListResource(AuthRequiredResource):
                 e['middleName'] = person.middleName
                 e['fatherLastname'] = person.fatherLastname
                 e['motherLastname'] = person.motherLastname
+                e['active'] = account.active and client.active
                 e.update(account.toJson())
                 e.update(currency.toJson())
                 e.update(accountType.toJson())

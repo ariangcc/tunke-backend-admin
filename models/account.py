@@ -9,6 +9,7 @@ class Account(db.Model, AddUpdateDelete):
     openingDate = db.Column(db.DateTime)
     closingDate = db.Column(db.DateTime)
     cardNumber = db.Column(db.String(100))
+    active = db.Column(db.Boolean)
     idAccountType = db.Column(db.Integer, db.ForeignKey('accountType.id'))
     idProduct = db.Column(db.Integer, db.ForeignKey('product.id'))
     idCurrency = db.Column('idCurrency', db.ForeignKey('currency.id'))

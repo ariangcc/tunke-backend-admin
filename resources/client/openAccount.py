@@ -41,7 +41,6 @@ class OpenAccountResource(Resource):
             regClient = Client.query.get(client.id)
             regAccount = Account.query.get(account.id)
             person = Person.query.get(prospectiveClient.idPerson)
-            print("xd")
             d = {}
             d['name'] = " ".join([person.firstName, person.middleName, person.fatherLastname, person.motherLastname])
             d['accountNumber'] = regAccount.accountNumber
