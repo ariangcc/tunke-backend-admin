@@ -8,6 +8,7 @@ from resources.admin.authentication import SignupResource
 from resources.admin.person import PersonListResource, PersonResource, PersonDocumentResource
 from resources.admin.client import ClientListResource, ClientResource
 from resources.admin.account import AccountListResource, AccountResource 
+from resources.client.dniValidation import DniValidationResource
 
 apiBp = Blueprint('api', __name__)
 api = Api(apiBp)
@@ -23,3 +24,4 @@ api.add_resource(ClientListResource, '/clients/')
 api.add_resource(AccountResource, '/accounts/<int:id>')
 api.add_resource(AccountListResource, '/accounts/')
 api.add_resource(PersonDocumentResource, '/persons/getByDocument/')
+api.add_resource(DniValidationResource, '/dniValidation/')
