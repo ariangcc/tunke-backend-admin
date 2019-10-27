@@ -26,7 +26,7 @@ class Person(db.Model, AddUpdateDelete):
         d['middleName'] = self.middleName
         d['fatherLastname'] = self.fatherLastname
         d['motherLastname'] = self.motherLastname
-        d['birthdate'] = self.birthdate.strftime('%d-%m-%Y')
+        d['birthdate'] = self.birthdate.strftime('%Y-%m-%d')
         d['address'] = self.address
         d['nationality'] = self.nationality
         d['vehicle1Plate'] = self.vehicle1Plate
