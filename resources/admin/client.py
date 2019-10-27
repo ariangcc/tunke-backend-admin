@@ -8,6 +8,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from flask import request
 import status
 from datetime import datetime
+import requests, json
 
 class ClientResource(AuthRequiredResource):
     def get(self, id):
@@ -19,7 +20,7 @@ class ClientResource(AuthRequiredResource):
             d.update(client.toJson())
             d.update(prospectiveClient.toJson())
             d.update(person.toJson())
-            nationality = request.get('https://restcountries.eu/rest/v2/alpha/usa')
+            nationality = json.loads(requests.get('https://restcountries.eu/rest/v2/alpha/usa').text)
             d['nationality'] = nationality['name']
             d['flag'] = nationality['flag']
             return d, status.HTTP_200_OK
@@ -103,7 +104,7 @@ class ClientListResource(AuthRequiredResource):
                 e.update(client.toJson())
                 e.update(prospectiveClient.toJson())
                 e.update(person.toJson())
-                nationality = request.get('https://restcountries.eu/rest/v2/alpha/usa')
+                nationality = json.loads(requests.get('https://restcountries.eu/rest/v2/alpha/usa').text)
                 e['nationality'] = nationality['name']
                 e['flag'] = nationality['flag']
                 d['clients'].append(e)
