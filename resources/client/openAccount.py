@@ -24,15 +24,20 @@ class OpenAccountResource(Resource):
         try:
             idPerson = requestDict['idPerson']
             prospectiveClient = ProspectiveClient.query.filter_by(idPerson=idPerson).first()
-            client = Client(registerDate=curdatetime, totalAccounts=1, activeLoans=0, active=1, idProspectiveClient=prospectiveClient.id)
-            client.add(client)
-            
+            client = Client.query.filter_by(idProspectiveClient=prospectiveClient.id).first()
+            if not client: #Apertura de cuentas no cliente
+                client = Client(registerDate=curdatetime, totalAccounts=1, activeLoans=0, active=1, idProspectiveClient=prospectiveClient.id)
+                client.add(client)
+            else:
+                client.totalAccounts += 1
+                client.update()
+                
             salesRecord = SalesRecord(origin="Origen default", active=1,requestDate=curdatetime,idClient=client.id)
             salesRecord.add(salesRecord)
             currency = requestDict['currency']
             account = Account(accountNumber=GenerateAccount(), balance=0.0, openingDate=curdatetime, 
-                              closingDate=None, cardNumber="1234-5678-1234-5678", idAccountType=1,
-                              idProduct=1, idCurrency=currency)
+                            closingDate=None, cardNumber="1234-5678-1234-5678", idAccountType=1,
+                            idProduct=1, idCurrency=currency, idClient=client.id)
             account.add(account)
 
             #Commit changes
@@ -57,6 +62,7 @@ class OpenAccountResource(Resource):
                                         openingDate=d['openingDate'], currency=d['currency'])
             mail.send(msg)
             return d, status.HTTP_201_CREATED
+
         except SQLAlchemyError as e:
             db.session.rollback()
             response = {'error': str(e)}

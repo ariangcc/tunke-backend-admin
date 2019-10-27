@@ -16,7 +16,7 @@ class Client(db.Model, AddUpdateDelete):
         d = {}
         d['idClient'] = self.id
         d['registerDate'] = self.registerDate.strftime('%d-%m-%Y')
-        d['totalAccount'] = self.totalAccounts
+        d['totalAccounts'] = self.totalAccounts
         d['activeLoans'] = self.activeLoans
         d['active'] = self.active
         d['idProspectiveClient'] = self.idProspectiveClient
