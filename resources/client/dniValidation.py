@@ -10,6 +10,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from flask_mail import Message
 import status
 from app import db
+import requests, json
 
 class DniValidationResource(Resource):
     def post(self):
