@@ -36,6 +36,9 @@ class DniValidationResource(Resource):
                 if not prospectiveClient:
                     d['type'] = 2 #Es no cliente, aun no es prospecto
                     d.update(person.toJson())
+                    nationality = json.loads(requests.get('https://restcountries.eu/rest/v2/alpha/usa').text)
+                    d['nationality'] = nationality['name']
+                    d['flag'] = nationality['flag']
                     return d, status.HTTP_200_OK
                 
                 client = (Client.query.filter_by(idProspectiveClient=prospectiveClient.id).first())
@@ -43,11 +46,17 @@ class DniValidationResource(Resource):
                 if not client:
                     d['type'] = 2 #Es no cliente, ya es prospecto
                     d.update(person.toJson())
+                    nationality = json.loads(requests.get('https://restcountries.eu/rest/v2/alpha/usa').text)
+                    d['nationality'] = nationality['name']
+                    d['flag'] = nationality['flag']
                     return d, status.HTTP_200_OK
                 
                 d['type'] = 1
                 d.update(person.toJson())
                 d.update(prospectiveClient.toJson())
+                nationality = json.loads(requests.get('https://restcountries.eu/rest/v2/alpha/usa').text)
+                d['nationality'] = nationality['name']
+                d['flag'] = nationality['flag']
                 return d, status.HTTP_200_OK
             
         except SQLAlchemyError as e:
