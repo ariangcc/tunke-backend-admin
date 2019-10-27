@@ -37,7 +37,7 @@ class OpenAccountResource(Resource):
             currency = requestDict['currency']
             account = Account(accountNumber=GenerateAccount(), balance=0.0, openingDate=curdatetime, 
                             closingDate=None, cardNumber="1234-5678-1234-5678", idAccountType=1,
-                            idProduct=1, idCurrency=currency, idClient=client.id)
+                            idProduct=1, idCurrency=currency, idClient=client.id, active=1)
             account.add(account)
 
             #Commit changes

@@ -16,9 +16,12 @@ class ClientResource(AuthRequiredResource):
             prospectiveClient = ProspectiveClient.query.get_or_404(client.idProspectiveClient)
             person = Person.query.get_or_404(prospectiveClient.idPerson)
             d = {}
+            nationality = requests.get('https://restcountries.eu/rest/v2/alpha/col')
             d.update(client.toJson())
             d.update(prospectiveClient.toJson())
             d.update(person.toJson())
+            d['nationality'] = nationality['name']
+            d['flag'] = nationality['flag']
             return d, status.HTTP_200_OK
         except SQLAlchemyError as e:
             db.session.rollback()
