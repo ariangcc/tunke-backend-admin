@@ -75,6 +75,8 @@ class LoginResource(Resource):
         d = {}
         d['email'] = user.email
         d['id'] = user.id
+        d['name'] = 'Jossi Huarcaya'
+        d['code'] = 'XX2019'
 
         resp = {'token' : token.decode('ascii')}
         resp.update(d)
