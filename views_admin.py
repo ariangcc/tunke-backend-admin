@@ -8,11 +8,8 @@ from resources.admin.authentication import SignupResource
 from resources.admin.person import PersonListResource, PersonResource, PersonDocumentResource
 from resources.admin.client import ClientListResource, ClientResource
 from resources.admin.account import AccountListResource, AccountResource 
-<<<<<<< HEAD
 from resources.admin.authentication import VerifyEmailResource
-=======
 from resources.client.dniValidation import DniValidationResource
->>>>>>> Arian
 
 apiBp = Blueprint('api', __name__)
 api = Api(apiBp)
