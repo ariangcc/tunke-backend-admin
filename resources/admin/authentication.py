@@ -91,3 +91,25 @@ class VerifyTokenResource(Resource):
         valid = VerifyPassword(token, "unused")
         resp = {'valid': valid}
         return resp, status.HTTP_200_OK
+
+class VerifyEmailResource(Resource):
+    def post(self):
+        requestDict = request.get_json()
+        if not requestDict:
+            response = {'error': 'No input data provided'}
+            return response, status.HTTP_400_BAD_REQUEST
+
+        user = User.query.filter_by(email=requestDict['email']).first()
+        if not user:
+            response = {'error': 'El cliente no esta en la base de datos'}
+            return response, status.HTTP_400_BAD_REQUEST
+        
+        g.user = user
+        token = g.user.GenerateAuthToken()
+        d = {}
+        d['email'] = user.email
+        d['id'] = user.id
+
+        resp = {'token' : token.decode('ascii')}
+        resp.update(d)
+        return resp, status.HTTP_200_OK
