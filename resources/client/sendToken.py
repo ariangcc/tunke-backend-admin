@@ -24,9 +24,11 @@ class SendTokenResource(Resource):
                 return response, status.HTTP_400_BAD_REQUEST
 
             email = requestDict['email']
-
-            randomToken = "".join(chr(x) for x in [random.randint(ord('A'), ord('Z')) for _ in range(6)])
-
+            randomCharacters = [chr(random.randint(ord('A'), ord('Z'))) for _ in range(3)]
+            randomCharacters.extend(chr(random.randint(0, 9) + ord('0')) for _ in range(3))
+            random.shuffle(randomCharacters)
+            randomToken = "".join(x for x in randomCharacters)
+           
             from mailing import mail
             msg = Message("Tunke - Token Apertura de Cuenta", sender="tunkestaff@gmail.com", recipients=[email])
             msg.body = "Su token es " + randomToken
