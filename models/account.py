@@ -1,5 +1,6 @@
 from app import db
 from models.utils import AddUpdateDelete
+from models.currency import Currency
 
 class Account(db.Model, AddUpdateDelete):
     __tablename__ = 'account'
@@ -27,5 +28,9 @@ class Account(db.Model, AddUpdateDelete):
         d['idAccountType'] = self.idAccountType
         d['idProduct'] = self.idProduct
         d['idCurrency'] = self.idCurrency
+        currency = Currency.query.get_or_404(self.idCurrency)
+        d['currencyName'] = currency.currencyName
+        d['currencySymbol'] = currency.currencySymbol
+        d['currencyCode'] = currency.currencyCode
         d['idClient'] = self.idClient
         return d
