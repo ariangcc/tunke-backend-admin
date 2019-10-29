@@ -10,6 +10,7 @@ from resources.admin.client import ClientListResource, ClientResource
 from resources.admin.account import AccountListResource, AccountResource 
 from resources.admin.authentication import VerifyEmailResource
 from resources.client.dniValidation import DniValidationResource
+from resources.admin.account import GetByClientResource
 
 apiBp = Blueprint('api', __name__)
 api = Api(apiBp)
@@ -27,3 +28,4 @@ api.add_resource(AccountListResource, '/accounts/')
 api.add_resource(VerifyEmailResource, '/verifyEmail/')
 api.add_resource(PersonDocumentResource, '/persons/getByDocument/')
 api.add_resource(DniValidationResource, '/dniValidation/')
+api.add_resource(GetByClientResource, '/accounts/getByClient/')
