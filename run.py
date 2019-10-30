@@ -3,16 +3,16 @@ from app import CreateApp
 
 app = None
 if(sys.argv[1] == "db"):
-    appType = 0
+	appType = 0
 else:
-    appType = int(sys.argv[1])
+	appType = int(sys.argv[1])
 print(appType)
 if appType == 0:
-    app = CreateApp('configclient', appType)
+	app = CreateApp('configclient', appType)
 else:
-    app = CreateApp('configadmin', appType)
+	app = CreateApp('configadmin', appType)
 
 print(app.config['PORT'])
 
 if __name__ == '__main__':
-    app.run(host=app.config['HOST'], port=app.config['PORT'], debug=app.config['DEBUG'])
+	app.run(host=app.config['HOST'], port=app.config['PORT'], debug=app.config['DEBUG'])

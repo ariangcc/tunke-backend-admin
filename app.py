@@ -20,29 +20,29 @@ from flask.json import JSONEncoder
 from datetime import date
 
 class CustomJSONEncoder(JSONEncoder):
-    def default(self, obj):
-        try:
-            if isinstance(obj, date):
-                return obj.isoformat()
-            iterable = iter(obj)
-        except TypeError:
-            pass
-        else:
-            return list(iterable)
-        return JSONEncoder.default(self, obj)
+	def default(self, obj):
+		try:
+			if isinstance(obj, date):
+				return obj.isoformat()
+			iterable = iter(obj)
+		except TypeError:
+			pass
+		else:
+			return list(iterable)
+		return JSONEncoder.default(self, obj)
 
 def CreateApp(configFilename, appType):
-    app = Flask(__name__)
-    app.json_encoder = CustomJSONEncoder
-    app.config.from_object(configFilename)
-    CORS(app)
-    db.init_app(app)
+	app = Flask(__name__)
+	app.json_encoder = CustomJSONEncoder
+	app.config.from_object(configFilename)
+	CORS(app)
+	db.init_app(app)
 
-    if appType == 0:
-        from views_client import apiBp
-        app.register_blueprint(apiBp, url_prefix='/api')
-    else:
-        from views_admin import apiBp
-        app.register_blueprint(apiBp, url_prefix='/api')
+	if appType == 0:
+		from views_client import apiBp
+		app.register_blueprint(apiBp, url_prefix='/api')
+	else:
+		from views_admin import apiBp
+		app.register_blueprint(apiBp, url_prefix='/api')
 
-    return app
+	return app
