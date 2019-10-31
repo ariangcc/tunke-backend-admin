@@ -22,13 +22,13 @@ class SendTokenResource(Resource):
 				response = {'error': 'No input data provided'}
 				return response, status.HTTP_400_BAD_REQUEST
 
-			msgType = requestDict['msgType']
+			msgType = int(requestDict['msgType'])
 			randomCharacters = [chr(random.randint(ord('A'), ord('Z'))) for _ in range(3)]
 			randomCharacters.extend(chr(random.randint(0, 9) + ord('0')) for _ in range(3))
 			random.shuffle(randomCharacters)
 			randomToken = "".join(x for x in randomCharacters)
-			print(msgType) 
-			if msgType == "1": #Envio por email
+			 
+			if msgType == 1: #Envio por email
 				email = requestDict['email']
 				SendMail("Tunke - Token de Apertura de Cuenta", "tunkestaff@gmail.com", email, "Su token es " + randomToken)
 			else:
