@@ -12,7 +12,7 @@ class Account(db.Model, AddUpdateDelete):
 	cardNumber = db.Column(db.String(100))
 	active = db.Column(db.Boolean)
 	idAccountType = db.Column(db.Integer, db.ForeignKey('accountType.id'))
-	idProduct = db.Column(db.Integer, db.ForeignKey('product.id'))
+	idSalesRecord = db.Column(db.Integer, db.ForeignKey('salesRecord.id'))
 	idCurrency = db.Column('idCurrency', db.ForeignKey('currency.id'))
 	idClient = db.Column('idClient', db.ForeignKey('client.id'))
 	transactions = db.relationship("Transaction")
@@ -26,11 +26,12 @@ class Account(db.Model, AddUpdateDelete):
 		d['closingDate'] = (self.closingDate.strftime('%d-%m-%Y') if self.closingDate is not None else "UNDEFINED")
 		d['cardNumber'] = self.cardNumber
 		d['idAccountType'] = self.idAccountType
-		d['idProduct'] = self.idProduct
 		d['idCurrency'] = self.idCurrency
+		d['idSalesRecord'] = self.idSalesRecord
 		currency = Currency.query.get_or_404(self.idCurrency)
 		d['currencyName'] = currency.currencyName
 		d['currencySymbol'] = currency.currencySymbol
 		d['currencyCode'] = currency.currencyCode
 		d['idClient'] = self.idClient
+		d['active'] = self.active
 		return d

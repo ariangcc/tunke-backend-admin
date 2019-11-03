@@ -11,6 +11,8 @@ from resources.admin.account import AccountListResource, AccountResource
 from resources.admin.authentication import VerifyEmailResource
 from resources.client.dniValidation import DniValidationResource
 from resources.admin.account import GetByClientResource
+from resources.admin.parameterSettings import ParameterSettingsResource
+from resources.admin.salesRecord import SalesRecordListResource
 
 apiBp = Blueprint('api', __name__)
 api = Api(apiBp)
@@ -29,3 +31,5 @@ api.add_resource(VerifyEmailResource, '/verifyEmail/')
 api.add_resource(PersonDocumentResource, '/persons/getByDocument/')
 api.add_resource(DniValidationResource, '/dniValidation/')
 api.add_resource(GetByClientResource, '/accounts/getByClient/')
+api.add_resource(ParameterSettingsResource, '/parameterSettings/')
+api.add_resource(SalesRecordListResource,'/salesRecords/')

@@ -16,8 +16,8 @@ class SalesRecord(db.Model, AddUpdateDelete):
 		d['idSalesRecord'] = self.id
 		d['origin'] = self.origin
 		d['requestDate'] = self.requestDate.strftime('%d-%m-%Y')
-		d['active'] = self.active
 		d['idRecordStatus'] = self.idRecordStatus
+		d['active'] = self.active
 		d['idClient'] = self.idClient
 		d['idProduct'] = self.idProduct
 		return d
