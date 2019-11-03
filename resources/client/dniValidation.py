@@ -55,6 +55,7 @@ class DniValidationResource(Resource):
 				d['type'] = 1
 				d.update(person.toJson())
 				d.update(prospectiveClient.toJson())
+				d.update(client.toJson())
 				nationality = json.loads(requests.get('https://restcountries.eu/rest/v2/alpha/' + person.nationality).text)
 				d['nationality'] = nationality['name']
 				d['flag'] = nationality['flag']
