@@ -22,5 +22,5 @@ class ProspectiveClient(db.Model, AddUpdateDelete):
 		d['email2'] = self.email2
 		d['cellphone1'] = self.cellphone1
 		d['cellphone2'] = self.cellphone2
-
+		d['idPerson'] = self.idPerson
 		return d
