@@ -13,6 +13,8 @@ from resources.client.dniValidation import DniValidationResource
 from resources.admin.account import GetByClientResource
 from resources.admin.parameterSettings import ParameterSettingsResource
 from resources.admin.salesRecord import SalesRecordListResource
+from resources.admin.campaign import CampaignResource, CampaignListResource
+from resources.admin.loan import LoanResource, LoanListResource
 
 apiBp = Blueprint('api', __name__)
 api = Api(apiBp)
@@ -33,3 +35,7 @@ api.add_resource(DniValidationResource, '/dniValidation/')
 api.add_resource(GetByClientResource, '/accounts/getByClient/')
 api.add_resource(ParameterSettingsResource, '/parameterSettings/')
 api.add_resource(SalesRecordListResource,'/salesRecords/')
+api.add_resource(CampaignResource,'/campaign/<int:id>')
+api.add_resource(CampaignListResource,'/campaigns/')
+api.add_resource(LoanResource,'/loan/<int:id>')
+api.add_resource(LoanListResource, '/loans/')

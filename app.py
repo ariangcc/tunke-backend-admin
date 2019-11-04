@@ -5,14 +5,24 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 #Importing all models
+from models.account import Account
+from models.accountType import AccountType
 from models.product import Product 
-from models.recordStatus import RecordStatus 
+from models.recordStatus import RecordStatus
+from models.parameterSettings import ParameterSettings
+from models.campaign import Campaign
+from models.lead import Lead
+from models.loan import Loan
+from models.shareType import ShareType
+from models.person import Person
 from models.prospectiveClient import ProspectiveClient
+from models.salesRecord import SalesRecord
 from models.client import Client
 from models.profile import Profile
 from models.currency import Currency
 from models.transaction import Transaction
 from models.blacklist import Blacklist
+from models.user import User
 from models.blacklistClassification import BlacklistClassification
 from models.securityQuestion import SecurityQuestion
 

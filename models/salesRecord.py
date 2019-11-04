@@ -10,6 +10,8 @@ class SalesRecord(db.Model, AddUpdateDelete):
 	idRecordStatus = db.Column('idRecordStatus', db.ForeignKey('recordStatus.id'))
 	idClient = db.Column('idClient', db.ForeignKey('client.id'))
 	idProduct = db.Column('idProduct', db.ForeignKey('product.id'))
+	accounts = db.relationship("Account")
+	loans = db.relationship("Loan")
 
 	def toJson(self):
 		d = {}
