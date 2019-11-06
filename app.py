@@ -23,6 +23,7 @@ from models.currency import Currency
 from models.transaction import Transaction
 from models.blacklist import Blacklist
 from models.user import User
+from models.bankAccount import BankAccount
 from models.blacklistClassification import BlacklistClassification
 from models.securityQuestion import SecurityQuestion
 

@@ -2,6 +2,8 @@ from app import db
 from models.loan import Loan
 from models.client import Client
 from models.salesRecord import SalesRecord
+from models.bankAccount import BankAccount
+from models.account import Account
 from resources.admin.security import AuthRequiredResource
 from flask_restful import Resource
 from flask import request
@@ -23,7 +25,18 @@ class RequestLoanResource(Resource):
 			interestRate = requestDict['interestRate']
 			idCampaign = requestDict['idCampaign']
 			idShareType = requestDict['idShareType']
+			idAccount = requestDict['idAccount']
 
+			#Minus en bank account
+			bankAccount = BankAccount.query.get_or_404(1)
+			bankAccount.balance = bankAccount.balance - amount
+			bankAccount.update()
+
+			#Plus in AccountClient
+			account = Account.query.get_or_404(idAccount)
+			account.balance = account.balance + amount
+			account.update()
+			
 			#Update boolean in client
 			client = Client.query.get_or_404(idClient)
 			client.activeLoans = 1
@@ -35,8 +48,7 @@ class RequestLoanResource(Resource):
 			salesRecord.add(salesRecord)
 			db.session.flush()
 
-			#Insert in loan
-			print(salesRecord.id)
+			#Insert in loan			
 			loan = Loan(totalShares=totalShares,amount=amount,interestRate=interestRate,idCampaign=idCampaign,
 			idClient=idClient,idSalesRecord=salesRecord.id,idShareType=idShareType,active=1)
 			loan.add(loan)
