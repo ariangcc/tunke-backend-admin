@@ -22,7 +22,6 @@ class SalesRecordListResource(AuthRequiredResource):
             d = {}
             d['salesRecords'] = []
             for salesRecord in salesRecords:
-                print(salesRecord)
                 salesRecord = salesRecord.toJson()
                 recordStatus = RecordStatus.query.get_or_404(salesRecord['idRecordStatus'])
                 client = Client.query.get_or_404(salesRecord['idClient'])
@@ -55,6 +54,9 @@ class SalesRecordListResource(AuthRequiredResource):
                 person = person.toJson()
                 product = product.toJson()
                 recordStatus = recordStatus.toJson()
+                nationality = json.loads(requests.get('https://restcountries.eu/rest/v2/alpha/' + person['nationality']).text)
+                e['nationality'] = nationality['name']
+                e['flag'] = nationality['flag']
                 e['activeClient'] = client['active']
                 e['nameRecordStatus'] = recordStatus['name']
                 e['firstName'] = person['firstName']
@@ -63,7 +65,6 @@ class SalesRecordListResource(AuthRequiredResource):
                 e['motherLastname'] = person['motherLastname']
                 e['birthdate'] = person['birthdate']
                 e['address'] = person['address']
-                e['nationality'] = person['nationality']
                 e['documentType'] = person['documentType']
                 e['documentNumber'] = person['documentNumber']
                 e['idSalesRecord'] = salesRecord['idSalesRecord']
