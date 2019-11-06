@@ -9,6 +9,7 @@ class Currency(db.Model, AddUpdateDelete):
 	currencyCode = db.Column(db.String(3), unique=True)
 	accounts = db.relationship("Account")
 	campaigns = db.relationship("Campaign")
+	bankAccount = db.relationship("BankAccount")
 
 	def toJson(self):
 		d = {}
