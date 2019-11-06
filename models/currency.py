@@ -8,6 +8,7 @@ class Currency(db.Model, AddUpdateDelete):
 	currencySymbol = db.Column(db.String(5), unique=True)
 	currencyCode = db.Column(db.String(3), unique=True)
 	accounts = db.relationship("Account")
+	campaigns = db.relationship("Campaign")
 
 	def toJson(self):
 		d = {}

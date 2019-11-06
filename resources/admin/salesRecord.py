@@ -7,6 +7,7 @@ from models.product import Product
 from models.prospectiveClient import ProspectiveClient
 from models.person import Person
 from models.account import Account
+from models.loan import Loan
 from flask_restful import Resource
 from sqlalchemy.exc import SQLAlchemyError
 from flask import request
@@ -21,6 +22,7 @@ class SalesRecordListResource(AuthRequiredResource):
             d = {}
             d['salesRecords'] = []
             for salesRecord in salesRecords:
+                print(salesRecord)
                 salesRecord = salesRecord.toJson()
                 recordStatus = RecordStatus.query.get_or_404(salesRecord['idRecordStatus'])
                 client = Client.query.get_or_404(salesRecord['idClient'])
@@ -29,16 +31,40 @@ class SalesRecordListResource(AuthRequiredResource):
                 prospectiveClient = ProspectiveClient.query.get_or_404(client['idProspectiveClient'])
                 prospectiveClient = prospectiveClient.toJson()
                 person = Person.query.get_or_404(prospectiveClient['idPerson'])
-                account = Account.query.filter_by(idSalesRecord=salesRecord['idSalesRecord']).first()
+                e = {}
+                if salesRecord['idProduct']==1:
+                    account = Account.query.filter_by(idSalesRecord=salesRecord['idSalesRecord']).first()
+                    account = account.toJson()
+                    e['activeAccount'] = account['active']
+                    e['balance'] = account['balance']
+                    e['openingDate'] = account['openingDate']
+                    e['closingDate'] = account['closingDate']
+                    e['accountNumber'] = account['accountNumber']
+                else:
+                    loan = Loan.query.filter_by(idSalesRecord=salesRecord['idSalesRecord']).first()
+                    loan = loan.toJson()
+                    e['activeLoan'] = loan['active']
+                    e['totalShares'] = loan['totalShares']
+                    e['idLoan'] = loan['idLoan']
+                    e['interestRate'] = loan['interestRate']
+                    e['idCampaign'] = loan['idCampaign']
+                    if loan['idShareType']==1:
+                        e['shareType'] = 'Ordinaria'
+                    else:
+                        e['shareType'] = 'Extraordinaria'
                 person = person.toJson()
                 product = product.toJson()
-                account = account.toJson()
                 recordStatus = recordStatus.toJson()
-                e = {}
-                e['activeAccount'] = account['active']
                 e['activeClient'] = client['active']
                 e['nameRecordStatus'] = recordStatus['name']
-                e['fullName'] = person['firstName'] + ' '+ person['fatherLastname']
+                e['firstName'] = person['firstName']
+                e['middleName'] = person['middleName']
+                e['fatherLastname'] = person['fatherLastname']
+                e['motherLastname'] = person['motherLastname']
+                e['birthdate'] = person['birthdate']
+                e['address'] = person['address']
+                e['nationality'] = person['nationality']
+                e['documentType'] = person['documentType']
                 e['documentNumber'] = person['documentNumber']
                 e['idSalesRecord'] = salesRecord['idSalesRecord']
                 e['origin'] = salesRecord['origin']

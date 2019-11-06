@@ -11,7 +11,9 @@ class Client(db.Model, AddUpdateDelete):
 	idProspectiveClient = db.Column('idProspectiveClient', db.ForeignKey('prospectiveClient.id'))
 	salesRecords = db.relationship('SalesRecord')
 	accounts = db.relationship('Account')
-
+	leads = db.relationship('Lead')
+	loans = db.relationship('Loan')
+	
 	def toJson(self):
 		d = {}
 		d['idClient'] = self.id
