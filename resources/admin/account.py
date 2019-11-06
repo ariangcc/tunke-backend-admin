@@ -83,7 +83,7 @@ class AccountListResource(AuthRequiredResource):
 			response = {'error', str(e)}
 			return response, status.HTTP_400_BAD_REQUEST
 
-class GetByClientResource(AuthRequiredResource):
+class GetByClientResource(Resource):
 	def post(self):
 		try:
 			requestDict = request.get_json()

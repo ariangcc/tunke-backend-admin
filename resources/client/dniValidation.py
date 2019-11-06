@@ -3,6 +3,8 @@ from models.prospectiveClient import ProspectiveClient
 from models.client import Client
 from models.blacklist import Blacklist
 from models.account import Account
+from models.lead import Lead
+from models.campaign import Campaign
 from resources.admin.security import AuthRequiredResource
 from flask_restful import Resource
 from flask import request, jsonify, render_template
@@ -56,11 +58,21 @@ class DniValidationResource(Resource):
 				d.update(person.toJson())
 				d.update(prospectiveClient.toJson())
 				d.update(client.toJson())
+				d['activeCampaigns'] = False
+				leads = Lead.query.filter_by(idClient=client.id)
+				for lead in leads:
+					lead = lead.toJson()
+					if(lead['active']):
+						d['activeCampaigns'] = True
+						campaign = Campaign.query.get_or_404(lead['idCampaign'])
+						d['campaign'] = campaign.toJson()
+						break
+
 				nationality = json.loads(requests.get('https://restcountries.eu/rest/v2/alpha/' + person.nationality).text)
 				d['nationality'] = nationality['name']
 				d['flag'] = nationality['flag']
 				return d, status.HTTP_200_OK
-			
+
 		except SQLAlchemyError as e:
 			db.session.rollback()
 			response = {'error': str(e)}

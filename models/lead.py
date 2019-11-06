@@ -12,7 +12,7 @@ class Lead(db.Model, AddUpdateDelete):
 
     def toJson(self):
         d = {}
-        d['idShareType'] = self.id
+        d['idLead'] = self.id
         d['minimumLoan'] = self.minimumLoan
         d['maximumLoan'] = self.maximumLoan
         d['active'] = self.active
