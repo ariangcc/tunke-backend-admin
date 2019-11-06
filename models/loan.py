@@ -11,6 +11,7 @@ class Loan(db.Model, AddUpdateDelete):
     idClient = db.Column('idClient', db.ForeignKey('client.id'))
     idSalesRecord = db.Column('idSalesRecord', db.ForeignKey('salesRecord.id'))
     idShareType = db.Column('idShareType', db.ForeignKey('shareType.id'))
+    idAccount = db.Column('idAccount', db.ForeignKey('account.id'))
     active = db.Column(db.Integer)
 
     def toJson(self):
@@ -23,6 +24,7 @@ class Loan(db.Model, AddUpdateDelete):
         d['idClient'] = self.idClient
         d['idSalesRecord'] = self.idSalesRecord
         d['idShareType'] = self.idShareType
+        d['idAccount'] = self.idAccount
         d['active'] = self.active
         return d
 

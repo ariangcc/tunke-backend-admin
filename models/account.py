@@ -15,6 +15,7 @@ class Account(db.Model, AddUpdateDelete):
 	idSalesRecord = db.Column(db.Integer, db.ForeignKey('salesRecord.id'))
 	idCurrency = db.Column('idCurrency', db.ForeignKey('currency.id'))
 	idClient = db.Column('idClient', db.ForeignKey('client.id'))
+	loans = db.relationship("Loan")
 	transactions = db.relationship("Transaction")
 
 	def toJson(self):
