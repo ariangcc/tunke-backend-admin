@@ -20,3 +20,36 @@ class ParameterSettingsResource(AuthRequiredResource):
 			db.session.rollback()
 			response = {'error': 'An error ocurred. Contact cat-support asap. ' + str(e)}
 			return response, status.HTTP_400_BAD_REQUEST
+
+	def put(self):
+		try:
+			requestDict = request.get_json()
+			if not requestDict:
+				response = {'error' : 'No input data provided'}
+				return response, status.HTTP_400_BAD_REQUEST
+
+			maxTokenSends = requestDict['maxTokenSends']
+			maxDiaryMovements = requestDict['maxDiaryMovements']
+			legalAge = requestDict['legalAge']
+			maxAccountsNumber = requestDict['maxAccountsNumber']
+
+			parameterSettings = ParameterSettings.query.filter_by(id=1).first()
+			parameterSettings.maxTokenSends = maxTokenSends
+			parameterSettings.maxDiaryMovements = maxDiaryMovements
+			parameterSettings.legalAge = legalAge
+			parameterSettings.maxAccountsNumber = maxAccountsNumber
+			parameterSettings.update()
+
+			db.session.commit()
+			response = {'ok': 'Parámetros actualizados correctamente'}
+			return response, status.HTTP_200_OK
+
+		except SQLAlchemyError as e:
+			db.session.rollback()
+			response = {'error', str(e)}
+			return response, status.HTTP_400_BAD_REQUEST
+
+		except Exception as e:
+			db.session.rollback()
+			response = {'error', str(e)}
+			return response, status.HTTP_400_BAD_REQUEST
