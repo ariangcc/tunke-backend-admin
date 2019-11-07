@@ -53,7 +53,7 @@ class LoanResource(AuthRequiredResource):
 			account.update()
 			db.session.commit()
 			response = {'ok': 'Prestamo actualizado satisfactoriamente.'}
-			return response, status.HTTP_204_NO_CONTENT
+			return response, status.HTTP_200_OK
 
 		except SQLAlchemyError as e:
 			db.session.rollback()
