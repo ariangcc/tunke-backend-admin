@@ -30,7 +30,7 @@ class SendTokenResource(Resource):
 			 
 			if msgType == 1: #Envio por email
 				email = requestDict['email']
-				SendMail("Tunke - Token de Apertura de Cuenta", "tunkestaff@gmail.com", email, "Su token es " + randomToken)
+				SendMail("Tunke - Token", "tunkestaff@gmail.com", email, "Su token es " + randomToken)
 			else:
 				cellphone = requestDict['cellphone']
 				SendSMS(cellphone, "Su token es " + randomToken)

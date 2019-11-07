@@ -3,9 +3,7 @@ from password_strength import PasswordPolicy
 from random import randint
 from twilio.rest import Client
 from flask_mail import Message
-accountSid = 'AC84b2f9aafd614e412c158691414148ff'
-authToken = '3f42c54aaaff688f4116da6274a7cb9b'
-myTwilio = '+19543765857'
+from credentials import accountSid, authToken, myTwilio
 
 passwordPolicy = PasswordPolicy.from_names(
 	length=5,  # min length: 8
