@@ -7,19 +7,10 @@ from sqlalchemy.exc import SQLAlchemyError
 import status
 
 class LeadResource(AuthRequiredResource):
-    def post(self):
-        requestDict = request.get_json()
-        if not requestDict:
-            response = {'error': 'No input data provided'}
-            return response, status.HTTP_400_BAD_REQUEST
-
-        idClient = requestDict['idClient']
-        idCampaign = requestDict['idCampaign']
+    def get(self,id):
         try:
-            d = {}
-            lead = Lead.query.filter_by(idClient=idClient,idCampaign=idCampaign).first()
-            d['lead'] = lead.toJson()
-            return d, status.HTTP_200_OK
+            lead = Lead.query.get_or_404(id)
+            return lead.toJson(), status.HTTP_200_OK
         
         except SQLAlchemyError as e:
             db.session.rollback()
