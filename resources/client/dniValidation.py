@@ -64,6 +64,7 @@ class DniValidationResource(Resource):
 					lead = lead.toJson()
 					if(lead['active']):
 						d['activeCampaigns'] = True
+						d['idLead'] = lead['idLead']
 						campaign = Campaign.query.get_or_404(lead['idCampaign'])
 						d['campaign'] = campaign.toJson()
 						break
