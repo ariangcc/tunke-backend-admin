@@ -6,7 +6,7 @@ from flask import request
 from sqlalchemy.exc import SQLAlchemyError
 import status
 
-class LeadResource(AuthRequiredResource):
+class LeadResource(Resource):
     def get(self,id):
         try:
             lead = Lead.query.get_or_404(id)
