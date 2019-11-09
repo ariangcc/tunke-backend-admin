@@ -32,3 +32,39 @@ class BlackListListResource(AuthRequiredResource):
             db.session.rollback()
             response = {'error', str(e)}
             return response, status.HTTP_400_BAD_REQUEST
+
+    def post(self):
+        try:
+            requestDict = request.get_json()
+            if not requestDict:
+                response = {'error' : 'No input data provided'}
+                return response, status.HTTP_400_BAD_REQUEST
+            blackLists = Blacklist.query.all()
+            for person in requestDict:
+                flag = 0
+                dni = person['dni']
+                for bl in blackLists:
+                    if(dni==bl.documentNumber):
+                        flag = 1
+                        break
+                if(flag==1):
+                     continue
+                motivo = person['motivo']
+                blacklistClassification = BlacklistClassification.query.filter_by(description=motivo).first()
+                blacklistClassification = blacklistClassification.toJson()
+                blacklist = Blacklist(documentType="DNI",documentNumber=dni,active=1,idBlacklistClassification=blacklistClassification['idBlacklistClassification'])
+                blacklist.add(blacklist)
+            
+            db.session.commit()
+            response = {'ok' : 'BlackList actualizada correctamente'}
+            return response, status.HTTP_201_CREATED
+
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            response = {'error', str(e)}
+            return response, status.HTTP_400_BAD_REQUEST
+
+        except Exception as e:
+            db.session.rollback()
+            response = {'error', str(e)}
+            return response, status.HTTP_400_BAD_REQUEST

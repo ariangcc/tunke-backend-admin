@@ -6,12 +6,13 @@ class Loan(db.Model, AddUpdateDelete):
     id = db.Column(db.Integer, primary_key=True)
     totalShares = db.Column(db.Integer)
     amount = db.Column(db.Integer)
-    interestRate = db.Column(db.Integer)
+    interestRate = db.Column(db.Float)
     idCampaign = db.Column('idCampaign', db.ForeignKey('campaign.id'))
     idClient = db.Column('idClient', db.ForeignKey('client.id'))
     idSalesRecord = db.Column('idSalesRecord', db.ForeignKey('salesRecord.id'))
     idShareType = db.Column('idShareType', db.ForeignKey('shareType.id'))
     idAccount = db.Column('idAccount', db.ForeignKey('account.id'))
+    share = db.Column(db.Float)
     active = db.Column(db.Integer)
 
     def toJson(self):
@@ -25,6 +26,7 @@ class Loan(db.Model, AddUpdateDelete):
         d['idSalesRecord'] = self.idSalesRecord
         d['idShareType'] = self.idShareType
         d['idAccount'] = self.idAccount
+        d['share'] = self.share
         d['active'] = self.active
         return d
 
