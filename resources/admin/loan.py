@@ -86,3 +86,58 @@ class LoanListResource(AuthRequiredResource):
 			response = {'error', str(e)}
 			return response, status.HTTP_400_BAD_REQUEST
 
+	def post(self):
+		try:
+			requestDict = request.get_json()
+			if not requestDict:
+				response = {'error': 'No input data provided'}
+				return response, status.HTTP_400_BAD_REQUEST
+
+			idClient = requestDict['idClient']
+			totalShares = requestDict['totalShares']
+			amount = requestDict['amount']
+			interestRate = requestDict['interestRate']
+			idShareType = requestDict['idShareType']
+			idAccount = requestDict['idAccount']
+
+			client = Client.query.get_or_404(idClient)
+			if client.activeLoans==1:
+				response = {'error':' El cliente tiene un préstamo activo'}
+				return response, status.HTTP_400_BAD_REQUEST 
+			client.activeLoans = 1
+			client.update()
+
+			salesRecord = SalesRecord(origin='Origen default', requestDate=datetime.now(), idRecordStatus=3,active=1,idClient=idClient,idProduct=2)
+			salesRecord.add(salesRecord)
+			db.session.flush()
+			
+			#Prestamo con campaña para clientes sin campaña
+			loan = Loan(totalShares=totalShares,amount=amount,interestRate=interestRate,idCampaign=2,idClient=idClient,idSalesRecord=salesRecord.id,idShareType=idShareType,active=1)
+			loan.add(loan)
+
+			db.session.commit()
+			
+			regLoan = Loan.query.get(loan.id)
+			d={}
+			d['idLoan'] = regLoan.id
+			d['totalShares'] = regLoan.totalShares
+			d['amount'] = regLoan.amount
+			d['interestRate'] = regLoan.interestRate
+			d['idCampaign'] = 2
+			d['idClient'] = regLoan.idClient
+			d['idSalesRecord'] = regLoan.idSalesRecord
+			d['idShareType'] = regLoan.idShareType
+			d['active'] = regLoan.active
+
+			return d, status.HTTP_201_CREATED
+
+		except SQLAlchemyError as e:
+			db.session.rollback()
+			response = {'error', str(e)}
+			return response, status.HTTP_400_BAD_REQUEST
+
+		except Exception as e:
+			db.session.rollback()
+			response = {'error', str(e)}
+			return response, status.HTTP_400_BAD_REQUEST
+
