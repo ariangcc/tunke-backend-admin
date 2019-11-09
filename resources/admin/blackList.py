@@ -1,6 +1,7 @@
 from app import db
 from models.blacklist import Blacklist
 from models.person import Person
+from models.blacklistClassification import BlacklistClassification
 from resources.admin.security import AuthRequiredResource
 from flask_restful import Resource
 from sqlalchemy.exc import SQLAlchemyError
@@ -14,8 +15,12 @@ class BlackListListResource(AuthRequiredResource):
             d = []
             for bl in listBlackList:
                 bl = bl.toJson()
+                blacklistClassification = BlacklistClassification.query.get(bl['idBlacklistClassification'])
                 person = Person.query.filter_by(documentNumber=bl['documentNumber']).first()
-                d.append(person.toJson())
+                e = {}
+                e.update(person.toJson())
+                e['reason'] = blacklistClassification.description
+                d.append(e)
             return d, status.HTTP_200_OK
 
         except SQLAlchemyError as e:
