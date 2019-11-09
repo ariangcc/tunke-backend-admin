@@ -112,7 +112,7 @@ class LoanListResource(AuthRequiredResource):
 			db.session.flush()
 			
 			#Prestamo con campaña para clientes sin campaña
-			loan = Loan(totalShares=totalShares,amount=amount,interestRate=interestRate,idCampaign=2,idClient=idClient,idSalesRecord=salesRecord.id,idShareType=idShareType,active=1)
+			loan = Loan(totalShares=totalShares,amount=amount,interestRate=interestRate,idCampaign=2,idClient=idClient,idSalesRecord=salesRecord.id,idShareType=idShareType,active=1,idAccount=idAccount)
 			loan.add(loan)
 
 			db.session.commit()

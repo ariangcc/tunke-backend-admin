@@ -53,7 +53,7 @@ class RequestLoanResource(Resource):
 
 			#Insert in loan			
 			loan = Loan(totalShares=totalShares,amount=amount,interestRate=interestRate,idCampaign=idCampaign,
-			idClient=idClient,idSalesRecord=salesRecord.id,idShareType=idShareType,active=1)
+			idClient=idClient,idSalesRecord=salesRecord.id,idShareType=idShareType,active=1,idAccount=idAccount)
 			loan.add(loan)
 			
 			#Commit changes
