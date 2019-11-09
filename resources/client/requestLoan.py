@@ -39,6 +39,9 @@ class RequestLoanResource(Resource):
 			
 			#Update boolean in client
 			client = Client.query.get_or_404(idClient)
+			if client.activeLoans==1:
+				response = {'error': 'El cliente tiene un préstamo activo'}
+				return response, status.HTTP_400_BAD_REQUEST
 			client.activeLoans = 1
 			client.update()
 
