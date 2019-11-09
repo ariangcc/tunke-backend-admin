@@ -12,7 +12,7 @@ class Campaign(db.Model, AddUpdateDelete):
     maximumLoan = db.Column(db.Integer)
     minimumPeriod = db.Column(db.Integer)
     maximumPeriod = db.Column(db.Integer)
-    interestRate = db.Column(db.Integer)
+    interestRate = db.Column(db.Float)
     idCurrency = db.Column('idCurrency', db.ForeignKey('currency.id'))
     leads = db.relationship('Lead')
     loans = db.relationship('Loan')
