@@ -99,7 +99,7 @@ class LoanListResource(AuthRequiredResource):
 			interestRate = requestDict['interestRate']
 			idShareType = requestDict['idShareType']
 			idAccount = requestDict['idAccount']
-			share = requestDict['shares']
+			share = requestDict['share']
 
 			client = Client.query.get_or_404(idClient)
 			if client.activeLoans==1:
