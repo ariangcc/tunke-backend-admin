@@ -6,6 +6,7 @@ from models.account import Account
 from models.campaign import Campaign
 from models.currency import Currency
 from models.prospectiveClient import ProspectiveClient
+from models.bankAccount import BankAccount
 from models.person import Person
 from resources.admin.security import AuthRequiredResource
 from flask_restful import Resource
@@ -44,10 +45,13 @@ class LoanResource(AuthRequiredResource):
 			account = Account.query.get_or_404(loan.idAccount)
 			client = Client.query.get_or_404(loan.idClient)
 			salesRecord = SalesRecord.query.get_or_404(loan.idSalesRecord) 
+			bankAccount = BankAccount.query.get_or_404(1)
 			if state == 1:#aprobado
 				salesRecord.idRecordStatus = 1
 				salesRecord.requestDate = datetime.now()
 				account.balance = account.balance + loan.amount
+				bankAccount.balance = bankAccount.balance - loan.amount
+				bankAccount.update()
 				client.activeLoans = 1
 			elif state == 2:
 				salesRecord.idRecordStatus = 2
@@ -137,7 +141,7 @@ class LoanListResource(AuthRequiredResource):
 			db.session.flush()
 			
 			#Prestamo con campaña para clientes sin campaña
-			loan = Loan(totalShares=totalShares,amount=amount,interestRate=interestRate,idCampaign=2,idClient=idClient,idSalesRecord=salesRecord.id,idShareType=idShareType,active=1,idAccount=idAccount,share=share)
+			loan = Loan(totalShares=totalShares,amount=amount,interestRate=interestRate,idCampaign=1,idClient=idClient,idSalesRecord=salesRecord.id,idShareType=idShareType,active=1,idAccount=idAccount,share=share)
 			loan.add(loan)
 
 			db.session.commit()
