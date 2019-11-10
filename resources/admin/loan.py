@@ -3,6 +3,10 @@ from models.loan import Loan
 from models.client import Client
 from models.salesRecord import SalesRecord
 from models.account import Account
+from models.campaign import Campaign
+from models.currency import Currency
+from models.prospectiveClient import ProspectiveClient
+from models.person import Person
 from resources.admin.security import AuthRequiredResource
 from flask_restful import Resource
 from flask import request
@@ -42,10 +46,12 @@ class LoanResource(AuthRequiredResource):
 			salesRecord = SalesRecord.query.get_or_404(loan.idSalesRecord) 
 			if state == 1:#aprobado
 				salesRecord.idRecordStatus = 1
+				salesRecord.requestDate = datetime.now()
 				account.balance = account.balance + loan.amount
 				client.activeLoans = 1
 			elif state == 2:
 				salesRecord.idRecordStatus = 2
+				salesRecord.requestDate = datetime.now()
 				client.activeLoans = 0
 
 			salesRecord.update()
@@ -71,7 +77,25 @@ class LoanListResource(AuthRequiredResource):
 			loans = Loan.query.all()
 			d= []
 			for loan in loans:
-				e = loan.toJson()
+				e = {}
+				e.update(loan.toJson())
+				campaign = Campaign.query.get_or_404(e['idCampaign'])
+				account = Account.query.get_or_404(e['idAccount'])
+				client = Client.query.get_or_404(e['idClient'])
+				prospectiveClient = ProspectiveClient.query.get_or_404(client.idProspectiveClient)
+				person = Person.query.get_or_404(prospectiveClient.idPerson)
+				salesRecord = SalesRecord.query.get_or_404(e['idSalesRecord'])
+				salesRecord = salesRecord.toJson()
+				e['campaignName'] = campaign.name
+				e['accountNumber'] = account.accountNumber
+				if account.idCurrency == 1:
+					e['currency'] = 'Soles'
+				elif account.idCurrency ==2:
+					e['currency'] = 'Dólares'
+				e['fullName'] = person.firstName + ' ' + person.fatherLastname
+				e['documentNumber'] = person.documentNumber
+				e['documentType'] = person.documentType
+				e['requestDate'] = salesRecord['requestDate']
 				d.append(e)
 
 			return d, status.HTTP_200_OK
