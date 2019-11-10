@@ -31,7 +31,7 @@ class OpenAccountResource(Resource):
 			else:
 				client.totalAccounts += 1
 				client.update()
-				
+			db.session.flush()
 			salesRecord = SalesRecord(origin="Origen default", active=1,requestDate=curdatetime,idClient=client.id, idRecordStatus=1, idProduct=1)
 			salesRecord.add(salesRecord)
 			db.session.flush()
