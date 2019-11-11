@@ -27,6 +27,7 @@ class RequestLoanResource(Resource):
 			idShareType = requestDict['idShareType']
 			share = requestDict['share']
 			idAccount = requestDict['idAccount']
+			commission = requestDict['commission']
 
 			#Minus en bank account
 			bankAccount = BankAccount.query.get_or_404(1)
@@ -54,7 +55,7 @@ class RequestLoanResource(Resource):
 
 			#Insert in loan			
 			loan = Loan(totalShares=totalShares,amount=amount,interestRate=interestRate,idCampaign=idCampaign,
-			idClient=idClient,idSalesRecord=salesRecord.id,idShareType=idShareType,active=1,idAccount=idAccount,share=share)
+			idClient=idClient,idSalesRecord=salesRecord.id,idShareType=idShareType,active=1,idAccount=idAccount,share=share,commission=commission)
 			loan.add(loan)
 			
 			#Commit changes
