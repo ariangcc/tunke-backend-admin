@@ -12,7 +12,7 @@ from resources.admin.authentication import VerifyEmailResource
 from resources.client.dniValidation import DniValidationResource
 from resources.admin.account import GetByClientResource
 from resources.admin.parameterSettings import ParameterSettingsResource
-from resources.admin.salesRecord import SalesRecordListResource
+from resources.admin.salesRecord import SalesRecordListResource,SalesRecordResource
 from resources.admin.campaign import CampaignResource, CampaignListResource
 from resources.admin.loan import LoanResource, LoanListResource
 from resources.admin.blackList import BlackListListResource
@@ -36,6 +36,7 @@ api.add_resource(PersonDocumentResource, '/persons/getByDocument/')
 api.add_resource(DniValidationResource, '/dniValidation/')
 api.add_resource(GetByClientResource, '/accounts/getByClient/')
 api.add_resource(ParameterSettingsResource, '/parameterSettings/')
+api.add_resource(SalesRecordResource,'/salesRecord/<int:id>')
 api.add_resource(SalesRecordListResource,'/salesRecords/')
 api.add_resource(CampaignResource,'/campaign/<int:id>')
 api.add_resource(CampaignListResource,'/campaigns/')
