@@ -23,8 +23,8 @@ class Campaign(db.Model, AddUpdateDelete):
         d['idCampaign'] = self.id
         d['name'] = self.name
         d['month'] = self.month
-        d['startDate'] = self.startDate.strftime('%d-%m-%Y')
-        d['endDate'] = self.endDate.strftime('%d-%m-%Y')
+        d['startDate'] = self.startDate.strftime('%Y-%m-%d')
+        d['endDate'] = self.endDate.strftime('%Y-%m-%d')
         d['minimumLoan'] = self.minimumLoan
         d['maximumLoan'] = self.maximumLoan
         d['minimumPeriod'] = self.minimumPeriod
