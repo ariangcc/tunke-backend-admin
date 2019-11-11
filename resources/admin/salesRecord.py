@@ -107,8 +107,8 @@ class SalesRecordResource(AuthRequiredResource):
                 if state == 1:#aprobado
                     salesRecord.idRecordStatus = 1
                     salesRecord.requestDate = datetime.now()
-                    account.balance = account.balance + loan.amount
-                    bankAccount.balance = bankAccount.balance - loan.amount
+                    account.balance = account.balance + loan['amount']
+                    bankAccount.balance = bankAccount.balance - loan['amount']
                     bankAccount.update()
                     client.activeLoans = 1
                 elif state == 2:
