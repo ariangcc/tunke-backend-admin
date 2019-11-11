@@ -86,3 +86,49 @@ class SalesRecordListResource(AuthRequiredResource):
             return response, status.HTTP_400_BAD_REQUEST
 
 
+class SalesRecordResource(AuthRequiredResource):
+
+    	def put(self,id):
+            try:
+                requestDict = request.get_json()
+                if not requestDict:
+                    response = {'error', 'No input data provided'}
+                    return response, status.HTTP_400_BAD_REQUEST
+
+                state = requestDict['state']
+
+                salesRecord = SalesRecord.query.get_or_404(id)
+                loan = Loan.query.filter_by(idSalesRecord=id)
+                loan = loan.toJson()
+                account = Account.query.get_or_404(loan['idAccount'])
+                client = Client.query.get_or_404(loan['idClient'])
+                bankAccount = BankAccount.query.get_or_404(1)
+                if state == 1:#aprobado
+                    salesRecord.idRecordStatus = 1
+                    salesRecord.requestDate = datetime.now()
+                    account.balance = account.balance + loan.amount
+                    bankAccount.balance = bankAccount.balance - loan.amount
+                    bankAccount.update()
+                    client.activeLoans = 1
+                elif state == 2:
+                    salesRecord.idRecordStatus = 2
+                    salesRecord.requestDate = datetime.now()
+                    client.activeLoans = 0
+
+                salesRecord.update()
+                client.update()
+                account.update()
+                db.session.commit()
+                response = {'ok': 'Prestamo actualizado satisfactoriamente.'}
+                return response, status.HTTP_200_OK
+
+            except SQLAlchemyError as e:
+                db.session.rollback()
+                response = {'error', str(e)}
+                return response, status.HTTP_400_BAD_REQUEST
+
+            except Exception as e:
+                db.session.rollback()
+                response = {'error', str(e)}
+                return response, status.HTTP_400_BAD_REQUEST
+
