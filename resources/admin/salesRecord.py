@@ -8,6 +8,7 @@ from models.prospectiveClient import ProspectiveClient
 from models.person import Person
 from models.account import Account
 from models.loan import Loan
+from models.bankAccount import BankAccount
 from flask_restful import Resource
 from sqlalchemy.exc import SQLAlchemyError
 from flask import request
@@ -98,7 +99,7 @@ class SalesRecordResource(AuthRequiredResource):
                 state = requestDict['state']
 
                 salesRecord = SalesRecord.query.get_or_404(id)
-                loan = Loan.query.filter_by(idSalesRecord=id)
+                loan = Loan.query.filter_by(idSalesRecord=id).first()
                 loan = loan.toJson()
                 account = Account.query.get_or_404(loan['idAccount'])
                 client = Client.query.get_or_404(loan['idClient'])
