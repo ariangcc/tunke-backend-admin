@@ -128,6 +128,7 @@ class LoanListResource(AuthRequiredResource):
 			idShareType = requestDict['idShareType']
 			idAccount = requestDict['idAccount']
 			share = requestDict['share']
+			commission = requestDict['commission']
 
 			client = Client.query.get_or_404(idClient)
 			if client.activeLoans==1:
@@ -141,7 +142,7 @@ class LoanListResource(AuthRequiredResource):
 			db.session.flush()
 			
 			#Prestamo con campaña para clientes sin campaña
-			loan = Loan(totalShares=totalShares,amount=amount,interestRate=interestRate,idCampaign=1,idClient=idClient,idSalesRecord=salesRecord.id,idShareType=idShareType,active=1,idAccount=idAccount,share=share)
+			loan = Loan(totalShares=totalShares,amount=amount,interestRate=interestRate,idCampaign=1,idClient=idClient,idSalesRecord=salesRecord.id,idShareType=idShareType,active=1,idAccount=idAccount,share=share,commission=commission)
 			loan.add(loan)
 
 			db.session.commit()

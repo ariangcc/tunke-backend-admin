@@ -36,6 +36,7 @@ class BlackListListResource(AuthRequiredResource):
     def post(self):
         try:
             requestDict = request.get_json()
+            print(requestDict)
             if not requestDict:
                 response = {'error' : 'No input data provided'}
                 return response, status.HTTP_400_BAD_REQUEST

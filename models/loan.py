@@ -12,6 +12,7 @@ class Loan(db.Model, AddUpdateDelete):
     idSalesRecord = db.Column('idSalesRecord', db.ForeignKey('salesRecord.id'))
     idShareType = db.Column('idShareType', db.ForeignKey('shareType.id'))
     idAccount = db.Column('idAccount', db.ForeignKey('account.id'))
+    commission = db.Column(db.Float)
     share = db.Column(db.Float)
     active = db.Column(db.Integer)
 
@@ -27,6 +28,7 @@ class Loan(db.Model, AddUpdateDelete):
         d['idShareType'] = self.idShareType
         d['idAccount'] = self.idAccount
         d['share'] = self.share
+        d['commission'] = self.commission
         d['active'] = self.active
         return d
 

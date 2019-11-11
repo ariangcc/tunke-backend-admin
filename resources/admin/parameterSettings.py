@@ -32,12 +32,14 @@ class ParameterSettingsResource(AuthRequiredResource):
 			maxDiaryMovements = requestDict['maxDiaryMovements']
 			legalAge = requestDict['legalAge']
 			maxAccountsNumber = requestDict['maxAccountsNumber']
+			commissionPercentage = requestDict['commissionPercentage']
 
 			parameterSettings = ParameterSettings.query.filter_by(id=1).first()
 			parameterSettings.maxTokenSends = maxTokenSends
 			parameterSettings.maxDiaryMovements = maxDiaryMovements
 			parameterSettings.legalAge = legalAge
 			parameterSettings.maxAccountsNumber = maxAccountsNumber
+			parameterSettings.commissionPercentage = commissionPercentage
 			parameterSettings.update()
 
 			db.session.commit()
