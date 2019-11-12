@@ -5,7 +5,7 @@ from flask_restful import Resource
 from flask import request
 import status
 
-class ParameterSettingsResource(AuthRequiredResource):
+class ParameterSettingsResource(Resource):
 	def get(self):
 		try:
 			parameterSettings = ParameterSettings.query.filter_by(id=1).first()
