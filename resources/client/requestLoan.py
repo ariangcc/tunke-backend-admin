@@ -24,15 +24,15 @@ class RequestLoanResource(Resource):
 				response = {'error': 'No input data provided'}
 				return response, status.HTTP_400_BAD_REQUEST
 
-			idClient = requestDict['idClient']
-			totalShares = requestDict['totalShares']
-			amount = requestDict['amount']
-			interestRate = requestDict['interestRate']
-			idCampaign = requestDict['idCampaign']
-			idShareType = requestDict['idShareType']
-			share = requestDict['share']
-			idAccount = requestDict['idAccount']
-			commission = requestDict['commission']
+			idClient = int(requestDict['idClient'])
+			totalShares = int(requestDict['totalShares'])
+			amount = float(requestDict['amount'])
+			interestRate = float(requestDict['interestRate'])
+			idCampaign = int(requestDict['idCampaign'])
+			idShareType = int(requestDict['idShareType'])
+			share = float(requestDict['share'])
+			idAccount = int(requestDict['idAccount'])
+			commission = float(requestDict['commission'])
 			print(idClient, totalShares, amount, interestRate, idCampaign, idShareType, share, idAccount, commission)
 			#Obteniendo campaign
 			campaign = Campaign.query.get_or_404(idCampaign)
