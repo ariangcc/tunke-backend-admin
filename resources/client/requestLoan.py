@@ -79,7 +79,7 @@ class RequestLoanResource(Resource):
 			from mailing import mail
 			msg = Message("Tunke - Prestamo otorgado exitosamente", sender="tunkestaff@gmail.com", recipients=[prospectiveClient.email1])
 			msg.body = 'Hola'
-			msg.html = render_template('loans.html', name=d['name'], accountNumber=account.accountNumber, accountDetail='Cuenta Simple'
+			msg.html = render_template('loans.html', name=d['name'], accountNumber=account.accountNumber, accountDetail='Cuenta Simple',
 										currency=d['currency'], amount=amount)
 			mail.send(msg)
 			return d,status.HTTP_201_CREATED
