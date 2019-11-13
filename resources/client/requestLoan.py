@@ -3,12 +3,14 @@ from models.loan import Loan
 from models.client import Client
 from models.salesRecord import SalesRecord
 from models.bankAccount import BankAccount
+from models.prospectiveClient import ProspectiveClient
 from models.account import Account
 from resources.admin.security import AuthRequiredResource
 from flask_restful import Resource
 from flask import request
 from sqlalchemy.exc import SQLAlchemyError
 from datetime import datetime
+from flask_mail import Message
 import status
 
 class RequestLoanResource(Resource):
@@ -72,7 +74,14 @@ class RequestLoanResource(Resource):
 			d['idSalesRecord'] = regLoan.idSalesRecord
 			d['idShareType'] = regLoan.idShareType
 			d['active'] = regLoan.active 
-			
+
+			prospectiveClient = ProspectiveClient.query.get_or_404(client.idProspectiveClient)
+			from mailing import mail
+			msg = Message("Tunke - Prestamo otorgado exitosamente", sender="tunkestaff@gmail.com", recipients=[prospectiveClient.email1])
+			msg.body = 'Hola'
+			msg.html = render_template('loans.html', name=d['name'], accountNumber=account.accountNumber, accountDetail='Cuenta Simple'
+										currency=d['currency'], amount=amount)
+			mail.send(msg)
 			return d,status.HTTP_201_CREATED
 
 		except SQLAlchemyError as e:
