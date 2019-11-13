@@ -3,6 +3,8 @@ from models.loan import Loan
 from models.client import Client
 from models.salesRecord import SalesRecord
 from models.bankAccount import BankAccount
+from models.campaign import Campaign
+from models.currency import Currency
 from models.prospectiveClient import ProspectiveClient
 from models.account import Account
 from resources.admin.security import AuthRequiredResource
@@ -30,9 +32,12 @@ class RequestLoanResource(Resource):
 			share = requestDict['share']
 			idAccount = requestDict['idAccount']
 			commission = requestDict['commission']
+			
+			#Obteniendo campaign
+			campaign = Campaign.query.get_or_404(idCampaign)
 
 			#Minus en bank account
-			bankAccount = BankAccount.query.get_or_404(1)
+			bankAccount = BankAccount.query.get_or_404(campaign.idCurrency)
 			bankAccount.balance = bankAccount.balance - amount
 			bankAccount.update()
 
@@ -76,11 +81,12 @@ class RequestLoanResource(Resource):
 			d['active'] = regLoan.active 
 
 			prospectiveClient = ProspectiveClient.query.get_or_404(client.idProspectiveClient)
+			currency = Currency.query.get_or_404(campaign.idCurrency)
 			from mailing import mail
 			msg = Message("Tunke - Prestamo otorgado exitosamente", sender="tunkestaff@gmail.com", recipients=[prospectiveClient.email1])
 			msg.body = 'Hola'
 			msg.html = render_template('loans.html', name=d['name'], accountNumber=account.accountNumber, accountDetail='Cuenta Simple',
-										currency=d['currency'], amount=amount)
+										currency=currency.currencyName, amount=amount)
 			mail.send(msg)
 			return d,status.HTTP_201_CREATED
 
