@@ -67,6 +67,7 @@ class RequestLoanResource(Resource):
 			loan.add(loan)
 			
 			#Commit changes
+			print("hola")
 			db.session.commit()
 
 			regLoan = Loan.query.get(loan.id)
