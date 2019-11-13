@@ -5,6 +5,7 @@ from models.salesRecord import SalesRecord
 from models.bankAccount import BankAccount
 from models.campaign import Campaign
 from models.currency import Currency
+from models.person import Person
 from models.prospectiveClient import ProspectiveClient
 from models.account import Account
 from resources.admin.security import AuthRequiredResource
@@ -81,11 +82,12 @@ class RequestLoanResource(Resource):
 			d['active'] = regLoan.active 
 
 			prospectiveClient = ProspectiveClient.query.get_or_404(client.idProspectiveClient)
+			person = Person.query.get_or_404(prospectiveClient.idClient)
 			currency = Currency.query.get_or_404(campaign.idCurrency)
 			from mailing import mail
 			msg = Message("Tunke - Prestamo otorgado exitosamente", sender="tunkestaff@gmail.com", recipients=[prospectiveClient.email1])
 			msg.body = 'Hola'
-			msg.html = render_template('loans.html', name=d['name'], accountNumber=account.accountNumber, accountDetail='Cuenta Simple',
+			msg.html = render_template('loans.html', name=person.name + " " + person.fatherLastname, accountNumber=account.accountNumber, accountDetail='Cuenta Simple',
 										currency=currency.currencyName, amount=amount)
 			mail.send(msg)
 			return d,status.HTTP_201_CREATED
