@@ -33,7 +33,7 @@ class RequestLoanResource(Resource):
 			share = requestDict['share']
 			idAccount = requestDict['idAccount']
 			commission = requestDict['commission']
-			
+			print(idClient, totalShares, amount, interestRate, idCampaign, idShareType, share, idAccount, commission)
 			#Obteniendo campaign
 			campaign = Campaign.query.get_or_404(idCampaign)
 
@@ -80,7 +80,7 @@ class RequestLoanResource(Resource):
 			d['idSalesRecord'] = regLoan.idSalesRecord
 			d['idShareType'] = regLoan.idShareType
 			d['active'] = regLoan.active 
-
+			
 			prospectiveClient = ProspectiveClient.query.get_or_404(client.idProspectiveClient)
 			person = Person.query.get_or_404(prospectiveClient.idClient)
 			currency = Currency.query.get_or_404(campaign.idCurrency)
