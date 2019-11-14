@@ -38,9 +38,11 @@ class RequestLoanResource(Resource):
 			campaign = Campaign.query.get_or_404(idCampaign)
 
 			#Minus en bank account
+			print('a')
 			bankAccount = BankAccount.query.get_or_404(campaign.idCurrency)
 			bankAccount.balance = bankAccount.balance - amount
 			bankAccount.update()
+			print('b')
 
 			#Plus in AccountClient
 			account = Account.query.get_or_404(idAccount)
@@ -81,7 +83,8 @@ class RequestLoanResource(Resource):
 			d['idSalesRecord'] = regLoan.idSalesRecord
 			d['idShareType'] = regLoan.idShareType
 			d['active'] = regLoan.active 
-			
+			#print("ptm")
+			"""
 			prospectiveClient = ProspectiveClient.query.get_or_404(client.idProspectiveClient)
 			person = Person.query.get_or_404(prospectiveClient.idClient)
 			currency = Currency.query.get_or_404(campaign.idCurrency)
@@ -91,6 +94,7 @@ class RequestLoanResource(Resource):
 			msg.html = render_template('loans.html', name=person.name + " " + person.fatherLastname, accountNumber=account.accountNumber, accountDetail='Cuenta Simple',
 										currency=currency.currencyName, amount=amount)
 			mail.send(msg)
+			"""
 			return d,status.HTTP_201_CREATED
 
 		except SQLAlchemyError as e:
