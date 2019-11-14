@@ -10,7 +10,7 @@ from models.prospectiveClient import ProspectiveClient
 from models.account import Account
 from resources.admin.security import AuthRequiredResource
 from flask_restful import Resource
-from flask import request
+from flask import request, render_template
 from sqlalchemy.exc import SQLAlchemyError
 from datetime import datetime
 from flask_mail import Message
@@ -74,26 +74,20 @@ class RequestLoanResource(Resource):
 
 			regLoan = Loan.query.get(loan.id)
 			d={}
-			d['idLoan'] = regLoan.id
-			d['totalShares'] = regLoan.totalShares
-			d['amount'] = regLoan.amount
-			d['interestRate'] = regLoan.interestRate
-			d['idCampaign'] = regLoan.idCampaign
-			d['idClient'] = regLoan.idClient
-			d['idSalesRecord'] = regLoan.idSalesRecord
-			d['idShareType'] = regLoan.idShareType
-			d['active'] = regLoan.active 
+			d['idLoan'] = str(regLoan.id)
+			d['totalShares'] = str(regLoan.totalShares)
+			d['amount'] = str(regLoan.amount)
+			d['interestRate'] = str(regLoan.interestRate)
+			d['idCampaign'] = str(regLoan.idCampaign)
+			d['idClient'] = str(regLoan.idClient)
+			d['idSalesRecord'] = str(regLoan.idSalesRecord)
+			d['idShareType'] = str(regLoan.idShareType)
+			d['active'] = str(regLoan.active)
 			prospectiveClient = ProspectiveClient.query.get_or_404(client.idProspectiveClient)
 			person = Person.query.get_or_404(prospectiveClient.idPerson)
 			currency = Currency.query.get_or_404(campaign.idCurrency)
-			from mailing import mail
-			msg = Message("Tunke - Prestamo otorgado exitosamente", sender="tunkestaff@gmail.com", recipients=[prospectiveClient.email1])
-			msg.body = 'Hola'
-			print("perdon :s")
-			msg.html = render_template('loans.html', name=person.name + " " + person.fatherLastname, accountNumber=account.accountNumber, accountDetail='Cuenta Simple',
-										currency=currency.currencyName, amount=amount)
-			mail.send(msg)
-			return d,status.HTTP_201_CREATED
+			
+			return d, status.HTTP_201_CREATED
 
 		except SQLAlchemyError as e:
 			db.session.rollback()
