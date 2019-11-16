@@ -9,9 +9,13 @@ import status
 class BankAccountResource(AuthRequiredResource):
     def get(self):
         try:
-            bankAccount = BankAccount.query.filter_by(id=1).first()
-            d = bankAccount.toJson()
-            return d, status.HTTP_200_OK
+            l = []
+            bankAccounts = BankAccount.query.all()
+            for bankAccount in bankAccounts:
+                d = {}
+                d.update(bankAccount.toJson())
+                l.append(d)
+            return l, status.HTTP_200_OK
 
         except SQLAlchemyError as e:
             db.session.rollback()

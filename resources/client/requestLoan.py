@@ -11,9 +11,9 @@ from models.account import Account
 from models.transaction import Transaction
 from resources.admin.security import AuthRequiredResource
 from flask_restful import Resource
-from flask import request, render_template
 from sqlalchemy.exc import SQLAlchemyError
 from datetime import datetime
+from flask import request, render_template
 from flask_mail import Message
 import status
 
@@ -34,16 +34,13 @@ class RequestLoanResource(Resource):
 			share = float(requestDict['share'])
 			idAccount = int(requestDict['idAccount'])
 			commission = float(requestDict['commission'])
-			print(idClient, totalShares, amount, interestRate, idCampaign, idShareType, share, idAccount, commission)
 			#Obteniendo campaign
 			campaign = Campaign.query.get_or_404(idCampaign)
 
 			#Minus en bank account
-			print('a')
 			bankAccount = BankAccount.query.get_or_404(campaign.idCurrency)
 			bankAccount.balance = bankAccount.balance - amount
 			bankAccount.update()
-			print('b')
 
 			#Plus in AccountClient
 			account = Account.query.get_or_404(idAccount)
@@ -90,7 +87,16 @@ class RequestLoanResource(Resource):
 			prospectiveClient = ProspectiveClient.query.get_or_404(client.idProspectiveClient)
 			person = Person.query.get_or_404(prospectiveClient.idPerson)
 			currency = Currency.query.get_or_404(campaign.idCurrency)
-			
+
+			from mailing import mail
+			msg = Message("Tunke - Prestamo exitoso", sender="tunkestaff@gmail.com", recipients=[prospectiveClient.email1])
+			msg.body = 'Hola'
+			fullName = person.firstName + ' ' + person.fatherLastname
+			accNumber = str(account.accountNumber)
+			curName = str(currency.currencyName)
+			amount = str(d['amount'])
+			msg.html = render_template('loans.html', name=fullName, accountNumber=accNumber, currency=curName, amount=amount)
+			mail.send(msg)	
 			return d, status.HTTP_201_CREATED
 
 		except SQLAlchemyError as e:
