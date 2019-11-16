@@ -8,6 +8,7 @@ from models.currency import Currency
 from models.person import Person
 from models.prospectiveClient import ProspectiveClient
 from models.account import Account
+from models.transaction import Transaction
 from resources.admin.security import AuthRequiredResource
 from flask_restful import Resource
 from flask import request, render_template
@@ -58,7 +59,7 @@ class RequestLoanResource(Resource):
 			client.update()
 
 			#Insert in salesRecord
-			salesRecord = SalesRecord(origin='Origen default',requestDate=datetime.now(),idRecordStatus=1,
+			salesRecord = SalesRecord(origin='Web',requestDate=datetime.now(),idRecordStatus=1,
 			active=1,idClient=idClient,idProduct=2)
 			salesRecord.add(salesRecord)
 			db.session.flush()
@@ -68,8 +69,11 @@ class RequestLoanResource(Resource):
 			idClient=idClient,idSalesRecord=salesRecord.id,idShareType=idShareType,active=1,idAccount=idAccount,share=share,commission=commission)
 			loan.add(loan)
 			
+			#Insert in transaction
+			transaction = Transaction(datetime=datetime.now(),amount=amount,idAccount=idAccount,idBankAccount=campaign.idCurrency,active=1)
+			transaction.add(transaction)
+			
 			#Commit changes
-			print("hola")
 			db.session.commit()
 
 			regLoan = Loan.query.get(loan.id)
