@@ -23,6 +23,7 @@ class OpenAccountResource(Resource):
 		curdatetime = datetime.now()
 		try:
 			idPerson = requestDict['idPerson']
+			origin = requestDict['origin']
 			prospectiveClient = ProspectiveClient.query.filter_by(idPerson=idPerson).first()
 			client = Client.query.filter_by(idProspectiveClient=prospectiveClient.id).first()
 			if not client: #Apertura de cuentas no cliente
@@ -32,7 +33,12 @@ class OpenAccountResource(Resource):
 				client.totalAccounts += 1
 				client.update()
 			db.session.flush()
-			salesRecord = SalesRecord(origin="Origen default", active=1,requestDate=curdatetime,idClient=client.id, idRecordStatus=1, idProduct=1)
+			orig = ""
+			if origin==1:
+				orig = "Web"
+			else:
+				orig = "Ventanilla" 
+			salesRecord = SalesRecord(origin=orig, active=1,requestDate=curdatetime,idClient=client.id, idRecordStatus=1, idProduct=1)
 			salesRecord.add(salesRecord)
 			db.session.flush()
 			currency = requestDict['currency']

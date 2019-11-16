@@ -8,6 +8,7 @@ class BankAccount(db.Model, AddUpdateDelete):
     balance = db.Column(db.Float)
     idCurrency = db.Column('idCurrency', db.ForeignKey('currency.id'))
     active = db.Column(db.Integer)
+    transactions = db.relationship("Transaction")
 
     def toJson(self):
         d = {}

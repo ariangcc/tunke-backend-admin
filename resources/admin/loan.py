@@ -8,6 +8,7 @@ from models.currency import Currency
 from models.prospectiveClient import ProspectiveClient
 from models.bankAccount import BankAccount
 from models.person import Person
+from models.transaction import Transaction
 from resources.admin.security import AuthRequiredResource
 from flask_restful import Resource
 from flask import request
@@ -95,14 +96,14 @@ class LoanListResource(AuthRequiredResource):
 			client.activeLoans = 1
 			client.update()
 
-			salesRecord = SalesRecord(origin='Origen default', requestDate=datetime.now(), idRecordStatus=3,active=1,idClient=idClient,idProduct=2)
+			salesRecord = SalesRecord(origin='Ventanilla', requestDate=datetime.now(), idRecordStatus=3,active=1,idClient=idClient,idProduct=2)
 			salesRecord.add(salesRecord)
 			db.session.flush()
 			
 			#Prestamo con campaña para clientes sin campaña
 			loan = Loan(totalShares=totalShares,amount=amount,interestRate=interestRate,idCampaign=idCampaign,idClient=idClient,idSalesRecord=salesRecord.id,idShareType=idShareType,active=1,idAccount=idAccount,share=share,commission=commission)
 			loan.add(loan)
-
+			
 			db.session.commit()
 			
 			regLoan = Loan.query.get(loan.id)
