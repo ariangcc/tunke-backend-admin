@@ -1,6 +1,7 @@
 from models.transaction import Transaction
 from models.account import Account
 from models.bankAccount import BankAccount
+from models.currency import Currency
 from resources.admin.security import AuthRequiredResource
 from flask_restful import Resource
 from sqlalchemy.exc import SQLAlchemyError
@@ -29,11 +30,14 @@ class TransactionListResource(AuthRequiredResource):
 			for transaction in transactions:
 				d = {}
 				transaction = transaction.toJson()
+				account = Account.query.get_or_404(transaction['idAccount'])
+				currency = Currency.query.get_or_404(account.idCurrency)
 				d['id'] = transaction['idTransaction']
 				d['datetime'] = transaction['datetime']
 				d['amount'] = transaction['amount']
-				d['accountNumber'] = Account.query.get_or_404(transaction['idAccount']).accountNumber
+				d['accountNumber'] = account.accountNumber
 				d['bankAccountNumber'] = BankAccount.query.get_or_404(transaction['idBankAccount']).accountNumber
+				d['currency'] = currency.currencyName
 				l.append(d)
 			return l, status.HTTP_200_OK
 		except SQLAlchemyError as e:
