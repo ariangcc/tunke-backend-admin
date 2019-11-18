@@ -15,7 +15,7 @@ from resources.admin.parameterSettings import ParameterSettingsResource
 from resources.admin.salesRecord import SalesRecordListResource,SalesRecordResource
 from resources.admin.campaign import CampaignResource, CampaignListResource, CampaignChargeResource
 from resources.admin.loan import LoanResource, LoanListResource
-from resources.admin.blackList import BlackListListResource
+from resources.admin.blackList import BlackListListResource, BlackListResource
 from resources.admin.bankAccount import BankAccountResource
 from resources.admin.transaction import TransactionListResource
 from resources.admin.lead import LeadListResource
@@ -49,3 +49,4 @@ api.add_resource(BlackListListResource,'/blackLists/')
 api.add_resource(TransactionListResource,'/transactions/')
 api.add_resource(CampaignChargeResource,'/campaignCharge/')
 api.add_resource(LeadListResource,'/leads/')
+api.add_resource(BlackListResource,'/blackList/')

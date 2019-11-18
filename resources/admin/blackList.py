@@ -8,6 +8,42 @@ from sqlalchemy.exc import SQLAlchemyError
 from flask import request
 import status
 
+class BlackListResource(AuthRequiredResource):
+    def post(self):
+        try:
+            requestDict = request.get_json()
+            if not requestDict:
+                response = {'error' : 'No input data provided'}
+                return response, status.HTTP_400_BAD_REQUEST
+
+            dni = requestDict['dni']
+            reason = requestDict['reason']
+            blackLists = Blacklist.query.all()
+            for bl in blackLists:
+                if(dni==bl.documentNumber):
+                    response = {'error' : 'Esta persona ya se encuentra en la blackList'}
+                    return response, status.HTTP_400_BAD_REQUEST
+
+            blacklistClassification = BlacklistClassification.query.filter_by(description=reason).first()
+            blacklistClassification = blacklistClassification.toJson()
+            blacklist = Blacklist(documentType="DNI",documentNumber=dni,active=1,idBlacklistClassification=blacklistClassification['idBlacklistClassification'])
+            blacklist.add(blacklist)
+
+            db.session.commit()
+            
+            response = {'ok': 'Añadido a la Blacklist correctamente'}
+            return response, status.HTTP_201_CREATED
+
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            response = {'error', str(e)}
+            return response, status.HTTP_400_BAD_REQUEST
+
+        except Exception as e:
+            db.session.rollback()
+            response = {'error': 'An error ocurred. Contact cat-support asap. ' + str(e)}
+            return response, status.HTTP_400_BAD_REQUEST
+
 class BlackListListResource(AuthRequiredResource):
     def get(self):
         try:
