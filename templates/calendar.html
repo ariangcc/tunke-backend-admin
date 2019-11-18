@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title>Calendario de pagos</title>
+  </head>
+      <style type="text/css">
+    	.table thead th{
+		  border : 0px;
+		  color : black;
+		  font-size: 0.80rem;
+		  font-weight: 600;
+		}
+
+		tbody tr td{
+		 font-size: 0.80rem;
+		 font-weight: 500;
+		}
+		tfoot tr td{
+		  font-weight: bold;
+		}
+
+		.tdOneTwoFourSeven{
+		  padding-left: 4%;
+		}
+
+		.tdThreeFive{
+		  padding-left: 2%;
+		}
+
+		.tdSix{
+		  padding-left: 2.5%;
+		}
+
+		thead .table-dark th{
+		  background-color: #e6e6e6;
+		}
+
+		tfoot .table-dark td {
+		  color: black;
+		  font-weight: 600;
+		  font-size: 1.1rem;
+		}
+    </style>
+
+  <body>
+  	<div id="app">
+	    <table class="table">
+	          <thead>
+	              <tr class="table-dark">
+	                  <th>N° cuota</th>
+	                  <th>F. Vencimiento</th>
+	                  <th>Saldo Inicial</th>
+	                  <th>Amortización</th>
+	                  <th>Interés</th>
+	                  <th>Comisión</th>
+	                  <th>Monto de Cuota</th>
+	              </tr>
+	          </thead>
+	          <tbody id="tableData">
+	              <tr v-for="(share,index) in shares" v-bind:key="index">
+	                  <td class="tdOneTwoFourSeven">{{index + 1}}</td>
+	                  <td class="tdOneTwoFourSeven">{{share.date}}</td>
+	                  <td class="tdThreeFive">{{currencySymbol}} {{share.initialBalance}}</td>
+	                  <td class="tdOneTwoFourSeven">{{currencySymbol}} {{share.amortization}}</td>
+	                  <td class="tdThreeFive">{{currencySymbol}} {{share.interest}}</td>
+	                  <td class="tdSix">{{currencySymbol}} {{share.commission}}</td>
+	                  <td class="tdOneTwoFourSeven">{{currencySymbol}} {{share.feeAmount}}</td>
+	              </tr>
+	          </tbody>
+	          <tfoot>
+	              <tr class="table-dark">
+	                  <td class="tdThreeFive">Totales</td>
+	                  <td></td>
+	                  <td></td>
+	                  <td>{{currencySymbol}} {{totalAmortization}}</td>
+	                  <td>{{currencySymbol}} {{totalInterest}}</td>
+	                  <td>{{currencySymbol}} {{totalComission}}</td>
+	                  <td class="tdSix">{{currencySymbol}} {{totalShare}}</td>                                
+	              </tr>
+	          </tfoot>
+	    </table>
+	</div>    
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+     <script>
+    	const app = new Vue({
+    		el : '#app',
+    		data : {
+				shares:[],
+				currencySymbol : '',
+				totalAmortization : -1,
+				totalInterest : -1,
+				totalComission : -1,
+				totalShare : -1
+    		}
+    	})
+    </script>
+  </body>
+</html>

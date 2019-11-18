@@ -16,6 +16,7 @@ from datetime import datetime
 from flask import request, render_template
 from flask_mail import Message
 import status
+import pdfkit
 
 class RequestLoanResource(Resource):
 	def post(self):
@@ -96,6 +97,9 @@ class RequestLoanResource(Resource):
 			curName = str(currency.currencyName)
 			amount = str(d['amount'])
 			msg.html = render_template('loans.html', name=fullName, accountNumber=accNumber, currency=curName, amount=amount)
+			#rendered = render_template('calendar.html',shares=shares,currencySymbol=currencySymbol,totalAmortization=totalAmortization,totalInterest=totalInterest,totalComission=totalComission,totalShare=totalShare)
+			#pdf = pdfkit.from_string(rendered ,False)
+			#msg.attach("Calendario.pdf","application/pdf",pdf)
 			mail.send(msg)	
 			return d, status.HTTP_201_CREATED
 
