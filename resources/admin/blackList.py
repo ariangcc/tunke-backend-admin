@@ -25,8 +25,24 @@ class BlackListResource(AuthRequiredResource):
                     return response, status.HTTP_400_BAD_REQUEST
 
             blacklistClassification = BlacklistClassification.query.filter_by(description=reason).first()
-            blacklistClassification = blacklistClassification.toJson()
-            blacklist = Blacklist(documentType="DNI",documentNumber=dni,active=1,idBlacklistClassification=blacklistClassification['idBlacklistClassification'])
+            if (blacklistClassification is None):
+                #Si no está la clasificación
+                blacklistClassification = BlacklistClassification(name="Regular",description=reason,active=1)
+                blacklistClassification.add(blacklistClassification)
+
+                db.session.flush()
+
+                blacklist = Blacklist(documentType="DNI",documentNumber=dni,active=1,idBlacklistClassification=blacklistClassification.id)
+                blacklist.add(blacklist)
+                
+                db.session.commit()
+
+                response = {'ok': 'Añadido a la Blacklist correctamente'}
+                return response, status.HTTP_201_CREATED
+
+            blClassification = BlacklistClassification.query.filter_by(description=reason).first()
+            blClassification = blacklistClassification.toJson()
+            blacklist = Blacklist(documentType="DNI",documentNumber=dni,active=1,idBlacklistClassification=blClassification['idBlacklistClassification'])
             blacklist.add(blacklist)
 
             db.session.commit()
@@ -87,6 +103,16 @@ class BlackListListResource(AuthRequiredResource):
                      continue
                 motivo = person['motivo']
                 blacklistClassification = BlacklistClassification.query.filter_by(description=motivo).first()
+                if(blacklistClassification is None):
+                    #Si no está la clasificación
+                    blacklistClassification = BlacklistClassification(name="Regular",description=motivo,active=1)
+                    blacklistClassification.add(blacklistClassification)
+
+                    db.session.flush()
+
+                    blacklist = Blacklist(documentType="DNI",documentNumber=dni,active=1,idBlacklistClassification=blacklistClassification.id)
+                    blacklist.add(blacklist)
+                    continue
                 blacklistClassification = blacklistClassification.toJson()
                 blacklist = Blacklist(documentType="DNI",documentNumber=dni,active=1,idBlacklistClassification=blacklistClassification['idBlacklistClassification'])
                 blacklist.add(blacklist)
