@@ -21,3 +21,33 @@ class LeadResource(Resource):
             db.session.rollback()
             response = {'error', str(e)}
             return response, status.HTTP_400_BAD_REQUEST
+
+class LeadListResource(AuthRequiredResource):
+    def post(self):
+        requestDict = request.get_json()
+        try :
+            if not requestDict:
+                response = {'error': 'No input data provided'}
+                return response, status.HTTP_400_BAD_REQUEST
+
+            idClient = requestDict['idClient']
+            idCampaign = requestDict['idCampaign']
+            minimumLoan = requestDict['minimumLoan']
+            maximumLoan = requestDict['maximumLoan']
+
+            lead = Lead(idClient=idClient,idCampaign=idCampaign,minimumLoan=minimumLoan,maximumLoan=maximumLoan,active=1)
+            lead.add(lead)
+
+            db.session.commit()
+            response = {'ok' : 'Lead creado correctamente'}
+            return response, status.HTTP_201_CREATED
+
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            response = {'error', str(e)}
+            return response, status.HTTP_400_BAD_REQUEST
+
+        except Exception as e:
+            db.session.rollback()
+            response = {'error': 'An error ocurred. Contact cat-support asap. ' + str(e)}
+            return response, status.HTTP_400_BAD_REQUEST
