@@ -85,6 +85,7 @@ class GetByCampaignResource(AuthRequiredResource):
                 e['fatherLastname'] = person['fatherLastname']
                 e['motherLastname'] = person['motherLastname']
                 e['birthdate'] = person['birthdate']
+                e['address'] = person['address']
                 d['leads'].append(e)
 
             return d, status.HTTP_200_OK
