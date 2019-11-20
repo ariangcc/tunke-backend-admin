@@ -128,6 +128,7 @@ class RequestLoanResource(Resource):
 			shares = []
 			for sha in sharesA:
 				e = sha.toJson()
+				print(e)
 				shares.append(e)
 
 			from mailing import mail
