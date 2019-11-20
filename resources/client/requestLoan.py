@@ -61,30 +61,25 @@ class RequestLoanResource(Resource):
 			day = today
 
 			#Obteniendo campaign
-			print('Campaign')
 			campaign = Campaign.query.get_or_404(idCampaign)
 
 			#Minus en bank account
-			print('Bank Account')
 			bankAccount = BankAccount.query.get_or_404(campaign.idCurrency)
 			bankAccount.balance = bankAccount.balance - amount
 			bankAccount.update()
 
 			#Plus in AccountClient
-			print('Account')
 			account = Account.query.get_or_404(idAccount)
 			account.balance = account.balance + amount
 			account.update()
 
 			#Insert in salesRecord
-			print('SalesRecord')
 			salesRecord = SalesRecord(origin='Web',requestDate=datetime.now(),idRecordStatus=1,
 			active=1,idClient=idClient,idProduct=2)
 			salesRecord.add(salesRecord)
 			db.session.flush()
 
-			#Insert in loan
-			print('Loan')			
+			#Insert in loan		
 			loan = Loan(totalShares=totalShares,amount=amount,interestRate=interestRate,idCampaign=idCampaign,
 			idClient=idClient,idSalesRecord=salesRecord.id,idShareType=idShareType,active=1,idAccount=idAccount,share=share,commission=commission)
 			loan.add(loan)
@@ -108,7 +103,6 @@ class RequestLoanResource(Resource):
 
 
 			#Insert in transaction
-			print('Transaction')
 			transaction = Transaction(datetime=today,amount=amount,idAccount=idAccount,idBankAccount=campaign.idCurrency,active=1)
 			transaction.add(transaction)
 			
@@ -136,7 +130,6 @@ class RequestLoanResource(Resource):
 				shares.append(e)
 			shares = numpy.array(shares)
 			from mailing import mail
-			print('Correo')
 			msg = Message("Tunke - Prestamo exitoso", sender="tunkestaff@gmail.com", recipients=[prospectiveClient.email1])
 			msg.body = 'Hola'
 			fullName = person.firstName + ' ' + person.fatherLastname
@@ -149,9 +142,10 @@ class RequestLoanResource(Resource):
 			totalComission = str(totalComission)
 			totalShare = str(totalShare)
 			msg.html = render_template('loans.html', name=fullName, accountNumber=accNumber, currency=curName, amount=amount)
-			print('Calendar')
+			print('Rendered')
 			rendered = render_template('calendar.html',currencySymbol=currencySymbol,totalAmortization=totalAmortization,totalInterest=totalInterest,totalComission=totalComission,totalShare=totalShare)
 			#rendered = render_template('calendar.html',shares=shares,currencySymbol=currency.currencySymbol,totalAmortization=totalAmortization,totalInterest=totalInterest,totalComission=totalComission,totalShare=totalShare)
+			print('Pdfkit')
 			pdf = pdfkit.from_string(rendered ,False)
 			print('PDF')
 			msg.attach("Calendario.pdf","application/pdf",pdf)
