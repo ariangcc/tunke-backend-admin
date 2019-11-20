@@ -95,22 +95,13 @@ class RequestLoanResource(Resource):
 				d['commission'] = commission
 				d['feeAmount'] = feeAmount
 				d['date'] = day
+				d['idLoan'] = loan.id
 				shares.append(d)
-				print('b')
-				print(initialDebt)
-				print(amortization)
-				print(interest)
-				print(commission)
-				print(feeAmount)
-				print(day)
-				print(loan.id)
 				share = Share(initialBalance=initialDebt,amortization=amortization,interest=interest,commission=commission,feeAmount=feeAmount,dueDate=day,idLoan=loan.id)
-				print('ga')
 				share.add(share)
 				initialDebt = initialDebt - amortization
-				print('c')
 				#day = day + datetime.timedelta(days=30)
-				print('d')
+
 
 			#Insert in transaction
 			print('Transaction')
