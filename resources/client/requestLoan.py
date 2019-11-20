@@ -105,6 +105,7 @@ class RequestLoanResource(Resource):
 				print(day)
 				print(loan.id)
 				shareMonth = Share(initialBalance=initialDebt,amortization=amortization,interest=interest,commission=commission,feeAmount=feeAmount,dueDate=day,idLoan=loan.id)
+				print('ga')
 				share.add(shareMonth)
 				initialDebt = initialDebt - amortization
 				print('c')
