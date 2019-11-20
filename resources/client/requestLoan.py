@@ -46,7 +46,7 @@ class RequestLoanResource(Resource):
 			client.update()
 			print('a')
 			today = datetime.now()
-			'''tem = round((((1 + (interestRate/100)) ** (1/12))-1) * 100,2)
+			tem = round((((1 + (interestRate/100)) ** (1/12))-1) * 100,2)
 			print('Tem : ' + tem)
 			amortization = round(amount/totalShares,2)
 			print('Amortization : ' + amortization)
@@ -71,12 +71,15 @@ class RequestLoanResource(Resource):
 				shareMonth = Share(initialBalance=initialDebt,amortization=amortization,interest=interest,commission=commission,feeAmount=feeAmount,dueDate=day)
 				initialDebt = initialDebt - amortization
 				day = day + datetime.timedelta(days=30)
-			print('c')
+			print('Totals')
 			totalComission = round(commission * totalShares,2)
+			print('TotalComission : ' + totalComission)
 			totalAmortization = round(amortization * totalShares,2)
+			print('TotalAmortization: ' + totalAmortization)
 			totalShare = round(feeAmount * totalShares,2)
-			totalInterest = round(interest * totalShares,2)'''
-
+			print('TotalShare: ' + totalShare)
+			totalInterest = round(interest * totalShares,2)
+			print('TotalInterest: ' + totalInterest)
 			#Obteniendo campaign
 			print('Campaign')
 			campaign = Campaign.query.get_or_404(idCampaign)
