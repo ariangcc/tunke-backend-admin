@@ -135,8 +135,10 @@ class RequestLoanResource(Resource):
 			person = Person.query.get_or_404(prospectiveClient.idPerson)
 			currency = Currency.query.get_or_404(campaign.idCurrency)
 			print('ToJson')
-			for share in shares:
-				share = share.toJson()
+			for sha in shares:
+				print(sha)
+				sha = share.toJson()
+				print(sha)
 			from mailing import mail
 			print('Correo')
 			msg = Message("Tunke - Prestamo exitoso", sender="tunkestaff@gmail.com", recipients=[prospectiveClient.email1])
