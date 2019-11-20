@@ -1,6 +1,5 @@
 from app import db
 from models.utils import AddUpdateDelete
-from datetime import datetime
 
 class Share(db.Model, AddUpdateDelete):
     __tablename__ = 'share'
@@ -23,3 +22,5 @@ class Share(db.Model, AddUpdateDelete):
         d['commission'] = self.commission
         d['feeAmount'] = self.feeAmount
         d['idLoan'] = self.idLoan
+
+        return d

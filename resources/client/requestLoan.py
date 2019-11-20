@@ -87,7 +87,6 @@ class RequestLoanResource(Resource):
 			
 			#Insert in shares
 			for i in range(totalShares):
-				print('a')
 				d = {}
 				d['initialBalance'] = initialDebt
 				d['amortization'] = amortization
@@ -130,7 +129,7 @@ class RequestLoanResource(Resource):
 			for sha in sharesA:
 				e = sha.toJson()
 				shares.append(e)
-				
+
 			from mailing import mail
 			print('Correo')
 			msg = Message("Tunke - Prestamo exitoso", sender="tunkestaff@gmail.com", recipients=[prospectiveClient.email1])

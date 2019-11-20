@@ -19,6 +19,7 @@ from resources.admin.blackList import BlackListListResource, BlackListResource
 from resources.admin.bankAccount import BankAccountResource
 from resources.admin.transaction import TransactionListResource
 from resources.admin.lead import LeadListResource, GetByCampaignResource
+from resources.admin.share import ShareListResource
 
 apiBp = Blueprint('api', __name__)
 api = Api(apiBp)
@@ -51,3 +52,4 @@ api.add_resource(CampaignChargeResource,'/campaignCharge/')
 api.add_resource(LeadListResource,'/leads/')
 api.add_resource(BlackListResource,'/blackList/')
 api.add_resource(GetByCampaignResource,'/leads/getByCampaign/')
+api.add_resource(ShareListResource,'/shares/')
