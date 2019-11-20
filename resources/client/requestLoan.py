@@ -44,26 +44,18 @@ class RequestLoanResource(Resource):
 				return response, status.HTTP_400_BAD_REQUEST
 			client.activeLoans = 1
 			client.update()
-			print('a')
 			today = datetime.now()
-			print('b')
 			tea = interestRate
-			print(tea)
 			tem = round((((1 + (tea/100)) ** (1/12))-1) * 100,2)
-			print('c')
-			print(tem)
 			amortization = round(amount/totalShares,2)
-			print('Amortization : ', amortization)
 			interest = round(tem * amount/100,2)
-			print('Interest : ',interest)
-			feeAmount = amortization + interest + commission
-			print('Fee amount: ', feeAmount)
+			feeAmount = round(amortization + interest + commission,2)
 			initialDebt = amount
-			print('b')
 			today = datetime.now()
 			shares = []
 			day = today.strftime('%d-%m-%Y')
 			for i in range(totalShares):
+				print('a')
 				d = {}
 				d['initialBalance'] = initialDebt
 				d['amortization'] = amortization
@@ -72,9 +64,13 @@ class RequestLoanResource(Resource):
 				d['feeAmount'] = feeAmount
 				d['date'] = day
 				shares.append(d)
+				print('b')
 				shareMonth = Share(initialBalance=initialDebt,amortization=amortization,interest=interest,commission=commission,feeAmount=feeAmount,dueDate=day)
+				share.add(shareMonth)
 				initialDebt = initialDebt - amortization
+				print('c')
 				day = day + datetime.timedelta(days=30)
+				print('d')
 			print('Totals')
 			totalComission = round(commission * totalShares,2)
 			print('TotalComission : ' , totalComission)
