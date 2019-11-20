@@ -125,7 +125,7 @@ class RequestLoanResource(Resource):
 			prospectiveClient = ProspectiveClient.query.get_or_404(client.idProspectiveClient)
 			person = Person.query.get_or_404(prospectiveClient.idPerson)
 			currency = Currency.query.get_or_404(campaign.idCurrency)
-			print('ToJson')
+			shares = Share.query.filter_by(idLoan=loan.id)
 			for sha in shares:
 				print(sha)
 				sha = sha.toJson()
