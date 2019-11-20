@@ -18,6 +18,7 @@ from flask import request, render_template
 from flask_mail import Message
 import status
 import pdfkit
+import numpy
 
 class RequestLoanResource(Resource):
 	def post(self):
@@ -132,9 +133,8 @@ class RequestLoanResource(Resource):
 			shares = []
 			for sha in sharesA:
 				e = sha.toJson()
-				print(e)
 				shares.append(e)
-
+			shares = numpy.array(shares)
 			from mailing import mail
 			print('Correo')
 			msg = Message("Tunke - Prestamo exitoso", sender="tunkestaff@gmail.com", recipients=[prospectiveClient.email1])
