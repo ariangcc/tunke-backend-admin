@@ -134,7 +134,9 @@ class RequestLoanResource(Resource):
 			prospectiveClient = ProspectiveClient.query.get_or_404(client.idProspectiveClient)
 			person = Person.query.get_or_404(prospectiveClient.idPerson)
 			currency = Currency.query.get_or_404(campaign.idCurrency)
-
+			print('ToJson')
+			for share in shares:
+				share = share.toJson()
 			from mailing import mail
 			print('Correo')
 			msg = Message("Tunke - Prestamo exitoso", sender="tunkestaff@gmail.com", recipients=[prospectiveClient.email1])
@@ -145,10 +147,10 @@ class RequestLoanResource(Resource):
 			amount = str(d['amount'])
 			msg.html = render_template('loans.html', name=fullName, accountNumber=accNumber, currency=curName, amount=amount)
 			print('Calendar')
-			#rendered = render_template('calendar.html',shares=shares,currencySymbol=currency.currencySymbol,totalAmortization=totalAmortization,totalInterest=totalInterest,totalComission=totalComission,totalShare=totalShare)
-			#pdf = pdfkit.from_string(rendered ,False)
+			rendered = render_template('calendar.html',shares=shares,currencySymbol=currency.currencySymbol,totalAmortization=totalAmortization,totalInterest=totalInterest,totalComission=totalComission,totalShare=totalShare)
+			pdf = pdfkit.from_string(rendered ,False)
 			print('PDF')
-			#msg.attach("Calendario.pdf","application/pdf",pdf)
+			msg.attach("Calendario.pdf","application/pdf",pdf)
 			mail.send(msg)	
 			return d, status.HTTP_201_CREATED
 
