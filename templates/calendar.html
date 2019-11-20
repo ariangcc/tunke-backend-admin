@@ -66,7 +66,7 @@
 	          <tbody id="tableData">
 	              <tr v-for="(share,index) in shares" v-bind:key="index">
 	                  <td class="tdOneTwoFourSeven">{{index + 1}}</td>
-	                  <td class="tdOneTwoFourSeven">{{share.date}}</td>
+	                  <td class="tdOneTwoFourSeven">{{share.dueDate}}</td>
 	                  <td class="tdThreeFive">{{currencySymbol}} {{share.initialBalance}}</td>
 	                  <td class="tdOneTwoFourSeven">{{currencySymbol}} {{share.amortization}}</td>
 	                  <td class="tdThreeFive">{{currencySymbol}} {{share.interest}}</td>
