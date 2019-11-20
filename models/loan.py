@@ -15,6 +15,7 @@ class Loan(db.Model, AddUpdateDelete):
     commission = db.Column(db.Float)
     share = db.Column(db.Float)
     active = db.Column(db.Integer)
+    shares = db.relationship("Share")
 
     def toJson(self):
         d = {}
