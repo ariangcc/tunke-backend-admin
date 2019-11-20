@@ -86,7 +86,6 @@ class RequestLoanResource(Resource):
 			db.session.flush()
 			
 			#Insert in shares
-			number = 30
 			for i in range(totalShares):
 				print('a')
 				d = {}
@@ -110,8 +109,7 @@ class RequestLoanResource(Resource):
 				share.add(share)
 				initialDebt = initialDebt - amortization
 				print('c')
-				day = datetime.now() + datetime.timedelta(days=number)
-				number+=30
+				#day = day + datetime.timedelta(days=30)
 				print('d')
 
 			#Insert in transaction
