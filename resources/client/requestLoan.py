@@ -45,8 +45,8 @@ class RequestLoanResource(Resource):
 			client.activeLoans = 1
 			client.update()
 			print('a')
-			
-			tem = round((((1 + (interestRate/100)) ** (1/12))-1) * 100,2)
+			today = datetime.now()
+			'''tem = round((((1 + (interestRate/100)) ** (1/12))-1) * 100,2)
 			print('Tem : ' + tem)
 			amortization = round(amount/totalShares,2)
 			print('Amortization : ' + amortization)
@@ -75,7 +75,7 @@ class RequestLoanResource(Resource):
 			totalComission = round(commission * totalShares,2)
 			totalAmortization = round(amortization * totalShares,2)
 			totalShare = round(feeAmount * totalShares,2)
-			totalInterest = round(interest * totalShares,2)
+			totalInterest = round(interest * totalShares,2)'''
 
 			#Obteniendo campaign
 			campaign = Campaign.query.get_or_404(idCampaign)
