@@ -137,7 +137,7 @@ class RequestLoanResource(Resource):
 			print('ToJson')
 			for sha in shares:
 				print(sha)
-				sha = share.toJson()
+				sha = sha.toJson()
 				print(sha)
 			from mailing import mail
 			print('Correo')
