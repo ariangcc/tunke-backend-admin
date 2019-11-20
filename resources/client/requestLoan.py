@@ -46,9 +46,7 @@ class RequestLoanResource(Resource):
 			client.update()
 			print('a')
 			
-			tea = float(requestDict['interestRate'])
-			print('Tea : ' + tea)
-			tem = round((((1 + (tea/100)) ** (1/12))-1) * 100,2)
+			tem = round((((1 + (interestRate/100)) ** (1/12))-1) * 100,2)
 			print('Tem : ' + tem)
 			amortization = round(amount/totalShares,2)
 			print('Amortization : ' + amortization)
