@@ -1,6 +1,7 @@
 from app import db
 from models.parameterSettings import ParameterSettings
 from resources.admin.security import AuthRequiredResource
+from sqlalchemy.exc import SQLAlchemyError
 from flask_restful import Resource
 from flask import request
 import status
@@ -28,11 +29,11 @@ class ParameterSettingsResource(Resource):
 				response = {'error' : 'No input data provided'}
 				return response, status.HTTP_400_BAD_REQUEST
 
-			maxTokenSends = requestDict['maxTokenSends']
-			maxDiaryMovements = requestDict['maxDiaryMovements']
-			legalAge = requestDict['legalAge']
-			maxAccountsNumber = requestDict['maxAccountsNumber']
-			commissionPercentage = requestDict['commissionPercentage']
+			maxTokenSends = int(requestDict['maxTokenSends'])
+			maxDiaryMovements = int(requestDict['maxDiaryMovements'])
+			legalAge = int(requestDict['legalAge'])
+			maxAccountsNumber = int(requestDict['maxAccountsNumber'])
+			commissionPercentage = float(requestDict['commissionPercentage'])
 
 			parameterSettings = ParameterSettings.query.filter_by(id=1).first()
 			parameterSettings.maxTokenSends = maxTokenSends
