@@ -49,9 +49,9 @@ class RequestLoanResource(Resource):
 			print('b')
 			tea = interestRate
 			print(tea)
-			tem = round((((1 + (interestRate/100)) ** (1/12))-1) * 100,2)
+			tem = round((((1 + (tea/100)) ** (1/12))-1) * 100,2)
 			print('c')
-			print('Tem : ' + tem)
+			print(tem)
 			amortization = round(amount/totalShares,2)
 			print('Amortization : ' + amortization)
 			interest = round(tem * monto/100,2)
