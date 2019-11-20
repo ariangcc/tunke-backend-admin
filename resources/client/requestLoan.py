@@ -46,7 +46,11 @@ class RequestLoanResource(Resource):
 			client.update()
 			print('a')
 			today = datetime.now()
+			print('b')
+			tea = interestRate
+			print(tea)
 			tem = round((((1 + (interestRate/100)) ** (1/12))-1) * 100,2)
+			print('c')
 			print('Tem : ' + tem)
 			amortization = round(amount/totalShares,2)
 			print('Amortization : ' + amortization)
