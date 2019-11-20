@@ -97,6 +97,13 @@ class RequestLoanResource(Resource):
 				d['date'] = day
 				shares.append(d)
 				print('b')
+				print(initialDebt)
+				print(amortization)
+				print(interest)
+				print(commission)
+				print(feeAmount)
+				print(day)
+				print(loan.id)
 				shareMonth = Share(initialBalance=initialDebt,amortization=amortization,interest=interest,commission=commission,feeAmount=feeAmount,dueDate=day,idLoan=loan.id)
 				share.add(shareMonth)
 				initialDebt = initialDebt - amortization
