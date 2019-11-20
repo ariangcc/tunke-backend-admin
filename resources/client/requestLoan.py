@@ -47,10 +47,15 @@ class RequestLoanResource(Resource):
 			print('a')
 
 			tea = interestRate
+			print('Tea : ' + tea)
 			tem = round((((1 + (tea/100)) ** (1/12))-1) * 100,2)
+			print('Tem : ' + tem)
 			amortization = round(amount/totalShares,2)
+			print('Amortization : ' + amortization)
 			interest = round(tem * monto/100,2)
+			print('Interest : ' + interest)
 			feeAmount = amortization + interest + commission
+			print('Fee amount: ' + feeAmount)
 			initialDebt = amount
 			print('b')
 			today = datetime.now()
