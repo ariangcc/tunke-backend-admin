@@ -42,7 +42,7 @@ class RequestLoanResource(Resource):
 			if client.activeLoans==1:
 				response = {'error': 'El cliente tiene un préstamo activo'}
 				return response, status.HTTP_400_BAD_REQUEST
-			client.activeLoans = 1
+			#client.activeLoans = 1
 			client.update()
 			today = datetime.now()
 			tea = interestRate
@@ -141,6 +141,12 @@ class RequestLoanResource(Resource):
 			amount = str(d['amount'])
 			msg.html = render_template('loans.html', name=fullName, accountNumber=accNumber, currency=curName, amount=amount)
 			print('Calendar')
+			print(shares)
+			print(currency.currencySymbol)
+			print(totalAmortization)
+			print(totalInterest)
+			print(totalComission)
+			print(totalShare)
 			rendered = render_template('calendar.html',shares=shares,currencySymbol=currency.currencySymbol,totalAmortization=totalAmortization,totalInterest=totalInterest,totalComission=totalComission,totalShare=totalShare)
 			pdf = pdfkit.from_string(rendered ,False)
 			print('PDF')
