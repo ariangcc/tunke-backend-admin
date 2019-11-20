@@ -54,32 +54,7 @@ class RequestLoanResource(Resource):
 			today = datetime.now()
 			shares = []
 			day = today.strftime('%d-%m-%Y')
-			for i in range(totalShares):
-				print('a')
-				d = {}
-				d['initialBalance'] = initialDebt
-				d['amortization'] = amortization
-				d['interest'] = interest
-				d['commission'] = commission
-				d['feeAmount'] = feeAmount
-				d['date'] = day
-				shares.append(d)
-				print('b')
-				shareMonth = Share(initialBalance=initialDebt,amortization=amortization,interest=interest,commission=commission,feeAmount=feeAmount,dueDate=day)
-				share.add(shareMonth)
-				initialDebt = initialDebt - amortization
-				print('c')
-				day = day + datetime.timedelta(days=30)
-				print('d')
-			print('Totals')
-			totalComission = round(commission * totalShares,2)
-			print('TotalComission : ' , totalComission)
-			totalAmortization = round(amortization * totalShares,2)
-			print('TotalAmortization: ' , totalAmortization)
-			totalShare = round(feeAmount * totalShares,2)
-			print('TotalShare: ' , totalShare)
-			totalInterest = round(interest * totalShares,2)
-			print('TotalInterest: ' , totalInterest)
+
 			#Obteniendo campaign
 			print('Campaign')
 			campaign = Campaign.query.get_or_404(idCampaign)
@@ -108,7 +83,27 @@ class RequestLoanResource(Resource):
 			loan = Loan(totalShares=totalShares,amount=amount,interestRate=interestRate,idCampaign=idCampaign,
 			idClient=idClient,idSalesRecord=salesRecord.id,idShareType=idShareType,active=1,idAccount=idAccount,share=share,commission=commission)
 			loan.add(loan)
+			db.session.flush()
 			
+			#Insert in shares
+			for i in range(totalShares):
+				print('a')
+				d = {}
+				d['initialBalance'] = initialDebt
+				d['amortization'] = amortization
+				d['interest'] = interest
+				d['commission'] = commission
+				d['feeAmount'] = feeAmount
+				d['date'] = day
+				shares.append(d)
+				print('b')
+				shareMonth = Share(initialBalance=initialDebt,amortization=amortization,interest=interest,commission=commission,feeAmount=feeAmount,dueDate=day,idLoan=loan.id)
+				share.add(shareMonth)
+				initialDebt = initialDebt - amortization
+				print('c')
+				day = day + datetime.timedelta(days=30)
+				print('d')
+
 			#Insert in transaction
 			print('Transaction')
 			transaction = Transaction(datetime=today,amount=amount,idAccount=idAccount,idBankAccount=campaign.idCurrency,active=1)
