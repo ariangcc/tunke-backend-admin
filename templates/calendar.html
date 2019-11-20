@@ -63,7 +63,7 @@
 	                  <th>Monto de Cuota</th>
 	              </tr>
 	          </thead>
-	          <tbody id="tableData">
+	          <!--<tbody>
 	              <tr v-for="(share,index) in shares" v-bind:key="index">
 	                  <td class="tdOneTwoFourSeven">{{index + 1}}</td>
 	                  <td class="tdOneTwoFourSeven">{{share.dueDate}}</td>
@@ -73,7 +73,7 @@
 	                  <td class="tdSix">{{currencySymbol}} {{share.commission}}</td>
 	                  <td class="tdOneTwoFourSeven">{{currencySymbol}} {{share.feeAmount}}</td>
 	              </tr>
-	          </tbody>
+	          </tbody>-->
 	          <tfoot>
 	              <tr class="table-dark">
 	                  <td class="tdThreeFive">Totales</td>
@@ -98,7 +98,7 @@
     	const app = new Vue({
     		el : '#app',
     		data : {
-				shares:[],
+				//shares:[],
 				currencySymbol : '',
 				totalAmortization : -1,
 				totalInterest : -1,
