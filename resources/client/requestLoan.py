@@ -54,7 +54,7 @@ class RequestLoanResource(Resource):
 			print(tem)
 			amortization = round(amount/totalShares,2)
 			print('Amortization : ', amortization)
-			interest = round(tem * monto/100,2)
+			interest = round(tem * amount/100,2)
 			print('Interest : ',interest)
 			feeAmount = amortization + interest + commission
 			print('Fee amount: ', feeAmount)
