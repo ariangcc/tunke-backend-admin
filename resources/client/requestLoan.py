@@ -53,7 +53,7 @@ class RequestLoanResource(Resource):
 			initialDebt = amount
 			today = datetime.now()
 			shares = []
-			day = today.strftime('%d-%m-%Y')
+			day = today
 
 			#Obteniendo campaign
 			print('Campaign')
