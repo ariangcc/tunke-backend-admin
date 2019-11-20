@@ -50,6 +50,10 @@ class RequestLoanResource(Resource):
 			amortization = round(amount/totalShares,2)
 			interest = round(tem * amount/100,2)
 			feeAmount = round(amortization + interest + commission,2)
+			totalAmortization = amortization*totalShares
+			totalInterest = interest*totalShares
+			totalComission = commission*totalShares
+			totalShare = share* totalShares
 			initialDebt = amount
 			today = datetime.now()
 			shares = []
