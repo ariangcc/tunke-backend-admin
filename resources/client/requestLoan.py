@@ -78,30 +78,36 @@ class RequestLoanResource(Resource):
 			totalInterest = round(interest * totalShares,2)'''
 
 			#Obteniendo campaign
+			print('Campaign')
 			campaign = Campaign.query.get_or_404(idCampaign)
 
 			#Minus en bank account
+			print('Bank Account')
 			bankAccount = BankAccount.query.get_or_404(campaign.idCurrency)
 			bankAccount.balance = bankAccount.balance - amount
 			bankAccount.update()
 
 			#Plus in AccountClient
+			print('Account')
 			account = Account.query.get_or_404(idAccount)
 			account.balance = account.balance + amount
 			account.update()
 
 			#Insert in salesRecord
+			print('SalesRecord')
 			salesRecord = SalesRecord(origin='Web',requestDate=datetime.now(),idRecordStatus=1,
 			active=1,idClient=idClient,idProduct=2)
 			salesRecord.add(salesRecord)
 			db.session.flush()
 
-			#Insert in loan			
+			#Insert in loan
+			print('Loan')			
 			loan = Loan(totalShares=totalShares,amount=amount,interestRate=interestRate,idCampaign=idCampaign,
 			idClient=idClient,idSalesRecord=salesRecord.id,idShareType=idShareType,active=1,idAccount=idAccount,share=share,commission=commission)
 			loan.add(loan)
 			
 			#Insert in transaction
+			print('Transaction')
 			transaction = Transaction(datetime=today,amount=amount,idAccount=idAccount,idBankAccount=campaign.idCurrency,active=1)
 			transaction.add(transaction)
 			
