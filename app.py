@@ -25,6 +25,7 @@ from models.blacklist import Blacklist
 from models.user import User
 from models.bankAccount import BankAccount
 from models.blacklistClassification import BlacklistClassification
+from models.share import Share
 from models.securityQuestion import SecurityQuestion
 
 from flask.json import JSONEncoder

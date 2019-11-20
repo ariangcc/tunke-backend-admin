@@ -9,6 +9,7 @@ from models.person import Person
 from models.prospectiveClient import ProspectiveClient
 from models.account import Account
 from models.transaction import Transaction
+from models.share import Share
 from resources.admin.security import AuthRequiredResource
 from flask_restful import Resource
 from sqlalchemy.exc import SQLAlchemyError
@@ -35,6 +36,44 @@ class RequestLoanResource(Resource):
 			share = float(requestDict['share'])
 			idAccount = int(requestDict['idAccount'])
 			commission = float(requestDict['commission'])
+
+			#Update boolean in client
+			client = Client.query.get_or_404(idClient)
+			if client.activeLoans==1:
+				response = {'error': 'El cliente tiene un préstamo activo'}
+				return response, status.HTTP_400_BAD_REQUEST
+			client.activeLoans = 1
+			client.update()
+
+
+			tea = interestRate
+			tem = round((((1 + (tea/100)) ** (1/12))-1) * 100,2)
+			amortization = round(amount/totalShares,2)
+			interest = round(tem * monto/100,2)
+			feeAmount = amortization + interest + commission
+			initialDebt = amount
+
+			today = datetime.now()
+			shares = []
+			day = today.strftime('%d-%m-%Y')
+			for i in range(totalShares):
+				d = {}
+				d['initialBalance'] = initialDebt
+				d['amortization'] = amortization
+				d['interest'] = interest
+				d['commission'] = commission
+				d['feeAmount'] = feeAmount
+				d['date'] = day
+				shares.append(d)
+				shareMonth = Share(initialBalance=initialDebt,amortization=amortization,interest=interest,commission=commission,feeAmount=feeAmount,dueDate=day)
+				initialDebt = initialDebt - amortization
+				day = day + datetime.timedelta(days=30)
+
+			totalComission = round(commission * totalShares,2)
+			totalAmortization = round(amortization * totalShares,2)
+			totalShare = round(feeAmount * totalShares,2)
+			totalInterest = round(interest * totalShares,2)
+
 			#Obteniendo campaign
 			campaign = Campaign.query.get_or_404(idCampaign)
 
@@ -47,14 +86,6 @@ class RequestLoanResource(Resource):
 			account = Account.query.get_or_404(idAccount)
 			account.balance = account.balance + amount
 			account.update()
-			
-			#Update boolean in client
-			client = Client.query.get_or_404(idClient)
-			if client.activeLoans==1:
-				response = {'error': 'El cliente tiene un préstamo activo'}
-				return response, status.HTTP_400_BAD_REQUEST
-			client.activeLoans = 1
-			client.update()
 
 			#Insert in salesRecord
 			salesRecord = SalesRecord(origin='Web',requestDate=datetime.now(),idRecordStatus=1,
@@ -68,7 +99,7 @@ class RequestLoanResource(Resource):
 			loan.add(loan)
 			
 			#Insert in transaction
-			transaction = Transaction(datetime=datetime.now(),amount=amount,idAccount=idAccount,idBankAccount=campaign.idCurrency,active=1)
+			transaction = Transaction(datetime=today,amount=amount,idAccount=idAccount,idBankAccount=campaign.idCurrency,active=1)
 			transaction.add(transaction)
 			
 			#Commit changes
@@ -97,9 +128,9 @@ class RequestLoanResource(Resource):
 			curName = str(currency.currencyName)
 			amount = str(d['amount'])
 			msg.html = render_template('loans.html', name=fullName, accountNumber=accNumber, currency=curName, amount=amount)
-			#rendered = render_template('calendar.html',shares=shares,currencySymbol=currencySymbol,totalAmortization=totalAmortization,totalInterest=totalInterest,totalComission=totalComission,totalShare=totalShare)
-			#pdf = pdfkit.from_string(rendered ,False)
-			#msg.attach("Calendario.pdf","application/pdf",pdf)
+			rendered = render_template('calendar.html',shares=shares,currencySymbol=currency.currencySymbol,totalAmortization=totalAmortization,totalInterest=totalInterest,totalComission=totalComission,totalShare=totalShare)
+			pdf = pdfkit.from_string(rendered ,False)
+			msg.attach("Calendario.pdf","application/pdf",pdf)
 			mail.send(msg)	
 			return d, status.HTTP_201_CREATED
 
