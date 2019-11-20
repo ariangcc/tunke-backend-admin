@@ -1,5 +1,6 @@
 from app import db
 from models.utils import AddUpdateDelete
+from datetime import datetime, strftime
 
 class Share(db.Model, AddUpdateDelete):
     __tablename__ = 'share'
