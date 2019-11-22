@@ -128,6 +128,7 @@ class RequestLoanResource(Resource):
 			msg.html = render_template('loans.html', name=fullName, accountNumber=accNumber, currency=curName, amount=amount)
 			print('Rendered')
 			rendered = render_template('calendar.html', shares=shares, currencySymbol=currencySymbol,totalAmortization=totalAmortization,totalInterest=totalInterest,totalComission=totalComission,totalShare=totalShare)
+			print(rendered)
 			print('Pdfkit')
 			pdf = pdfkit.from_string(rendered , False)
 			print('PDF')
