@@ -130,9 +130,9 @@ class RequestLoanResource(Resource):
 			totalInterest = 1200.12
 			totalComission = 12341.12
 			totalShare = 13123.5
-			#msg.html = render_template('loans.html', name=fullName, accountNumber=accNumber, currency=curName, amount=amount)
+			msg.html = render_template('loans.html', name=fullName, accountNumber=accNumber, currency=curName, amount=amount)
 			print('Rendered')
-			msg.html = render_template('calendar.html', currencySymbol=currencySymbol,totalAmortization=totalAmortization,totalInterest=totalInterest,totalComission=totalComission,totalShare=totalShare)
+			#msg.html = render_template('calendar.html', currencySymbol=currencySymbol,totalAmortization=totalAmortization,totalInterest=totalInterest,totalComission=totalComission,totalShare=totalShare)
 			#print('Pdfkit')
 			#pdf = pdfkit.from_string(rendered ,'out.pdf')
 			#print('PDF')
