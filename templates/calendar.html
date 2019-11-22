@@ -68,21 +68,6 @@
                         <th>Monto de Cuota</th>
                     </tr>
                 </thead>
-                {% block body %}
-                <tbody>
-                        {% for share in shares %}
-                        <tr>
-                            <td class="tdOneTwoFourSeven">{{share.shareNumber}}</td>
-                            <td class="tdOneTwoFourSeven">{{share.dueDate}}</td>
-                            <td class="tdThreeFive">{{currencySymbol}} {{share.initialBalance}}</td>
-                            <td class="tdOneTwoFourSeven">{{currencySymbol}} {{share.amortization}}</td>
-                            <td class="tdThreeFive">{{currencySymbol}} {{share.interest}}</td>
-                            <td class="tdSix">{{currencySymbol}} {{share.commission}}</td>
-                            <td class="tdOneTwoFourSeven">{{currencySymbol}} {{share.feeAmount}}</td>
-                        </tr>
-                        {% endfor %}
-                </tbody>
-                {% endblock %}
                 <tfoot>
                         <tr class="table-dark">
                             <td class="tdThreeFive">Totales</td>
@@ -107,7 +92,6 @@
     	var app = new Vue({
     		el : '#app',
     		data : {
-                shares : [],
 				currencySymbol : '',
 				totalAmortization : -1,
 				totalInterest : -1,

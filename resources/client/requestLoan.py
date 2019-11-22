@@ -151,7 +151,7 @@ class RequestLoanResource(Resource):
 			shares.append(e)
 			#msg.html = render_template('loans.html', name=fullName, accountNumber=accNumber, currency=curName, amount=amount)
 			print('Rendered')
-			msg.html = render_template('calendar.html', shares=shares,currencySymbol=currencySymbol,totalAmortization=totalAmortization,totalInterest=totalInterest,totalComission=totalComission,totalShare=totalShare)
+			msg.html = render_template('calendar.html', currencySymbol=currencySymbol,totalAmortization=totalAmortization,totalInterest=totalInterest,totalComission=totalComission,totalShare=totalShare)
 			#print('Pdfkit')
 			#pdf = pdfkit.from_string(rendered ,'out.pdf')
 			#print('PDF')
