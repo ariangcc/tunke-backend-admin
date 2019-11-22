@@ -55,7 +55,19 @@
 
   <body>
   	<div>
+      <h1>Calendario de Pagos</h1>
       <table>
+        <thead>
+              <tr class="table-dark">
+                  <th>N° cuota</th>
+                  <th>F. Vencimiento</th>
+                  <th>Saldo Inicial</th>
+                  <th>Amortización</th>
+                  <th>Interés</th>
+                  <th>Comisión</th>
+                  <th>Monto de Cuota</th>
+              </tr>
+        </thead>
         <tbody>
           <tr>
               <td>{{currencySymbol}} {{totalAmortization}}</td>
