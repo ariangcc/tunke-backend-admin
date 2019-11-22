@@ -4,6 +4,7 @@ from models.utils import AddUpdateDelete
 class Share(db.Model, AddUpdateDelete):
     __tablename__ = 'share'
     id = db.Column(db.Integer, primary_key=True)
+    shareNumber = db.Column(db.Integer)
     dueDate = db.Column(db.DateTime)
     initialBalance = db.Column(db.Float)
     amortization = db.Column(db.Float)
@@ -22,5 +23,6 @@ class Share(db.Model, AddUpdateDelete):
         d['commission'] = self.commission
         d['feeAmount'] = self.feeAmount
         d['idLoan'] = self.idLoan
+        d['shareNumber'] = self.shareNumber
 
         return d

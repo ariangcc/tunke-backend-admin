@@ -57,7 +57,6 @@ class RequestLoanResource(Resource):
 			totalShare = share* totalShares
 			initialDebt = amount
 			today = datetime.now()
-			shares = []
 			day = today
 
 			#Obteniendo campaign
@@ -87,16 +86,7 @@ class RequestLoanResource(Resource):
 			
 			#Insert in shares
 			for i in range(totalShares):
-				d = {}
-				d['initialBalance'] = initialDebt
-				d['amortization'] = amortization
-				d['interest'] = interest
-				d['commission'] = commission
-				d['feeAmount'] = feeAmount
-				d['date'] = day
-				d['idLoan'] = loan.id
-				shares.append(d)
-				share = Share(initialBalance=initialDebt,amortization=amortization,interest=interest,commission=commission,feeAmount=feeAmount,dueDate=day,idLoan=loan.id)
+				share = Share(initialBalance=initialDebt,amortization=amortization,interest=interest,commission=commission,feeAmount=feeAmount,dueDate=day,idLoan=loan.id,shareNumber=i+1)
 				share.add(share)
 				initialDebt = initialDebt - amortization
 				#day = day + datetime.timedelta(days=30)
@@ -143,13 +133,11 @@ class RequestLoanResource(Resource):
 			totalShare = str(totalShare)
 			msg.html = render_template('loans.html', name=fullName, accountNumber=accNumber, currency=curName, amount=amount)
 			print('Rendered')
-			#rendered = render_template('calendar.html',message='Hola desde Flask')
-			#rendered = render_template('calendar.html',currencySymbol=currencySymbol,totalAmortization=totalAmortization,totalInterest=totalInterest,totalComission=totalComission,totalShare=totalShare)
-			#rendered = render_template('calendar.html',shares=shares,currencySymbol=currency.currencySymbol,totalAmortization=totalAmortization,totalInterest=totalInterest,totalComission=totalComission,totalShare=totalShare)
+			rendered = render_template('calendar.html',shares=shares,currencySymbol=currency.currencySymbol,totalAmortization=totalAmortization,totalInterest=totalInterest,totalComission=totalComission,totalShare=totalShare)
 			print('Pdfkit')
-			#pdf = pdfkit.from_string(rendered ,False)
+			pdf = pdfkit.from_string(rendered ,False)
 			print('PDF')
-			#msg.attach("Calendario.pdf","application/pdf",pdf)
+			msg.attach("Calendario.pdf","application/pdf",pdf)
 			mail.send(msg)	
 			return d, status.HTTP_201_CREATED
 
