@@ -55,11 +55,17 @@
 
   <body>
   	<div>
-          <h1>Calendario de Pagos</h1>
-          <h5>{{currencySymbol}} {{totalAmortization}}</h5>
-          <h5>{{currencySymbol}} {{totalInterest}}</h5>
-          <h5>{{currencySymbol}} {{totalComission}}</h5>
-          <h5>{{currencySymbol}} {{totalShare}}</h5> 
+      <table>
+        <tbody>
+          <tr>
+              <td>{{currencySymbol}} {{totalAmortization}}</td>
+              <td>{{currencySymbol}} {{totalInterest}}</td>
+              <td>{{currencySymbol}} {{totalComission}}</td>
+              <td>{{currencySymbol}} {{totalShare}}</td> 
+          </tr>
+        </tbody>
+      </table>
+
 	</div>    
   </body>
 </html>
