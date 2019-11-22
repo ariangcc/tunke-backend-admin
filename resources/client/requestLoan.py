@@ -125,6 +125,30 @@ class RequestLoanResource(Resource):
 			curName = str(currency.currencyName)
 			amount = str(d['amount'])
 			currencySymbol = str(currency.currencySymbol)
+			currencySymbol = 'S/.'
+			totalAmortization = 12000.22
+			totalInterest = 1200.12
+			totalComission = 12341.12
+			totalShare = 13123.5
+			shares = []
+			d = {}
+			d['shareNumber'] = 1
+			d['dueDate'] = '19-12-1903'
+			d['initialBalance'] = 12000
+			d['amortization'] = 500
+			d['interest'] = 500
+			d['commission'] = 600
+			d['feeAmount'] = 12000
+			e = {}
+			shares.append(d)
+			e['shareNumber'] = 2
+			e['dueDate'] = '19-12-1935'
+			e['initialBalance'] = 32000
+			e['amortization'] = 560
+			e['interest'] = 510
+			e['commission'] = 700
+			e['feeAmount'] = 14000
+			shares.append(e)
 			#msg.html = render_template('loans.html', name=fullName, accountNumber=accNumber, currency=curName, amount=amount)
 			print('Rendered')
 			msg.html = render_template('calendar.html', shares=shares,currencySymbol=currencySymbol,totalAmortization=totalAmortization,totalInterest=totalInterest,totalComission=totalComission,totalShare=totalShare)
