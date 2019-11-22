@@ -54,30 +54,47 @@
     </style>
 
   <body>
-  	<div>
-      <h1>Calendario de Pagos</h1>
-      <table>
-        <thead>
-              <tr class="table-dark">
-                  <th>Numero cuota</th>
-                  <th>F. Vencimiento</th>
-                  <th>Saldo Inicial</th>
-                  <th>Amortizacion</th>
-                  <th>Interes</th>
-                  <th>Comision</th>
-                  <th>Monto de Cuota</th>
-              </tr>
-        </thead>
-        <tbody>
-          <tr>
-              <td>{{currencySymbol}} {{totalAmortization}}</td>
-              <td>{{currencySymbol}} {{totalInterest}}</td>
-              <td>{{currencySymbol}} {{totalComission}}</td>
-              <td>{{currencySymbol}} {{totalShare}}</td> 
-          </tr>
-        </tbody>
-      </table>
-
+  	<div id="app">
+          <h1>Calendario de Pagos</h1>
+          <table class="table">
+                <thead>
+                    <tr class="table-dark">
+                        <th>Numero de cuota</th>
+                        <th>F. Vencimiento</th>
+                        <th>Saldo Inicial</th>
+                        <th>Amortizacion</th>
+                        <th>Interes</th>
+                        <th>Comision</th>
+                        <th>Monto de Cuota</th>
+                    </tr>
+                </thead>
+                {% block body %}
+                <tbody>
+                        {% for share in shares %}
+                        <tr>
+                            <td class="tdOneTwoFourSeven">{{share.shareNumber}}</td>
+                            <td class="tdOneTwoFourSeven">{{share.dueDate}}</td>
+                            <td class="tdThreeFive">{{currencySymbol}} {{share.initialBalance}}</td>
+                            <td class="tdOneTwoFourSeven">{{currencySymbol}} {{share.amortization}}</td>
+                            <td class="tdThreeFive">{{currencySymbol}} {{share.interest}}</td>
+                            <td class="tdSix">{{currencySymbol}} {{share.commission}}</td>
+                            <td class="tdOneTwoFourSeven">{{currencySymbol}} {{share.feeAmount}}</td>
+                        </tr>
+                        {% endfor %}
+                </tbody>
+                {% endblock %}
+                <tfoot>
+                        <tr class="table-dark">
+                            <td class="tdThreeFive">Totales</td>
+                            <td></td>
+                            <td></td>
+                            <td>{{currencySymbol}} {{totalAmortization}}</td>
+                            <td>{{currencySymbol}} {{totalInterest}}</td>
+                            <td>{{currencySymbol}} {{totalComission}}</td>
+                            <td class="tdSix">{{currencySymbol}} {{totalShare}}</td>                                
+                        </tr>
+                </tfoot>
+            </table>
 	</div>    
   </body>
 </html>
