@@ -131,12 +131,11 @@ class RequestLoanResource(Resource):
 			totalShare = str(totalShare)
 			msg.html = render_template('loans.html', name=fullName, accountNumber=accNumber, currency=curName, amount=amount)
 			print('Rendered')
-			print(shares)
 			rendered = render_template('calendar.html',shares=shares,currencySymbol=currency.currencySymbol,totalAmortization=totalAmortization,totalInterest=totalInterest,totalComission=totalComission,totalShare=totalShare)
 			print('Pdfkit')
-			#pdf = pdfkit.from_string(rendered ,False)
+			pdf = pdfkit.from_string(rendered ,'out.pdf')
 			print('PDF')
-			#msg.attach("Calendario.pdf","application/pdf",pdf)
+			msg.attach("Calendario.pdf","application/pdf",pdf)
 			mail.send(msg)	
 			return d, status.HTTP_201_CREATED
 
