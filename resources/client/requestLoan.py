@@ -32,6 +32,7 @@ class RequestLoanResource(Resource):
 			amount = float(requestDict['amount'])
 			interestRate = float(requestDict['interestRate'])
 			idCampaign = int(requestDict['idCampaign'])
+			idLead = int(requestDict['idLead'])
 			idShareType = int(requestDict['idShareType'])
 			share = float(requestDict['share'])
 			idAccount = int(requestDict['idAccount'])
@@ -42,7 +43,7 @@ class RequestLoanResource(Resource):
 			if client.activeLoans==1:
 				response = {'error': 'El cliente tiene un préstamo activo'}
 				return response, status.HTTP_400_BAD_REQUEST
-			#client.activeLoans = 1
+			client.activeLoans = 1
 			client.update()
 			today = datetime.now()
 			tea = interestRate
@@ -78,7 +79,7 @@ class RequestLoanResource(Resource):
 			db.session.flush()
 
 			#Insert in loan		
-			loan = Loan(totalShares=totalShares,amount=amount,interestRate=interestRate,idCampaign=idCampaign,
+			loan = Loan(totalShares=totalShares,amount=amount,interestRate=interestRate,idLead=idLead,
 			idClient=idClient,idSalesRecord=salesRecord.id,idShareType=idShareType,active=1,idAccount=idAccount,share=share,commission=commission)
 			loan.add(loan)
 			db.session.flush()
@@ -89,7 +90,6 @@ class RequestLoanResource(Resource):
 				share.add(share)
 				initialDebt = initialDebt - amortization
 				#day = day + datetime.timedelta(days=30)
-
 
 			#Insert in transaction
 			transaction = Transaction(datetime=today,amount=amount,idAccount=idAccount,idBankAccount=campaign.idCurrency,active=1)
@@ -104,7 +104,6 @@ class RequestLoanResource(Resource):
 			d['totalShares'] = str(regLoan.totalShares)
 			d['amount'] = str(regLoan.amount)
 			d['interestRate'] = str(regLoan.interestRate)
-			d['idCampaign'] = str(regLoan.idCampaign)
 			d['idClient'] = str(regLoan.idClient)
 			d['idSalesRecord'] = str(regLoan.idSalesRecord)
 			d['idShareType'] = str(regLoan.idShareType)
@@ -126,7 +125,7 @@ class RequestLoanResource(Resource):
 			amount = str(d['amount'])
 			currencySymbol = str(currency.currencySymbol)
 			msg.html = render_template('loans.html', name=fullName, accountNumber=accNumber, currency=curName, amount=amount)
-			print('Rendered')
+			#print('Rendered')
 			#rendered = render_template('calendar.html', shares=shares, currencySymbol=currencySymbol,totalAmortization=totalAmortization,totalInterest=totalInterest,totalComission=totalComission,totalShare=totalShare)
 			#print('Pdfkit')
 			#pdf = pdfkit.from_string(rendered , False)

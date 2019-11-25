@@ -48,7 +48,7 @@ class SalesRecordListResource(AuthRequiredResource):
                     e['totalShares'] = loan['totalShares']
                     e['idLoan'] = loan['idLoan']
                     e['interestRate'] = loan['interestRate']
-                    e['idCampaign'] = loan['idCampaign']
+                    e['idLead'] = loan['idLead']
                     if loan['idShareType']==1:
                         e['shareType'] = 'Ordinaria'
                     else:

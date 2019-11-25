@@ -39,8 +39,11 @@ class LeadListResource(AuthRequiredResource):
             idCampaign = requestDict['idCampaign']
             minimumLoan = requestDict['minimumLoan']
             maximumLoan = requestDict['maximumLoan']
+            minimumPeriod = requestDict['minimumPeriod']
+            maximumPeriod = requestDict['maximumPeriod']
+            interestRate = requestDict['interestRate']
 
-            lead = Lead(idClient=idClient,idCampaign=idCampaign,minimumLoan=minimumLoan,maximumLoan=maximumLoan,active=1)
+            lead = Lead(idClient=idClient,idCampaign=idCampaign,minimumLoan=minimumLoan,maximumLoan=maximumLoan,active=1,minimumPeriod=minimumPeriod,maximumPeriod=maximumPeriod,interestRate=interestRate)
             lead.add(lead)
 
             db.session.commit()

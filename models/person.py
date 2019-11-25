@@ -15,6 +15,7 @@ class Person(db.Model, AddUpdateDelete):
 	nationality = db.Column(db.String(100))
 	vehicle1Plate = db.Column(db.String(100))
 	vehicle2Plate = db.Column(db.String(100))
+	gender = db.Column(db.String(1))
 	prospectiveClients = db.relationship("ProspectiveClient")
 
 	def toJson(self):
