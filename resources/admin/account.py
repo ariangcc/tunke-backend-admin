@@ -110,3 +110,46 @@ class GetByClientResource(Resource):
 			db.session.rollback()
 			response = {'error': 'An error ocurred. Contact cat-support asap. ' + str(e)}
 			return response, status.HTTP_400_BAD_REQUEST
+
+class GetByNationality(Resource):
+	def post(self):
+		try:
+			requestDict = request.get_json()
+			if not requestDict:
+				response = {'error': 'No input data provided'}
+				return response, status.HTTP_400_BAD_REQUEST
+			
+			nationality = requestDict['nationality']
+
+			#Obtener clientes por nacionalidad
+			persons = Person.query.filter_by(nationality=nationality)
+			prospectiveClients = []
+			for person in persons:
+				idPerson = person.id
+				prospectiveClient = ProspectiveClient.query.filter_by(idPerson=idPerson).first()
+				if prospectiveClient is not None:
+					prospectiveClients.append(prospectiveClient.id)
+			
+			clients = []
+			for idProspectiveClient in prospectiveClients:
+				client = Client.query.filter_by(idProspectiveClient=idProspectiveClient).first()
+				if client is not None:
+					clients.append(client.id)
+			
+			d = {}
+			d['accounts'] = []
+			for idClient in clients:
+				accounts = Account.query.filter_by(idClient=idClient)
+				for account in accounts:
+					d['accounts'].append(account.toJson())
+			
+			return d, status.HTTP_200_OK
+
+		except SQLAlchemyError as e:
+			db.session.rollback()
+			response = {'error': str(e)}
+			return response, status.HTTP_400_BAD_REQUEST
+		except Exception as e:
+			db.session.rollback()
+			response = {'error': 'An error ocurred. Contact cat-support asap. ' + str(e)}
+			return response, status.HTTP_400_BAD_REQUEST
