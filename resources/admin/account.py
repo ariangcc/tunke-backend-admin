@@ -153,3 +153,45 @@ class GetByNationality(Resource):
 			db.session.rollback()
 			response = {'error': 'An error ocurred. Contact cat-support asap. ' + str(e)}
 			return response, status.HTTP_400_BAD_REQUEST
+
+class GetByPeriod(Resource):
+	def post(self):
+		try:
+			requestDict = request.get_json()
+			if not requestDict:
+				response = {'error': 'No input data provided'}
+				return response, status.HTTP_400_BAD_REQUEST
+			
+			month, year = -1, -1
+			year = int(requestDict['year'])
+			if 'month' in requestDict:
+				month = int(requestDict['month'])
+
+			accounts = Account.query.all()
+			ans = 0
+			if month != -1:
+				for account in accounts:
+					dateLst = [int(x) for x in account.openingDate.strftime('%m %Y').split()]
+					dateMonth, dateYear = dateLst[0], dateLst[1]
+					if month == dateMonth and year == dateYear:
+						ans += 1
+			else:
+				for account in accounts:
+					dateLst = [int(x) for x in account.openingDate.strftime('%m %Y').split()]
+					dateMonth, dateYear = dateLst[0], dateLst[1]
+					if year == dateYear:
+						ans += 1
+			
+			d = {}
+			d['count'] = ans
+
+			return d, status.HTTP_200_OK
+
+		except SQLAlchemyError as e:
+			db.session.rollback()
+			response = {'error': str(e)}
+			return response, status.HTTP_400_BAD_REQUEST
+		except Exception as e:
+			db.session.rollback()
+			response = {'error': 'An error ocurred. Contact cat-support asap. ' + str(e)}
+			return response, status.HTTP_400_BAD_REQUEST
