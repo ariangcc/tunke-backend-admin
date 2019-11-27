@@ -9,6 +9,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from flask import request
 from werkzeug.utils import secure_filename
 import status
+import pandas as pd
 
 class BlackListResource(AuthRequiredResource):
     def post(self):
@@ -97,7 +98,15 @@ class BlackListListResource(AuthRequiredResource):
                 return response, status.HTTP_400_BAD_REQUEST
             
             if file and allowed_file(file.filename):
-                response = {'ok' : 'el archivo ha llegado ' + file.filename}
+                df = None
+                try:
+                    df = pd.read_csv(file.data, header=0, skip_blank_lines=True, 
+                         skipinitialspace=True, encoding='latin-1')
+                except:
+                    df = pd.read_excel(data, header=0)
+                
+                print(df[0], df[1], df[2])
+
                 return response, status.HTTP_200_OK
             else:
                 response = {'error' : 'Bad file sent. Please check extension.'}
