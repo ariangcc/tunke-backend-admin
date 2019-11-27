@@ -169,23 +169,34 @@ class GetByPeriod(Resource):
 
 			accounts = Account.query.all()
 			ans = 0
-			if month != -1:
+			if month != -1: # Hay mes, separar por 4 semanas
+				d = {}
+				d['count'] = [0 for i in range(4)]
+				for account in accounts:
+					dateLst = [int(x) for x in account.openingDate.strftime('%d %m %Y').split()]
+					dateDay, dateMonth, dateYear = dateLst[0], dateLst[1], dateLst[2]
+					if dateMonth != month or dateYear != year:
+						continue
+					if dateDay <= 7:
+						d['count'][0] += 1
+					elif dateDay > 7 and dateDay <= 14:
+						d['count'][1] += 1
+					elif dateDay > 14 and dateDay <= 21:
+						d['count'][2] += 1
+					else:
+						d['count'][3] += 1
+				
+				return d, status.HTTP_200_OK
+					
+			else: #No hay mes, separar por 12 meses
+				d = {}
+				d['count'] = [0 for i in range(12)]
 				for account in accounts:
 					dateLst = [int(x) for x in account.openingDate.strftime('%m %Y').split()]
 					dateMonth, dateYear = dateLst[0], dateLst[1]
-					if month == dateMonth and year == dateYear:
-						ans += 1
-			else:
-				for account in accounts:
-					dateLst = [int(x) for x in account.openingDate.strftime('%m %Y').split()]
-					dateMonth, dateYear = dateLst[0], dateLst[1]
-					if year == dateYear:
-						ans += 1
-			
-			d = {}
-			d['count'] = ans
-
-			return d, status.HTTP_200_OK
+					d['count'][dateMonth - 1] += 1
+				
+				return d, status.HTTP_200_OK
 
 		except SQLAlchemyError as e:
 			db.session.rollback()
