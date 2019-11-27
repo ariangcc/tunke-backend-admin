@@ -104,7 +104,7 @@ class BlackListListResource(AuthRequiredResource):
                     df = pd.read_excel(file.data, header=0)
                 
                 print(df[0], df[1], df[2])
-
+                response = {'xd' : 'xd'}
                 return response, status.HTTP_200_OK
             else:
                 response = {'error' : 'Bad file sent. Please check extension.'}
