@@ -62,7 +62,7 @@ class BlackListResource(AuthRequiredResource):
             response = {'error': 'An error ocurred. Contact cat-support asap. ' + str(e)}
             return response, status.HTTP_400_BAD_REQUEST
 
-class BlackListListResource(Resource):
+class BlackListListResource(AuthRequiredResource):
     def get(self):
         try:
             listBlackList = Blacklist.query.all()
