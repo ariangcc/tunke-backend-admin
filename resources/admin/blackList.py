@@ -98,7 +98,7 @@ class BlackListListResource(AuthRequiredResource):
             if file and allowed_file(file.filename):
                 df = None
                 print(file.filename)
-                df = pd.read_excel(file.stream, header=None)
+                df = pd.read_excel(file.read(), header=None)
                 print(df[0], df[1])
                 """
                 try:
