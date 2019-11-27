@@ -3,9 +3,11 @@ from models.blacklist import Blacklist
 from models.person import Person
 from models.blacklistClassification import BlacklistClassification
 from resources.admin.security import AuthRequiredResource
+from resources.utils import allowed_file
 from flask_restful import Resource
 from sqlalchemy.exc import SQLAlchemyError
 from flask import request
+from werkzeug.utils import secure_filename
 import status
 
 class BlackListResource(AuthRequiredResource):
@@ -60,7 +62,7 @@ class BlackListResource(AuthRequiredResource):
             response = {'error': 'An error ocurred. Contact cat-support asap. ' + str(e)}
             return response, status.HTTP_400_BAD_REQUEST
 
-class BlackListListResource(AuthRequiredResource):
+class BlackListListResource(Resource):
     def get(self):
         try:
             listBlackList = Blacklist.query.all()
@@ -91,35 +93,18 @@ class BlackListListResource(AuthRequiredResource):
             if not requestDict:
                 response = {'error' : 'No input data provided'}
                 return response, status.HTTP_400_BAD_REQUEST
-            blackLists = Blacklist.query.all()
-            for person in requestDict:
-                flag = 0
-                dni = person['dni']
-                for bl in blackLists:
-                    if(dni==bl.documentNumber):
-                        flag = 1
-                        break
-                if(flag==1):
-                     continue
-                motivo = person['motivo']
-                blacklistClassification = BlacklistClassification.query.filter_by(description=motivo).first()
-                if(blacklistClassification is None):
-                    #Si no está la clasificación
-                    blacklistClassification = BlacklistClassification(name="Regular",description=motivo,active=1)
-                    blacklistClassification.add(blacklistClassification)
-
-                    db.session.flush()
-
-                    blacklist = Blacklist(documentType="DNI",documentNumber=dni,active=1,idBlacklistClassification=blacklistClassification.id)
-                    blacklist.add(blacklist)
-                    continue
-                blacklistClassification = blacklistClassification.toJson()
-                blacklist = Blacklist(documentType="DNI",documentNumber=dni,active=1,idBlacklistClassification=blacklistClassification['idBlacklistClassification'])
-                blacklist.add(blacklist)
             
-            db.session.commit()
-            response = {'ok' : 'BlackList actualizada correctamente'}
-            return response, status.HTTP_201_CREATED
+            file = request.files['file']
+            if file.filename == '':
+                response = {'error' : 'No selected files'}
+                return response, status.HTTP_400_BAD_REQUEST
+            
+            if file and allowed_file(file.filename):
+                response = {'ok' : 'el archivo ha llegado ' + file.filename}
+                return response, status.HTTP_200_OK
+            else:
+                response = {'error' : 'Bad file sent. Please check extension.'}
+                return response, status.HTTP_400_BAD_REQUEST
 
         except SQLAlchemyError as e:
             db.session.rollback()

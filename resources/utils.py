@@ -32,3 +32,7 @@ def SendMail(subject, sender, to, msgBody):
 def SendSMS(cellphone, msg):
 	client = Client(accountSid, authToken)
 	message = client.messages.create(to=("+51"+cellphone), from_=myTwilio, body=msg)
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ['csv', 'xlsx']
