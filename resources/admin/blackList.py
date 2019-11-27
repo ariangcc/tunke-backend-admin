@@ -97,6 +97,7 @@ class BlackListListResource(AuthRequiredResource):
             
             if file and allowed_file(file.filename):
                 df = None
+                """
                 try:
                     df = pd.read_csv(file.data, header=0, skip_blank_lines=True, 
                          skipinitialspace=True, encoding='latin-1')
@@ -104,6 +105,7 @@ class BlackListListResource(AuthRequiredResource):
                     df = pd.read_excel(file.data, header=0)
                 
                 print(df[0], df[1], df[2])
+                """
                 response = {'xd' : 'xd'}
                 return response, status.HTTP_200_OK
             else:
