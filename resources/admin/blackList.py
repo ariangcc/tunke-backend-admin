@@ -98,8 +98,11 @@ class BlackListListResource(AuthRequiredResource):
             if file and allowed_file(file.filename):
                 df = None
                 print(file.filename)
-                df = pd.read_excel(file.read(), header=None)
-                print(df[0], df[1])
+                print(file.content_type)
+                print(file.size)
+                data = file.read()
+                print(data)
+                
                 """
                 try:
                     df = pd.read_csv(file.data, header=0, skip_blank_lines=True, 
