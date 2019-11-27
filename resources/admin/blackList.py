@@ -90,8 +90,6 @@ class BlackListListResource(AuthRequiredResource):
 
     def post(self):
         try:
-            requestDict = request.get_json()
-            
             file = request.files['file']
             if file.filename == '':
                 response = {'error' : 'No selected files'}
@@ -103,7 +101,7 @@ class BlackListListResource(AuthRequiredResource):
                     df = pd.read_csv(file.data, header=0, skip_blank_lines=True, 
                          skipinitialspace=True, encoding='latin-1')
                 except:
-                    df = pd.read_excel(data, header=0)
+                    df = pd.read_excel(file.data, header=0)
                 
                 print(df[0], df[1], df[2])
 
