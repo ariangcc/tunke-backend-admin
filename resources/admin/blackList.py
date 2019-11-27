@@ -90,9 +90,6 @@ class BlackListListResource(Resource):
     def post(self):
         try:
             requestDict = request.get_json()
-            if not requestDict:
-                response = {'error' : 'No input data provided'}
-                return response, status.HTTP_400_BAD_REQUEST
             
             file = request.files['file']
             if file.filename == '':
