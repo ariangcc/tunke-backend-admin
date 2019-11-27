@@ -22,6 +22,9 @@ class OpenAccountResource(Resource):
 			return response, status.HTTP_400_BAD_REQUEST
 		curdatetime = datetime.now()
 		try:
+			accountType = 1 #Cuenta Simple por defecto
+			if 'accountType' in requestDict:
+				accountType = int(requestDict['accountType'])
 			idPerson = requestDict['idPerson']
 			origin = requestDict['origin']
 			prospectiveClient = ProspectiveClient.query.filter_by(idPerson=idPerson).first()
@@ -43,7 +46,7 @@ class OpenAccountResource(Resource):
 			db.session.flush()
 			currency = requestDict['currency']
 			account = Account(accountNumber=GenerateAccount(), balance=0.0, openingDate=curdatetime, 
-							closingDate=None, cardNumber="1234-5678-1234-5678", idAccountType=1,
+							closingDate=None, cardNumber="1234-5678-1234-5678", idAccountType=accountType,
 							idSalesRecord=salesRecord.id, idCurrency=currency, idClient=client.id, active=1)
 			account.add(account)
 
@@ -52,12 +55,13 @@ class OpenAccountResource(Resource):
 
 			regClient = Client.query.get(client.id)
 			regAccount = Account.query.get(account.id)
+			regAccountType = AccountType.query.get(accountType)
 			person = Person.query.get(prospectiveClient.idPerson)
 			d = {}
 			d['name'] = " ".join([person.firstName, person.middleName, person.fatherLastname, person.motherLastname])
 			d['accountNumber'] = regAccount.accountNumber
 			d['cci'] = "0011-" + regAccount.accountNumber
-			d['accountDetail'] = 'Cuenta Simple'
+			d['accountDetail'] = regAccountType.typeName
 			d['openingDate'] = regAccount.openingDate.strftime('%d-%m-%Y')
 			d['currency'] = ('Soles' if regAccount.idCurrency == 1 else 'Dolares')
 			d['email'] = prospectiveClient.email1
