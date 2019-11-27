@@ -33,11 +33,6 @@ class CampaignResource(AuthRequiredResource):
 			month = requestDict['month']
 			startDate = requestDict['startDate']
 			endDate = requestDict['endDate']
-			minimumLoan = requestDict['minimumLoan']
-			maximumLoan = requestDict['maximumLoan']
-			minimumPeriod = requestDict['minimumPeriod']
-			maximumPeriod = requestDict['maximumPeriod']
-			interestRate = requestDict['interestRate']
 
 			campaign = Campaign.query.get_or_404(id)
 
@@ -45,11 +40,6 @@ class CampaignResource(AuthRequiredResource):
 			campaign.month = month
 			campaign.startDate = startDate
 			campaign.endDate = endDate
-			campaign.minimumLoan = minimumLoan
-			campaign.maximumLoan = maximumLoan
-			campaign.minimumPeriod = minimumPeriod
-			campaign.maximumPeriod = maximumPeriod
-			campaign.interestRate = interestRate
 
 			campaign.update()
 			db.session.commit()
