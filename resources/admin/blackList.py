@@ -120,10 +120,10 @@ class BlackListListResource(AuthRequiredResource):
 
         except SQLAlchemyError as e:
             db.session.rollback()
-            response = {'error', str(e)}
+            response = {'error': str(e)}
             return response, status.HTTP_400_BAD_REQUEST
 
         except Exception as e:
             db.session.rollback()
-            response = {'error', str(e)}
+            response = {'error': str(e)}
             return response, status.HTTP_400_BAD_REQUEST
