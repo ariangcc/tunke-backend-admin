@@ -45,7 +45,7 @@ class CustomJSONEncoder(JSONEncoder):
 
 def CreateApp(configFilename, appType):
 	app = Flask(__name__)
-	app.json_encoder = CustomJSONEncoder
+	#app.json_encoder = CustomJSONEncoder
 	app.config.from_object(configFilename)
 	CORS(app)
 	db.init_app(app)
