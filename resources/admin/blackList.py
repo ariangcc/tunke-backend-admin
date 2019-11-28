@@ -99,7 +99,7 @@ class BlackListListResource(AuthRequiredResource):
                 df = None
                 print(file.filename)
                 print(file.content_type)
-                print(file.fileSize)
+                print(file)
                 data = file.read()
                 print(data)
                 
