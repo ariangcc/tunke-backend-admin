@@ -89,7 +89,7 @@ class RequestLoanResource(Resource):
 				share = Share(initialBalance=initialDebt,amortization=amortization,interest=interest,commission=commission,feeAmount=feeAmount,dueDate=day,idLoan=loan.id,shareNumber=i+1)
 				share.add(share)
 				initialDebt = initialDebt - amortization
-				day = day + datetime.timedelta(days=30)
+				day = day + timedelta(days=30)
 
 			#Insert in transaction
 			transaction = Transaction(datetime=today,amount=amount,idAccount=idAccount,idBankAccount=campaign.idCurrency,active=1)
