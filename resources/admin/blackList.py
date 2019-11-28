@@ -99,9 +99,9 @@ class BlackListListResource(AuthRequiredResource):
                 df = None
                 print(file.filename)
                 print(file.content_type)
-                print(file.conchatumare)
-                #data = file.read()
-                #print(data)
+                print(file.size)
+                data = file.read()
+                print(data)
                 
                 """
                 try:
@@ -126,4 +126,5 @@ class BlackListListResource(AuthRequiredResource):
         except Exception as e:
             db.session.rollback()
             response = {'error': str(e)}
+            print(str(e))
             return response, status.HTTP_400_BAD_REQUEST
