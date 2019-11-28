@@ -101,7 +101,7 @@ class BlackListListResource(AuthRequiredResource):
                 print(file.content_type)
                 print(file)
                 df = pd.read_excel(file, header=None)
-                print(df[0], df[1])
+                print(df[0][0], df[1][0], df[2][0], df[3][0], df[4][0])
                 
                 """
                 try:
