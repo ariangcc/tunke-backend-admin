@@ -27,9 +27,21 @@ from models.bankAccount import BankAccount
 from models.blacklistClassification import BlacklistClassification
 from models.share import Share
 from models.securityQuestion import SecurityQuestion
-
-from flask.json import JSONEncoder
 from datetime import date
+
+from json import dumps, loads, JSONEncoder, JSONDecoder
+import pickle
+
+class PythonObjectEncoder(JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, (list, dict, str, unicode, int, float, bool, type(None))):
+            return JSONEncoder.default(self, obj)
+        return {'_python_object': pickle.dumps(obj)}
+
+def as_python_object(dct):
+    if '_python_object' in dct:
+        return pickle.loads(str(dct['_python_object']))
+    return dct
 
 class SetEncoder(JSONEncoder):
 	def default(self, obj):
@@ -57,7 +69,7 @@ class CustomJSONEncoder(JSONEncoder):
 def CreateApp(configFilename, appType):
 	app = Flask(__name__)
 	app.config.from_object(configFilename)
-	app.json_encoder = SetEncoder
+	app.json_encoder = PythonObjectEncoder
 	CORS(app)
 	db.init_app(app)
 
