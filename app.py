@@ -34,8 +34,9 @@ from datetime import date
 class SetEncoder(JSONEncoder):
 	def default(self, obj):
 		if isinstance(obj, set):
+			print("AEA MONGOL DE MRD")
 			return list(obj)
-		return json.JSONEncoder.default(self, obj)
+		return JSONEncoder.default(self, obj)
 
 class CustomJSONEncoder(JSONEncoder):
 	def default(self, obj):
