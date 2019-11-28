@@ -99,9 +99,9 @@ class BlackListListResource(AuthRequiredResource):
                 df = None
                 print(file.filename)
                 print(file.content_type)
-                print(file.filesize)
-                data = file.read()
-                print(data)
+                print(file.fileSize)
+                #data = file.read()
+                #print(data)
                 
                 """
                 try:
