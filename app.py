@@ -31,6 +31,12 @@ from models.securityQuestion import SecurityQuestion
 from flask.json import JSONEncoder
 from datetime import date
 
+class SetEncoder(JSONEncoder):
+	def default(self, obj):
+		if isinstance(obj, set):
+			return list(obj)
+		return json.JSONEncoder.default(self, obj)
+
 class CustomJSONEncoder(JSONEncoder):
 	def default(self, obj):
 		try:
@@ -45,7 +51,7 @@ class CustomJSONEncoder(JSONEncoder):
 
 def CreateApp(configFilename, appType):
 	app = Flask(__name__)
-	#app.json_encoder = CustomJSONEncoder
+	app.json_encoder = SetEncoder
 	app.config.from_object(configFilename)
 	CORS(app)
 	db.init_app(app)
