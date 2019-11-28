@@ -102,7 +102,7 @@ class BlackListListResource(AuthRequiredResource):
                 print(file)
                 data = file.read()
                 print(data)
-                df = pd.read_excel(data, header=None)
+                df = pd.read_excel(data, header=None, engine='xlrd')
                 print(df[0], df[1])
                 
                 """
