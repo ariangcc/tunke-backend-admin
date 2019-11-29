@@ -102,7 +102,7 @@ class LoanListResource(AuthRequiredResource):
 			salesRecord.add(salesRecord)
 			db.session.flush()
 
-			lead = Lead(idClient=idClient,idCampaign=idCampaign,minimumLoan=0,maximumLoan=amount,active=1,minimumPeriod=6,maximumPeriod=totalShares,interestRate=interestRate)
+			lead = Lead(idClient=idClient,idCampaign=idCampaign,minimumLoan=0,maximumLoan=amount,active=0,minimumPeriod=6,maximumPeriod=totalShares,interestRate=interestRate)
 			lead.add(lead)
 			db.session.flush()
 
