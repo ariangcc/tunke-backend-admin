@@ -60,15 +60,16 @@ class DniValidationResource(Resource):
 				d.update(client.toJson())
 				d['activeCampaigns'] = False
 				leads = Lead.query.filter_by(idClient=client.id)
+				d['idLeads'] = []
+				d['campaigns'] = []
 				for lead in leads:
 					lead = lead.toJson()
-					if(lead['active']):
+					if lead['active']:
 						d['activeCampaigns'] = True
-						d['idLead'] = lead['idLead']
+						d['idLeads'].append(lead['idLead'])
 						campaign = Campaign.query.get_or_404(lead['idCampaign'])
-						d['campaign'] = campaign.toJson()
-						break
-
+						d['campaigns'].append(campaign.toJson())
+			
 				nationality = json.loads(requests.get('https://restcountries.eu/rest/v2/alpha/' + person.nationality).text)
 				d['nationality'] = nationality['name']
 				d['flag'] = nationality['flag']
