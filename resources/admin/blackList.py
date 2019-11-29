@@ -3,13 +3,15 @@ from models.blacklist import Blacklist
 from models.person import Person
 from models.blacklistClassification import BlacklistClassification
 from resources.admin.security import AuthRequiredResource
-from resources.utils import allowed_file
+from resources.utils import allowed_file, getDocumentType, fixDocumentNumber
 from flask_restful import Resource
 from sqlalchemy.exc import SQLAlchemyError
 from flask import request
 from werkzeug.utils import secure_filename
+from datetime import datetime
 import status
 import pandas as pd
+import numpy as np
 
 class BlackListResource(AuthRequiredResource):
     def post(self):
@@ -97,23 +99,78 @@ class BlackListListResource(AuthRequiredResource):
             
             if file and allowed_file(file.filename):
                 df = None
-                print(file.filename)
-                print(file.content_type)
-                print(file)
-                df = pd.read_excel(file, header=None)
-                print(df[0][0], df[1][0], df[2][0], df[3][0], df[4][0], df[5][0])
-                print(df[0][1], df[1][1], df[2][1], df[3][1], df[4][1], df[5][1])
-                
-                """
+                # [documentNumber], fatherLastname, motherLastname, name, sex, [birthDate]
                 try:
                     df = pd.read_csv(file.data, header=0, skip_blank_lines=True, 
                          skipinitialspace=True, encoding='latin-1')
                 except:
-                    df = pd.read_excel(file.data, header=0)
-                
-                print(df[0], df[1], df[2])
-                """
-                response = {'xd' : 'xd'}
+                    df = pd.read_excel(file.data, header=None)
+
+                n = df[0].size
+
+                response = {}
+                response['badIndexes'] = []
+                response['badReasons'] = []
+
+                for i in range(n):
+                    documentNumber = df[0][i]
+                    fatherLastname = df[1][i]
+                    motherLastname = df[2][i]
+                    name = df[3][i]
+                    sex = df[4][i]
+                    birthDate = df[5][i]
+
+                    #Obtener firstName y middleName
+                    listNames = [x for x in name.split()]
+                    firstName = listNames[0]
+                    
+                    if isinstance(documentNumber, float):
+                        if np.isnan(documentNumber):
+                            documentNumber = None
+                        else:
+                            documentNumber = str(int(documentNumber))
+                            documentNumber = fixDocumentNumber(documentNumber)
+                    else:
+                        documentNumber = fixDocumentNumber(documentNumber)                        
+
+                    if isinstance(birthDate, float):
+                        if np.isnan(birthDate):
+                            birthDate = None
+                    
+                    if documentNumber:
+                        blacklist = Blacklist.query.filter_by(documentNumber=documentNumber).first()
+                        if blacklist:
+                            response['badIndexes'].append(i)
+                            response['badReasons'].append("Usuario ya registrado en blacklist")
+                        else:
+                            blacklist = Blacklist(
+                                documentNumber=documentNumber,
+                                documentType=getDocumentType(documentNumber),
+                                active=1,
+                                idBlacklistClassification=1
+                            )
+                            blacklist.add(blacklist)
+                    else:
+                        person = Person.query.filter_by(
+                            firstName=firstName,
+                            motherLastname=motherLastname,
+                            fatherLastname=fatherLastname
+                        )
+
+                        if person:
+                            blacklist = Blacklist(
+                                documentNumber=person.documentNumber,
+                                documentType=person.documentType,
+                                active=1,
+                                idBlacklistClassification=1
+                            )
+                            blacklist.add(blacklist)
+                        
+                        else:
+                            response['badIndexes'].append(i)
+                            response['badReasons'].append("Usuario sin match en la base de datos")
+
+                response['ok'] = {'Registros agregados correctamente'}
                 return response, status.HTTP_200_OK
             else:
                 response = {'error' : 'Bad file sent. Please check extension.'}

@@ -13,6 +13,9 @@ passwordPolicy = PasswordPolicy.from_names(
 	nonletters=0,  # need min. 2 non-letter characters (digits, specials, anything)
 )
 
+documentLenghts = [8, 12, 11, 12, 15, 15]
+documentTypes = ["DNI", "CARNET DE EXTRANJERIA", "REG. UNICO DE CONTRIBUYENTES", "PASAPORTE", "PART. NACIMIENTO", "OTROS"]
+
 def GenerateAccount():
 	res = ""
 	for i in range(14):
@@ -36,3 +39,14 @@ def SendSMS(cellphone, msg):
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ['csv', 'xlsx']
+
+def fixDocumentNumber(documentNumber):
+	while len(documentNumber) not in documentLenghts:
+		documentNumber = "0" + documentNumber
+	return documentNumber
+		
+def getDocumentType(documentNumber):
+	for i in range(len(documentLenghts)):
+		if len(documentNumber) == documentLenghts[i]:
+			return documentTypes[i]
+	return documentTypes[0]
