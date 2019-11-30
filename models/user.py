@@ -19,7 +19,7 @@ class User(UserMixin, AddUpdateDelete, db.Model):
 	password = db.Column(db.String(100))
 	idProfile = db.Column('idProfile', db.ForeignKey('profile.id'))
 
-	def GenerateAuthToken(self, expiration = 600):
+	def GenerateAuthToken(self, expiration = 60000):
 		s = Serializer('hola', expires_in = expiration)
 		return s.dumps({ 'id': self.id })
 
