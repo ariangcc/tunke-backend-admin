@@ -101,10 +101,9 @@ class BlackListListResource(AuthRequiredResource):
                 df = None
                 # [documentNumber], fatherLastname, motherLastname, name, sex, [birthDate]
                 try:
-                    df = pd.read_csv(file.data, header=0, skip_blank_lines=True, 
-                         skipinitialspace=True, encoding='latin-1')
+                    df = pd.read_csv(file, header=None)
                 except:
-                    df = pd.read_excel(file.data, header=None)
+                    df = pd.read_excel(file, header=None)
 
                 n = df[0].size
 
@@ -119,7 +118,7 @@ class BlackListListResource(AuthRequiredResource):
                     name = df[3][i]
                     sex = df[4][i]
                     birthDate = df[5][i]
-
+                    print(df[0][i], df[1][i], df[2][i], df[3][i], df[4][i], df[5][i])
                     #Obtener firstName y middleName
                     listNames = [x for x in name.split()]
                     firstName = listNames[0]
@@ -136,10 +135,11 @@ class BlackListListResource(AuthRequiredResource):
                     if isinstance(birthDate, float):
                         if np.isnan(birthDate):
                             birthDate = None
-                    
+                        
                     if documentNumber:
                         blacklist = Blacklist.query.filter_by(documentNumber=documentNumber).first()
                         if blacklist:
+                            print("esta repetido xd")
                             response['badIndexes'].append(i)
                             response['badReasons'].append("Usuario ya registrado en blacklist")
                         else:
@@ -155,22 +155,30 @@ class BlackListListResource(AuthRequiredResource):
                             firstName=firstName,
                             motherLastname=motherLastname,
                             fatherLastname=fatherLastname
-                        )
-
+                        ).first()
+                        print("xd")
                         if person:
-                            blacklist = Blacklist(
-                                documentNumber=person.documentNumber,
-                                documentType=person.documentType,
-                                active=1,
-                                idBlacklistClassification=1
-                            )
-                            blacklist.add(blacklist)
-                        
+                            print("Encontro persona, revisando si hay blacklist registrado")
+                            blacklist = Blacklist.query.filter_by(documentNumber=person.documentNumber).first()
+                            print(blacklist)
+                            if blacklist:
+                                print("esta repetido xd x2")
+                                response['badIndexes'].append(i)
+                                response['badReasons'].append("Usuario ya registrado en blacklist")
+                            else:
+                                blacklist = Blacklist(
+                                    documentNumber=person.documentNumber,
+                                    documentType=person.documentType,
+                                    active=1,
+                                    idBlacklistClassification=1
+                                )
+                                blacklist.add(blacklist)
                         else:
                             response['badIndexes'].append(i)
                             response['badReasons'].append("Usuario sin match en la base de datos")
-
-                response['ok'] = {'Registros agregados correctamente'}
+                print("todo bien")
+                db.session.commit()
+                response['ok'] = 'Registros agregados correctamente'
                 return response, status.HTTP_200_OK
             else:
                 response = {'error' : 'Bad file sent. Please check extension.'}

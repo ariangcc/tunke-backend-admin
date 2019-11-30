@@ -1,5 +1,6 @@
 from app import db
 from models.loan import Loan
+from models.lead import Lead
 from models.client import Client
 from models.salesRecord import SalesRecord
 from models.bankAccount import BankAccount
@@ -43,7 +44,7 @@ class RequestLoanResource(Resource):
 			if client.activeLoans==1:
 				response = {'error': 'El cliente tiene un préstamo activo'}
 				return response, status.HTTP_400_BAD_REQUEST
-			client.activeLoans = 1
+			client.activeLoans = 0 # Esto deberia ser 0 (Soli)
 			client.update()
 			today = datetime.now()
 			tea = interestRate
@@ -94,6 +95,10 @@ class RequestLoanResource(Resource):
 			#Insert in transaction
 			transaction = Transaction(datetime=today,amount=amount,idAccount=idAccount,idBankAccount=campaign.idCurrency,active=1)
 			transaction.add(transaction)
+
+			lead = Lead.query.get_or_404(idLead)
+			lead.active = 0
+			lead.update()
 			
 			#Commit changes
 			db.session.commit()

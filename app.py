@@ -27,6 +27,7 @@ from models.bankAccount import BankAccount
 from models.blacklistClassification import BlacklistClassification
 from models.share import Share
 from models.securityQuestion import SecurityQuestion
+from models.additionalQuestion import AdditionalQuestion
 from datetime import date
 
 from json import dumps, loads, JSONEncoder, JSONDecoder

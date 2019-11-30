@@ -1,6 +1,7 @@
 from datetime import datetime
 from models.prospectiveClient import ProspectiveClient
 from models.account import Account 
+from models.additionalQuestion import AdditionalQuestion
 from models.accountType import AccountType
 from models.person import Person 
 from models.client import Client
@@ -49,6 +50,19 @@ class OpenAccountResource(Resource):
 							closingDate=None, cardNumber="1234-5678-1234-5678", idAccountType=accountType,
 							idSalesRecord=salesRecord.id, idCurrency=currency, idClient=client.id, active=1)
 			account.add(account)
+			db.session.flush()
+			response1 = requestDict['response1']
+			response2 = requestDict['response2']
+			response3 = requestDict['response3']
+			response4 = requestDict['response4']
+			additionalQuestion = AdditionalQuestion(
+				response1=response1,
+				response2=response2,
+				response3=response3,
+				response4=response4,
+				idAccount=account.id
+			)
+			additionalQuestion.add(additionalQuestion)
 
 			#Commit changes
 			db.session.commit()
