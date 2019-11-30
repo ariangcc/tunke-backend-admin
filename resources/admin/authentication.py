@@ -7,6 +7,7 @@ from resources.admin.security import VerifyPassword
 import status
 from flask_restful import Resource
 from sqlalchemy.exc import SQLAlchemyError
+from models.parameterSettings import ParameterSettings
 
 class SignupResource(Resource):
 	def post(self):
@@ -70,6 +71,17 @@ class LoginResource(Resource):
 			resp = {'error': 'Please check your login credentials and try again.'}
 			return resp, status.HTTP_400_BAD_REQUEST
 
+		parameterSettings = ParameterSettings.query.get_or_404(1)
+		#Activar esta validacion para tener solo una sesion posible
+		"""
+		if parameterSettings.sessionActive == 1:
+			resp = {'error': 'Sesion activa actualmente. Por favor, comuniquese con el administrador.'}
+			return resp, status.HTTP_400_BAD_REQUEST
+		"""
+		parameterSettings.sessionActive = 1
+		parameterSettings.update()
+		db.session.commit()
+
 		g.user = user
 		token = g.user.GenerateAuthToken()
 		d = {}
@@ -114,4 +126,13 @@ class VerifyEmailResource(Resource):
 
 		resp = {'token' : token.decode('ascii')}
 		resp.update(d)
+		return resp, status.HTTP_200_OK
+
+class LogoutResource(Resource):
+	def post(self):
+		parameterSettings = ParameterSettings.query.get_or_404(1)
+		parameterSettings.sessionActive = 0
+		parameterSettings.update()
+		db.session.commit()
+		resp = {'ok': 'Logged out succesfully.'}
 		return resp, status.HTTP_200_OK

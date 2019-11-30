@@ -14,7 +14,7 @@ class UserResource(AuthRequiredResource):
 			return d, status.HTTP_200_OK
 		except SQLAlchemyError as e:
 			db.session.rollback()
-			response = {'error', str(e)}
+			response = {'error': str(e)}
 			return response, status.HTTP_400_BAD_REQUEST
 
 class UserListResource(AuthRequiredResource):
@@ -31,5 +31,5 @@ class UserListResource(AuthRequiredResource):
 			return d, status.HTTP_200_OK
 		except SQLAlchemyError as e:
 			db.session.rollback()
-			response = {'error', str(e)}
+			response = {'error': str(e)}
 			return response, status.HTTP_400_BAD_REQUEST

@@ -22,6 +22,7 @@ from resources.admin.lead import LeadListResource, GetByCampaignResource
 from resources.admin.share import ShareListResource
 from resources.admin.account import GetByNationality
 from resources.admin.account import GetByPeriod
+from resources.admin.authentication import LogoutResource
 
 apiBp = Blueprint('api', __name__)
 api = Api(apiBp)
@@ -57,3 +58,4 @@ api.add_resource(GetByCampaignResource,'/leads/getByCampaign/')
 api.add_resource(ShareListResource,'/shares/')
 api.add_resource(GetByNationality,'/accounts/getByNationality/')
 api.add_resource(GetByPeriod,'/accounts/getByPeriod/')
+api.add_resource(LogoutResource, '/logoff/')

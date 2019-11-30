@@ -19,7 +19,7 @@ class TransactionResource(AuthRequiredResource):
 			return d, status.HTTP_200_OK
 		except SQLAlchemyError as e:
 			db.session.rollback()
-			response = {'error', str(e)}
+			response = {'error': str(e)}
 			return response, status.HTTP_400_BAD_REQUEST
 
 class TransactionListResource(AuthRequiredResource):
@@ -42,5 +42,5 @@ class TransactionListResource(AuthRequiredResource):
 			return l, status.HTTP_200_OK
 		except SQLAlchemyError as e:
 			db.session.rollback()
-			response = {'error', str(e)}
+			response = {'error': str(e)}
 			return response, status.HTTP_400_BAD_REQUEST

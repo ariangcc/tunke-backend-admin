@@ -79,12 +79,12 @@ class SalesRecordListResource(AuthRequiredResource):
 
         except SQLAlchemyError as e:
             db.session.rollback()
-            response = {'error',str(e)}
+            response = {'error':str(e)}
             return response, status.HTTP_400_BAD_REQUEST
 
         except Exception as e:
             db.session.rollback()
-            response = {'error',str(e)}
+            response = {'error':str(e)}
             return response, status.HTTP_400_BAD_REQUEST
 
 
@@ -94,7 +94,7 @@ class SalesRecordResource(AuthRequiredResource):
             try:
                 requestDict = request.get_json()
                 if not requestDict:
-                    response = {'error', 'No input data provided'}
+                    response = {'error': 'No input data provided'}
                     return response, status.HTTP_400_BAD_REQUEST
 
                 state = requestDict['state']
@@ -129,11 +129,11 @@ class SalesRecordResource(AuthRequiredResource):
 
             except SQLAlchemyError as e:
                 db.session.rollback()
-                response = {'error', str(e)}
+                response = {'error': str(e)}
                 return response, status.HTTP_400_BAD_REQUEST
 
             except Exception as e:
                 db.session.rollback()
-                response = {'error', str(e)}
+                response = {'error': str(e)}
                 return response, status.HTTP_400_BAD_REQUEST
 

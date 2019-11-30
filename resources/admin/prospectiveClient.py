@@ -19,7 +19,7 @@ class ProspectiveClientResource(Resource):
 			return d, status.HTTP_200_OK
 		except SQLAlchemyError as e:
 			db.session.rollback()
-			response = {'error', str(e)}
+			response = {'error': str(e)}
 			return response, status.HTTP_400_BAD_REQUEST
 
 class ProspectiveClientListResource(Resource):
@@ -34,7 +34,7 @@ class ProspectiveClientListResource(Resource):
 			return d, status.HTTP_200_OK
 		except SQLAlchemyError as e:
 			db.session.rollback()
-			response = {'error', str(e)}
+			response = {'error': str(e)}
 			return response, status.HTTP_400_BAD_REQUEST
 
 	def post(self):

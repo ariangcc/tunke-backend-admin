@@ -13,7 +13,7 @@ class PersonResource(AuthRequiredResource):
 			return d, status.HTTP_200_OK
 		except SQLAlchemyError as e:
 			db.session.rollback()
-			response = {'error', str(e)}
+			response = {'error': str(e)}
 			return response, status.HTTP_400_BAD_REQUEST
 
 class PersonListResource(AuthRequiredResource):
@@ -28,7 +28,7 @@ class PersonListResource(AuthRequiredResource):
 			return d, status.HTTP_200_OK
 		except SQLAlchemyError as e:
 			db.session.rollback()
-			response = {'error', str(e)}
+			response = {'error': str(e)}
 			return response, status.HTTP_400_BAD_REQUEST
 
 class PersonDocumentResource(AuthRequiredResource):
@@ -44,7 +44,7 @@ class PersonDocumentResource(AuthRequiredResource):
 			return d, status.HTTP_200_OK
 		except SQLAlchemyError as e:
 			db.session.rollback()
-			response = {'error', str(e)}
+			response = {'error': str(e)}
 			return response, status.HTTP_400_BAD_REQUEST
 		except Exception as e:
 			db.session.rollback()

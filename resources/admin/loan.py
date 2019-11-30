@@ -12,7 +12,7 @@ from models.transaction import Transaction
 from models.lead import Lead
 from resources.admin.security import AuthRequiredResource
 from flask_restful import Resource
-from flask import request
+from flask import request, render_template
 from sqlalchemy.exc import SQLAlchemyError
 from datetime import datetime
 import status
@@ -26,12 +26,12 @@ class LoanResource(AuthRequiredResource):
 
 		except SQLAlchemyError as e:
 			db.session.rollback()
-			response = {'error', str(e)}
+			response = {'error': str(e)}
 			return response, status.HTTP_400_BAD_REQUEST
 
 		except Exception as e:
 			db.session.rollback()
-			response = {'error', str(e)}
+			response = {'error': str(e)}
 			return response, status.HTTP_400_BAD_REQUEST
 
 class LoanListResource(AuthRequiredResource):
@@ -66,12 +66,12 @@ class LoanListResource(AuthRequiredResource):
 
 		except SQLAlchemyError as e:
 			db.session.rollback()
-			response = {'error', str(e)}
+			response = {'error': str(e)}
 			return response, status.HTTP_400_BAD_REQUEST
 
 		except Exception as e:
 			db.session.rollback()
-			response = {'error', str(e)}
+			response = {'error': str(e)}
 			return response, status.HTTP_400_BAD_REQUEST
 
 	def post(self):
@@ -127,11 +127,51 @@ class LoanListResource(AuthRequiredResource):
 
 		except SQLAlchemyError as e:
 			db.session.rollback()
-			response = {'error', str(e)}
+			response = {'error': str(e)}
 			return response, status.HTTP_400_BAD_REQUEST
 
 		except Exception as e:
 			db.session.rollback()
-			response = {'error', str(e)}
+			response = {'error': str(e)}
 			return response, status.HTTP_400_BAD_REQUEST
 
+"""
+class GenerateCalendarResource(Resource):
+	def post(self):
+		try:
+			requestDict = request.get_json()
+			if not requestDict:
+				response = {'error': 'No input data provided'}
+				return response, status.HTTP_400_BAD_REQUEST
+
+			idLoan = requestDict['idLoan']
+			
+			loan = Loan.query.get_or_404(idLoan)
+			idClient = loan.idClient
+			client = Client.query.get_or_404(idClient)
+			prospectiveClient = ProspectiveClient.query.get_or_404(client.id)
+			email = prospectiveClient.email1
+			shares = Shares.query.filter_by(idLoan=idLoan)
+			shareArray = []
+			for share in shares:
+				shareArray.append(share.toJson())
+			
+			print('Rendered')
+			rendered = render_template('calendar.html', shares=shareArray, currencySymbol=currencySymbol,totalAmortization=str(round(totalAmortization, 2)),totalInterest=str(round(totalInterest,2)),totalComission=str(round(totalComission,2)),totalShare=str(round(totalShare,2)))
+			print('Pdfkit')
+			pdf = pdfkit.from_string(rendered , False)
+			print('PDF')
+			msg.attach("Calendario.pdf","application/pdf",pdf)
+			mail.send(msg)	
+			return d, status.HTTP_201_CREATED
+			
+		except SQLAlchemyError as e:
+			db.session.rollback()
+			response = {'error': str(e)}
+			return response, status.HTTP_400_BAD_REQUEST
+
+		except Exception as e:
+			db.session.rollback()
+			response = {'error': str(e)}
+			return response, status.HTTP_400_BAD_REQUEST
+"""

@@ -8,7 +8,8 @@ class ParameterSettings(db.Model, AddUpdateDelete):
 	maxDiaryMovements = db.Column(db.Integer)
 	legalAge = db.Column(db.Integer)
 	maxAccountsNumber = db.Column(db.Integer)
-	commissionPercentage = db.Column(db.Float) 
+	commissionPercentage = db.Column(db.Float)
+	sessionActive = db.Column(db.Integer)
 
 	def toJson(self):
 		d = {}
@@ -18,5 +19,6 @@ class ParameterSettings(db.Model, AddUpdateDelete):
 		d['legalAge'] = self.legalAge
 		d['maxAccountsNumber'] = self.maxAccountsNumber
 		d['commissionPercentage'] = self.commissionPercentage
+		d['sessionActive'] = self.sessionActive
 		
 		return d

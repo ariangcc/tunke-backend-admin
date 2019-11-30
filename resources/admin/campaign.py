@@ -14,19 +14,19 @@ class CampaignResource(AuthRequiredResource):
 			return d, status.HTTP_200_OK
 		except SQLAlchemyError as e:
 			db.session.rollback()
-			response = {'error', str(e)}
+			response = {'error': str(e)}
 			return response, status.HTTP_400_BAD_REQUEST
 
 		except Exception as e:
 			db.session.rollback()
-			response = {'error', str(e)}
+			response = {'error': str(e)}
 			return response, status.HTTP_400_BAD_REQUEST
 
 	def put(self,id):
 		try:
 			requestDict = request.get_json()
 			if not requestDict:
-				response = {'error', 'No input data provided'}
+				response = {'error': 'No input data provided'}
 				return response, status.HTTP_400_BAD_REQUEST
 
 			name = requestDict['name']
@@ -49,12 +49,12 @@ class CampaignResource(AuthRequiredResource):
 
 		except SQLAlchemyError as e:
 			db.session.rollback()
-			response = {'error', str(e)}
+			response = {'error': str(e)}
 			return response, status.HTTP_400_BAD_REQUEST
 
 		except Exception as e:
 			db.session.rollback()
-			response = {'error', str(e)}
+			response = {'error': str(e)}
 			return response, status.HTTP_400_BAD_REQUEST
 
 	def delete(self,id):
@@ -70,12 +70,12 @@ class CampaignResource(AuthRequiredResource):
 			
 		except SQLAlchemyError as e:
 			db.session.rollback()
-			response = {'error', str(e)}
+			response = {'error': str(e)}
 			return response, status.HTTP_400_BAD_REQUEST
 
 		except Exception as e:
 			db.session.rollback()
-			response = {'error', str(e)}
+			response = {'error': str(e)}
 			return response,status.HTTP_400_BAD_REQUEST
 
 
@@ -92,12 +92,12 @@ class CampaignListResource(AuthRequiredResource):
 
 		except SQLAlchemyError as e:
 			db.session.rollback()
-			response = {'error', str(e)}
+			response = {'error': str(e)}
 			return response, status.HTTP_400_BAD_REQUEST
 
 		except Exception as e:
 			db.session.rollback()
-			response = {'error', str(e)}
+			response = {'error': str(e)}
 			return response, status.HTTP_400_BAD_REQUEST
 
 			
@@ -123,12 +123,12 @@ class CampaignListResource(AuthRequiredResource):
 
 		except SQLAlchemyError as e:
 			db.session.rollback()
-			response = {'error', str(e)}
+			response = {'error': str(e)}
 			return response, status.HTTP_400_BAD_REQUEST
 
 		except Exception as e:
 			db.session.rollback()
-			response = {'error', str(e)}
+			response = {'error': str(e)}
 			return response, status.HTTP_400_BAD_REQUEST
 
 class CampaignChargeResource(AuthRequiredResource):
@@ -149,7 +149,7 @@ class CampaignChargeResource(AuthRequiredResource):
 
 		except SQLAlchemyError as e:
 			db.session.rollback()
-			response = {'error', str(e)}
+			response = {'error': str(e)}
 			return response, status.HTTP_400_BAD_REQUEST
 
 		except Exception as e:

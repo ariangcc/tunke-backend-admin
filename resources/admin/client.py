@@ -26,7 +26,7 @@ class ClientResource(AuthRequiredResource):
 			return d, status.HTTP_200_OK
 		except SQLAlchemyError as e:
 			db.session.rollback()
-			response = {'error', str(e)}
+			response = {'error': str(e)}
 			return response, status.HTTP_400_BAD_REQUEST
 
 	def put(self, id): 
@@ -67,7 +67,7 @@ class ClientResource(AuthRequiredResource):
 			return resp, status.HTTP_201_CREATED
 		except SQLAlchemyError as e:
 			db.session.rollback()
-			response = {'error', str(e)}
+			response = {'error': str(e)}
 			return response, status.HTTP_400_BAD_REQUEST
 		except Exception as e:
 			db.session.rollback()
@@ -84,7 +84,7 @@ class ClientResource(AuthRequiredResource):
 			return resp, status.HTTP_204_NO_CONTENT
 		except SQLAlchemyError as e:
 			db.session.rollback()
-			response = {'error', str(e)}
+			response = {'error': str(e)}
 			return response, status.HTTP_400_BAD_REQUEST
 		except Exception as e:
 			db.session.rollback()
@@ -112,7 +112,7 @@ class ClientListResource(AuthRequiredResource):
 			return d, status.HTTP_200_OK
 		except SQLAlchemyError as e:
 			db.session.rollback()
-			response = {'error', str(e)}
+			response = {'error': str(e)}
 			return response, status.HTTP_400_BAD_REQUEST
 	
 	def post(self):
@@ -162,7 +162,7 @@ class ClientListResource(AuthRequiredResource):
 			return resp, status.HTTP_201_CREATED
 		except SQLAlchemyError as e:
 			db.session.rollback()
-			response = {'error', str(e)}
+			response = {'error': str(e)}
 			return response, status.HTTP_400_BAD_REQUEST
 		except Exception as e:
 			db.session.rollback()
