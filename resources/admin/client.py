@@ -9,6 +9,7 @@ from flask import request
 import status
 from datetime import datetime
 import requests, json
+from datetime import timedelta
 
 class ClientResource(AuthRequiredResource):
 	def get(self, id):
@@ -43,7 +44,7 @@ class ClientResource(AuthRequiredResource):
 			email2 = requestDict['email2']
 			cellphone1 = requestDict['cellphone1']
 			cellphone2 = requestDict['cellphone2']
-			lastEnterDate = datetime.now()
+			lastEnterDate = datetime.now() - timedelta(hours=5)
 			
 			prospectiveClient = ProspectiveClient.query.get_or_404(client.idProspectiveClient)
 
@@ -130,7 +131,7 @@ class ClientListResource(AuthRequiredResource):
 			email2 = requestDict['email2']
 			cellphone1 = requestDict['cellphone1']
 			cellphone2 = requestDict['cellphone2']
-			lastEnterDate = datetime.now()
+			lastEnterDate = datetime.now() - timedelta(hours=5)
 
 			prospectiveClient = ProspectiveClient.query.filter_by(idPerson=idPerson).first()
 			if not prospectiveClient:

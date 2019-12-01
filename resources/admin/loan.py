@@ -10,12 +10,15 @@ from models.bankAccount import BankAccount
 from models.person import Person
 from models.transaction import Transaction
 from models.lead import Lead
+from models.share import Share
 from resources.admin.security import AuthRequiredResource
 from flask_restful import Resource
 from flask import request, render_template
 from sqlalchemy.exc import SQLAlchemyError
 from datetime import datetime, timedelta
+from flask_mail import Message
 import status
+import pdfkit
 
 class LoanResource(AuthRequiredResource):
 	def get(self,id):
@@ -135,8 +138,8 @@ class LoanListResource(AuthRequiredResource):
 			response = {'error': str(e)}
 			return response, status.HTTP_400_BAD_REQUEST
 
-"""
-class GenerateCalendarResource(Resource):
+
+class GenerateCalendarResource(AuthRequiredResource):
 	def post(self):
 		try:
 			requestDict = request.get_json()
@@ -151,18 +154,30 @@ class GenerateCalendarResource(Resource):
 			client = Client.query.get_or_404(idClient)
 			prospectiveClient = ProspectiveClient.query.get_or_404(client.id)
 			email = prospectiveClient.email1
-			shares = Shares.query.filter_by(idLoan=idLoan)
+			shares = Share.query.filter_by(idLoan=idLoan)
 			shareArray = []
+			totalAmortization, totalShare, totalInterest, totalComission = 0.0,0.0,0.0,0.0
 			for share in shares:
+				totalAmortization += share.amortization 
+				totalShare += share.feeAmount
+				totalInterest += share.interest
+				totalComission += share.commission
 				shareArray.append(share.toJson())
-			
+			lead = Lead.query.get_or_404(loan.idLead)
+			campaign = Campaign.query.get_or_404(lead.idCampaign)
+			currency = Currency.query.get_or_404(campaign.idCurrency)
+			currencySymbol = currency.currencySymbol
+			from mailing import mail
+			msg = Message("Tunke - Calendario de pagos", sender="tunkestaff@gmail.com", recipients=[prospectiveClient.email1])
+			msg.body = 'Calendario de pagos de tu prestamo!'
 			print('Rendered')
 			rendered = render_template('calendar.html', shares=shareArray, currencySymbol=currencySymbol,totalAmortization=str(round(totalAmortization, 2)),totalInterest=str(round(totalInterest,2)),totalComission=str(round(totalComission,2)),totalShare=str(round(totalShare,2)))
 			print('Pdfkit')
 			pdf = pdfkit.from_string(rendered , False)
 			print('PDF')
 			msg.attach("Calendario.pdf","application/pdf",pdf)
-			mail.send(msg)	
+			mail.send(msg)
+			d = {'ok': 'Calendario enviado correctamente'}
 			return d, status.HTTP_201_CREATED
 			
 		except SQLAlchemyError as e:
@@ -174,4 +189,3 @@ class GenerateCalendarResource(Resource):
 			db.session.rollback()
 			response = {'error': str(e)}
 			return response, status.HTTP_400_BAD_REQUEST
-"""
