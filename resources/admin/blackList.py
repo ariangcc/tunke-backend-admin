@@ -8,7 +8,7 @@ from flask_restful import Resource
 from sqlalchemy.exc import SQLAlchemyError
 from flask import request
 from werkzeug.utils import secure_filename
-from datetime import datetime
+from datetime import datetime, date
 import status
 import pandas as pd
 import logging
@@ -123,6 +123,9 @@ class BlackListListResource(AuthRequiredResource):
                     #Obtener firstName y middleName
                     listNames = [x for x in name.split()]
                     firstName = listNames[0]
+                    middleName = ""
+                    if len(listNames) > 1:
+                        middleName = listNames[1]
                     
                     if isinstance(documentNumber, float):
                         if np.isnan(documentNumber):
@@ -135,7 +138,12 @@ class BlackListListResource(AuthRequiredResource):
 
                     if isinstance(birthDate, float):
                         if np.isnan(birthDate):
-                            birthDate = None
+                            birthDate = date(2000,1,1)
+                    
+                    if isinstance(birthDate, str):
+                        lstDate = birthDate.split("/")
+                        dd, mm, yyyy = lstDate[0], lstDate[1], lstDate[2]
+                        birthDate = date(yyyy, mm, dd)
                         
                     if documentNumber:
                         blacklist = Blacklist.query.filter_by(documentNumber=documentNumber).first()
@@ -151,6 +159,23 @@ class BlackListListResource(AuthRequiredResource):
                                 idBlacklistClassification=1
                             )
                             blacklist.add(blacklist)
+                            person = Person.query.filter_by(documentNumber=documentNumber).first()
+                            if not person:
+                                person = Person(
+                                    documentNumber=documentNumber,
+                                    documentType=blacklist.documentType,
+                                    fatherLastname=fatherLastname,
+                                    motherLastname=motherLastname,
+                                    firstName=firstName,
+                                    middleName=middleName,
+                                    birthdate=birthDate,
+                                    address="Av. Universitaria 1801, Lima 15108, Peru",
+                                    nationality="per",
+                                    vehicle1Plate="XXX000",
+                                    vehicle2Plate="XXX000",
+                                    gender="M"
+                                )
+                                person.add(person)
                     else:
                         person = Person.query.filter_by(
                             firstName=firstName,
