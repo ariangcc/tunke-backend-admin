@@ -1,3 +1,5 @@
 *pycache*
 *.pyc
 credentials.py
+errorAdmin.txt
+errorClient.txt

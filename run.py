@@ -2,6 +2,7 @@ import sys
 from app import CreateApp
 from time import sleep
 from flask import Flask, render_template
+import logging
 
 app = None
 if(sys.argv[1] == "db"):
@@ -11,8 +12,10 @@ else:
 print(appType)
 if appType == 0:
 	app = CreateApp('configclient', appType)
+	logging.basicConfig(filename='errorClient.txt', level=logging.DEBUG)
 else:
 	app = CreateApp('configadmin', appType)
+	logging.basicConfig(filename='errorAdmin.txt', level=logging.DEBUG)
 
 print(app.config['PORT'])
 
