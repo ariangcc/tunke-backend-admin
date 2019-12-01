@@ -8,6 +8,7 @@ from resources.admin.security import AuthRequiredResource
 from sqlalchemy.exc import SQLAlchemyError
 from flask_restful import Resource
 from flask import request
+from datetime import timedelta
 from app import db
 import status
 
@@ -48,7 +49,7 @@ class ProspectiveClientListResource(Resource):
 		email2 = requestDict['email2']
 		cellphone1 = requestDict['cellphone1']
 		cellphone2 = requestDict['cellphone2']
-		lastEnterDate = datetime.datetime.now()
+		lastEnterDate = datetime.datetime.now() - timedelta(hours=5)
 		
 		try:
 			prospectiveClient = ProspectiveClient.query.filter_by(idPerson=idPerson).first()

@@ -14,7 +14,7 @@ from resources.admin.security import AuthRequiredResource
 from flask_restful import Resource
 from flask import request, render_template
 from sqlalchemy.exc import SQLAlchemyError
-from datetime import datetime
+from datetime import datetime, timedelta
 import status
 
 class LoanResource(AuthRequiredResource):
@@ -98,7 +98,7 @@ class LoanListResource(AuthRequiredResource):
 			client.activeLoans = 1
 			client.update()
 
-			salesRecord = SalesRecord(origin='Ventanilla', requestDate=datetime.now(), idRecordStatus=3,active=1,idClient=idClient,idProduct=2)
+			salesRecord = SalesRecord(origin='Ventanilla', requestDate=datetime.now() - timedelta(hours=5), idRecordStatus=3,active=1,idClient=idClient,idProduct=2)
 			salesRecord.add(salesRecord)
 			db.session.flush()
 

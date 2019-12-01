@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from models.prospectiveClient import ProspectiveClient
 from models.account import Account 
 from models.additionalQuestion import AdditionalQuestion
@@ -21,7 +21,7 @@ class OpenAccountResource(Resource):
 		if not requestDict:
 			response = {'error': 'No input data provided'}
 			return response, status.HTTP_400_BAD_REQUEST
-		curdatetime = datetime.now()
+		curdatetime = datetime.now() - timedelta(hours=5)
 		try:
 			accountType = 1 #Cuenta Simple por defecto
 			if 'accountType' in requestDict:

@@ -47,7 +47,7 @@ class RequestLoanResource(Resource):
 				return response, status.HTTP_400_BAD_REQUEST
 			client.activeLoans = 0 # Esto deberia ser 0 (Soli)
 			client.update()
-			today = datetime.now()
+			today = datetime.now() - timedelta(hours=5)
 			tea = interestRate
 			tem = round((((1 + (tea/100)) ** (1/12))-1) * 100,2)
 			amortization = round(amount/totalShares,2)
@@ -58,7 +58,7 @@ class RequestLoanResource(Resource):
 			totalComission = commission*totalShares
 			totalShare = share* totalShares
 			initialDebt = amount
-			today = datetime.now()
+			today = datetime.now() - timedelta(hours=5)
 			day = today
 
 			#Obteniendo campaign
@@ -75,7 +75,7 @@ class RequestLoanResource(Resource):
 			account.update()
 
 			#Insert in salesRecord
-			salesRecord = SalesRecord(origin='Web',requestDate=datetime.now(),idRecordStatus=1,
+			salesRecord = SalesRecord(origin='Web',requestDate=datetime.now() - timedelta(hours=5),idRecordStatus=1,
 			active=1,idClient=idClient,idProduct=2)
 			salesRecord.add(salesRecord)
 			db.session.flush()

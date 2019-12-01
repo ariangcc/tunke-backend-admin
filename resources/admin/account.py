@@ -11,6 +11,7 @@ from flask_restful import Resource
 from sqlalchemy.exc import SQLAlchemyError
 from flask import request
 import status
+from datetime import timedelta
 
 
 class AccountResource(AuthRequiredResource):
@@ -41,7 +42,7 @@ class AccountResource(AuthRequiredResource):
 		try:
 			account = Account.query.get_or_404(id)
 			account.active = 0
-			account.closingDate = datetime.now()
+			account.closingDate = datetime.now() - timedelta(hours=5)
 			account.update()
 			db.session.commit()
 			resp = {'ok': 'Cuenta borrada satisfactoriamente.'}

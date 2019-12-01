@@ -14,7 +14,7 @@ from flask_restful import Resource
 from sqlalchemy.exc import SQLAlchemyError
 from flask import request
 import status
-from datetime import datetime
+from datetime import datetime, timedelta
 import requests, json
 
 class SalesRecordListResource(AuthRequiredResource):
@@ -108,16 +108,16 @@ class SalesRecordResource(AuthRequiredResource):
                 bankAccount = BankAccount.query.get_or_404(aux['idCurrency'])
                 if state == 1:#aprobado
                     salesRecord.idRecordStatus = 1
-                    salesRecord.requestDate = datetime.now()
+                    salesRecord.requestDate = datetime.now() - timedelta(hours=5)
                     account.balance = account.balance + loan['amount']
                     bankAccount.balance = bankAccount.balance - loan['amount']
                     bankAccount.update()
-                    transaction = Transaction(datetime=datetime.now(),amount=loan['amount'],idAccount=loan['idAccount'],idBankAccount=aux['idCurrency'],active=1)
+                    transaction = Transaction(datetime=datetime.now() - timedelta(hours=5),amount=loan['amount'],idAccount=loan['idAccount'],idBankAccount=aux['idCurrency'],active=1)
                     transaction.add(transaction)
                     client.activeLoans = 1
                 elif state == 2:
                     salesRecord.idRecordStatus = 2
-                    salesRecord.requestDate = datetime.now()
+                    salesRecord.requestDate = datetime.now() - timedelta(hours=5)
                     client.activeLoans = 0
 
                 salesRecord.update()
