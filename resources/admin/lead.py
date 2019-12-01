@@ -44,7 +44,7 @@ class LeadListResource(AuthRequiredResource):
             idClient = requestDict['idClient']
             idCampaign = requestDict['idCampaign']
             minimumLoan = requestDict['minimumLoan']
-            maximumLoan = requestDict['maximumLoan']
+            maximumLoan = float(requestDict['maximumLoan'])
             minimumPeriod = requestDict['minimumPeriod']
             maximumPeriod = requestDict['maximumPeriod']
             interestRate = requestDict['interestRate']
@@ -182,7 +182,7 @@ class LeadListResource(AuthRequiredResource):
                     continue
                 
                 leads = Lead.query.filter_by(idClient=idClient)
-                maxLoan = maximumLoan
+                maxLoan = float(maximumAmount)
                 for lead in leads:
                     maxLoan = max(maxLoan, lead.maximumLoan)
                 
