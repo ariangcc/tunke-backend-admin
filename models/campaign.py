@@ -22,5 +22,5 @@ class Campaign(db.Model, AddUpdateDelete):
         d['endDate'] = self.endDate.strftime('%Y-%m-%d')
         d['idCurrency'] = self.idCurrency
         d['active'] = self.active
-        d['creationDate'] = self.active
+        d['creationDate'] = self.creationDate.strftime('%Y-%m-%d')
         return d

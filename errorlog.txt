@@ -9,3 +9,8 @@ INFO:werkzeug: * Running on http://0.0.0.0:9994/ (Press CTRL+C to quit)
 INFO:werkzeug: * Restarting with stat
 WARNING:werkzeug: * Debugger is active!
 INFO:werkzeug: * Debugger PIN: 382-837-096
+INFO:werkzeug: * Running on http://0.0.0.0:9994/ (Press CTRL+C to quit)
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 382-837-096
+INFO:werkzeug:127.0.0.1 - - [30/Nov/2019 23:36:16] "POST /api/login HTTP/1.1" 400 -
