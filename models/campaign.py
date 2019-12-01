@@ -11,6 +11,7 @@ class Campaign(db.Model, AddUpdateDelete):
     idCurrency = db.Column('idCurrency', db.ForeignKey('currency.id'))
     leads = db.relationship('Lead')
     active = db.Column(db.Integer)
+    creationDate = db.Column(db.DateTime)
 
     def toJson(self):
         d = {}
@@ -21,4 +22,5 @@ class Campaign(db.Model, AddUpdateDelete):
         d['endDate'] = self.endDate.strftime('%Y-%m-%d')
         d['idCurrency'] = self.idCurrency
         d['active'] = self.active
+        d['creationDate'] = self.active
         return d

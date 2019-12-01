@@ -32,6 +32,7 @@ from datetime import date
 
 from json import dumps, loads, JSONEncoder, JSONDecoder
 import pickle
+import logging
 
 class PythonObjectEncoder(JSONEncoder):
     def default(self, obj):
@@ -47,9 +48,7 @@ def as_python_object(dct):
 class SetEncoder(JSONEncoder):
 	def default(self, obj):
 		try:
-			print("YA MANITO, CTM")
 			if isinstance(obj, set):
-				print("AEA MONGOL DE MRD")
 				return list(obj)
 		except TypeError:
 			pass
@@ -71,6 +70,7 @@ def CreateApp(configFilename, appType):
 	app = Flask(__name__)
 	app.config.from_object(configFilename)
 	app.json_encoder = PythonObjectEncoder
+	logging.basicConfig(filename='errorlog.txt', level=logging.DEBUG)
 	CORS(app)
 	db.init_app(app)
 

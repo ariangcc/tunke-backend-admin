@@ -1,0 +1,11 @@
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 382-837-096
+INFO:werkzeug:127.0.0.1 - - [30/Nov/2019 23:21:37] "GET /errorLog HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [30/Nov/2019 23:21:54] "GET /errorLog HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [30/Nov/2019 23:22:29] "GET / HTTP/1.1" 404 -
+INFO:werkzeug:127.0.0.1 - - [30/Nov/2019 23:22:39] "GET /api/dniValidation/ HTTP/1.1" 405 -
+INFO:werkzeug:127.0.0.1 - - [30/Nov/2019 23:23:04] "GET /errorLog HTTP/1.1" 200 -
+INFO:werkzeug: * Running on http://0.0.0.0:9994/ (Press CTRL+C to quit)
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 382-837-096
