@@ -1,4 +1,5 @@
 from models.user import User
+from models.profile import Profile
 from werkzeug.security import generate_password_hash, check_password_hash
 from resources.utils import passwordPolicy
 from flask import request, jsonify, make_response, g
@@ -90,6 +91,8 @@ class LoginResource(Resource):
 		d['id'] = user.id
 		d['name'] = user.name
 		d['idProfile'] = user.idProfile
+		profile = Profile.query.get_or_404(user.idProfile)
+		d['charge'] = profile.charge
 		d['code'] = 'XX2019'
 
 		resp = {'token' : token.decode('ascii')}
