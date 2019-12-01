@@ -11,6 +11,7 @@ from werkzeug.utils import secure_filename
 from datetime import datetime
 import status
 import pandas as pd
+import logging
 import numpy as np
 
 class BlackListResource(AuthRequiredResource):
@@ -118,7 +119,7 @@ class BlackListListResource(AuthRequiredResource):
                     name = df[3][i]
                     sex = df[4][i]
                     birthDate = df[5][i]
-                    print(df[0][i], df[1][i], df[2][i], df[3][i], df[4][i], df[5][i])
+                    logging.debug(df[0][i], df[1][i], df[2][i], df[3][i], df[4][i], df[5][i])
                     #Obtener firstName y middleName
                     listNames = [x for x in name.split()]
                     firstName = listNames[0]
@@ -139,7 +140,7 @@ class BlackListListResource(AuthRequiredResource):
                     if documentNumber:
                         blacklist = Blacklist.query.filter_by(documentNumber=documentNumber).first()
                         if blacklist:
-                            print("esta repetido xd")
+                            logging.debug("esta repetido xd")
                             response['badIndexes'].append(i)
                             response['badReasons'].append("Usuario ya registrado en blacklist")
                         else:
@@ -156,13 +157,13 @@ class BlackListListResource(AuthRequiredResource):
                             motherLastname=motherLastname,
                             fatherLastname=fatherLastname
                         ).first()
-                        print("xd")
+                        logging.debug("xd")
                         if person:
-                            print("Encontro persona, revisando si hay blacklist registrado")
+                            logging.debug("Encontro persona, revisando si hay blacklist registrado")
                             blacklist = Blacklist.query.filter_by(documentNumber=person.documentNumber).first()
-                            print(blacklist)
+                            logging.debug(blacklist)
                             if blacklist:
-                                print("esta repetido xd x2")
+                                logging.debug("esta repetido xd x2")
                                 response['badIndexes'].append(i)
                                 response['badReasons'].append("Usuario ya registrado en blacklist")
                             else:
@@ -176,7 +177,7 @@ class BlackListListResource(AuthRequiredResource):
                         else:
                             response['badIndexes'].append(i)
                             response['badReasons'].append("Usuario sin match en la base de datos")
-                print("todo bien")
+                logging.debug("todo bien")
                 db.session.commit()
                 response['ok'] = 'Registros agregados correctamente'
                 return response, status.HTTP_200_OK
@@ -192,5 +193,5 @@ class BlackListListResource(AuthRequiredResource):
         except Exception as e:
             db.session.rollback()
             response = {'error': str(e)}
-            print(str(e))
+            logging.debug(str(e))
             return response, status.HTTP_400_BAD_REQUEST
