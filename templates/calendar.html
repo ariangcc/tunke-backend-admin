@@ -51,12 +51,17 @@
         .table{
             margin-top: 5%;
         }
+
+        table { page-break-inside:auto }
+        tr    { page-break-inside:avoid; page-break-after:auto }
+        thead { display:table-header-group }
+        tfoot { display:table-footer-group }	
     </style>
 
   <body>
-  	<div id="app">
+  	<div id="app" style="page-break-inside:avoid;">
           <h1>Calendario de Pagos</h1>
-          <table class="table">
+          <table class="table" style="page-break-inside:avoid;">
                 <thead>
                     <tr class="table-dark">
                         <th>Numero de cuota</th>
