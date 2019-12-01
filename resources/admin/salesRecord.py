@@ -114,7 +114,7 @@ class SalesRecordResource(AuthRequiredResource):
                     bankAccount.update()
                     transaction = Transaction(datetime=datetime.now() - timedelta(hours=5),amount=loan['amount'],idAccount=loan['idAccount'],idBankAccount=aux['idCurrency'],active=1)
                     transaction.add(transaction)
-                    client.activeLoans = 1
+                    client.activeLoans = 0
                 elif state == 2:
                     salesRecord.idRecordStatus = 2
                     salesRecord.requestDate = datetime.now() - timedelta(hours=5)
