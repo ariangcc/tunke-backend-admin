@@ -44,6 +44,7 @@ class SalesRecordListResource(AuthRequiredResource):
                 else:
                     loan = Loan.query.filter_by(idSalesRecord=salesRecord['idSalesRecord']).first()
                     loan = loan.toJson()
+                    e['amount'] = loan['amount']
                     e['activeLoan'] = loan['active']
                     e['totalShares'] = loan['totalShares']
                     e['idLoan'] = loan['idLoan']
