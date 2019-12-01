@@ -68,7 +68,6 @@ class LeadListResource(AuthRequiredResource):
     def put(self):
         try:
             idCampaign = request.form['idCampaign']
-            print(idCampaign)
             campaign = Campaign.query.get_or_404(idCampaign)
             file = request.files['file']
             if file.filename == '':
@@ -198,7 +197,7 @@ class LeadListResource(AuthRequiredResource):
         except Exception as e:
             db.session.rollback()
             print(str(e))
-            response = {'error': 'An error ocurred. Contact cat-support asap. ' + str(e)}
+            response = {'error': 'A fatal error ocurred. Contact cat-support asap. ' + str(e)}
             return response, status.HTTP_400_BAD_REQUEST
 
 class GetByCampaignResource(AuthRequiredResource):
