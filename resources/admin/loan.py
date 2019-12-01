@@ -63,6 +63,7 @@ class LoanListResource(AuthRequiredResource):
 				e['documentNumber'] = person.documentNumber
 				e['documentType'] = person.documentType
 				e['requestDate'] = salesRecord['requestDate']
+				e['idRecordStatus'] =salesRecord['idRecordStatus']
 				d.append(e)
 
 			return d, status.HTTP_200_OK
