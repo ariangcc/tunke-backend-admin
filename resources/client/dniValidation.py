@@ -60,7 +60,7 @@ class DniValidationResource(Resource):
 				d.update(client.toJson())
 				d['activeCampaigns'] = False
 				leads = Lead.query.filter_by(idClient=client.id)
-				d['idLeads'] = []
+				d['leads'] = []
 				d['campaigns'] = []
 				for lead in leads:
 					lead = lead.toJson()
@@ -69,7 +69,7 @@ class DniValidationResource(Resource):
 						if campaign.month != 'Diciembre':
 							continue
 						d['activeCampaigns'] = True
-						d['idLeads'].append(lead['idLead'])
+						d['leads'].append(lead)
 						d['campaigns'].append(campaign.toJson())
 			
 				nationality = json.loads(requests.get('https://restcountries.eu/rest/v2/alpha/' + person.nationality).text)
