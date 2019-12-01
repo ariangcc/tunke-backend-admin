@@ -11,6 +11,7 @@ from resources.admin.security import AuthRequiredResource
 from flask_restful import Resource
 from flask import request
 from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy import desc
 from datetime import datetime, date
 import status
 import pandas as pd
@@ -48,7 +49,15 @@ class LeadListResource(AuthRequiredResource):
             maximumPeriod = requestDict['maximumPeriod']
             interestRate = requestDict['interestRate']
 
-            lead = Lead(idClient=idClient,idCampaign=idCampaign,minimumLoan=minimumLoan,maximumLoan=maximumLoan,active=1,minimumPeriod=minimumPeriod,maximumPeriod=maximumPeriod,interestRate=interestRate)
+            leads = Lead.query.filter_by(idClient=idClient)
+            maxLoan = maximumLoan
+            for lead in leads:
+                maxLoan = max(maxLoan, lead.maximumLoan)
+            
+            for lead in leads:
+                lead.maximumLoan = maxLoan
+
+            lead = Lead(idClient=idClient,idCampaign=idCampaign,minimumLoan=minimumLoan,maximumLoan=maxLoan,active=1,minimumPeriod=minimumPeriod,maximumPeriod=maximumPeriod,interestRate=interestRate)
             lead.add(lead)
 
             db.session.commit()
@@ -172,9 +181,17 @@ class LeadListResource(AuthRequiredResource):
                     response['badReasons'].append("Esta tasa de interes es invalida")
                     continue
                 
+                leads = Lead.query.filter_by(idClient=idClient)
+                maxLoan = maximumLoan
+                for lead in leads:
+                    maxLoan = max(maxLoan, lead.maximumLoan)
+                
+                for lead in leads:
+                    lead.maximumLoan = maxLoan
+
                 lead = Lead(
                     minimumLoan=minimumAmount,
-                    maximumLoan=maximumAmount,
+                    maximumLoan=maxLoan,
                     minimumPeriod=minimumTerm,
                     maximumPeriod=maximumTerm,
                     interestRate=interestRate,
