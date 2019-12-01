@@ -53,6 +53,9 @@ class LeadListResource(AuthRequiredResource):
             maxLoan = maximumLoan
             for lead in leads:
                 maxLoan = max(maxLoan, lead.maximumLoan)
+                if idCampaign == lead.idCampaign:
+                    resp = {'error': 'Este cliente ya tiene un lead en esta campanha'}
+                    return resp, status.HTTP_400_BAD_REQUEST
             
             for lead in leads:
                 lead.maximumLoan = maxLoan
