@@ -17,6 +17,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from datetime import datetime, timedelta
 from flask import request, render_template
 from flask_mail import Message
+import logging
 import status
 import pdfkit
 
@@ -130,11 +131,11 @@ class RequestLoanResource(Resource):
 			amount = str(d['amount'])
 			currencySymbol = str(currency.currencySymbol)
 			msg.html = render_template('loans.html', name=fullName, accountNumber=accNumber, currency=curName, amount=amount)
-			print('Rendered')
+			logging.debug('Rendered')
 			rendered = render_template('calendar.html', shares=shares, currencySymbol=currencySymbol,totalAmortization=str(round(totalAmortization, 2)),totalInterest=str(round(totalInterest,2)),totalComission=str(round(totalComission,2)),totalShare=str(round(totalShare,2)))
-			print('Pdfkit')
+			logging.debug('Pdfkit')
 			pdf = pdfkit.from_string(rendered , False)
-			print('PDF')
+			logging.debug('PDF')
 			msg.attach("Calendario.pdf","application/pdf",pdf)
 			mail.send(msg)	
 			return d, status.HTTP_201_CREATED
@@ -147,5 +148,5 @@ class RequestLoanResource(Resource):
 		except Exception as e:
 			db.session.rollback()
 			response = {'error': str(e)}
-			print(str(e))
+			logging.debug(str(e))
 			return response, status.HTTP_400_BAD_REQUEST
