@@ -150,7 +150,7 @@ class BlackListListResource(AuthRequiredResource):
                         birthDate = date(yyyy, mm, dd)
 
                     if not isinstance(birthDate, datetime):
-                        birthDate = 
+                        birthDate = datetime.now() - timedelta(years=20)
                         
                     if documentNumber:
                         blacklist = Blacklist.query.filter_by(documentNumber=documentNumber).first()
