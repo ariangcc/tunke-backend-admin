@@ -108,7 +108,7 @@ class SalesRecordResource(AuthRequiredResource):
                 loan = Loan.query.filter_by(idSalesRecord=id).first()
                 loan = loan.toJson()
                 account = Account.query.get_or_404(loan['idAccount'])
-                currency = Currency.query.filter_by(account.idCurrency)
+                currency = Currency.query.get_or_404(account.idCurrency)
                 currency = currency.toJson()
                 aux = account.toJson()
                 client = Client.query.get_or_404(loan['idClient'])
