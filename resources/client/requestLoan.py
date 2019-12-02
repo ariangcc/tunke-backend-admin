@@ -52,7 +52,6 @@ class RequestLoanResource(Resource):
 			#Calculo de tea y tem
 			tea = interestRate
 			tem = (((1 + (tea/100)) ** (1/12))-1)
-			print('Tem' , tem)
 			month = today.month			
 			countExtraMonths = 0
 			numberExtra = 0
@@ -65,12 +64,9 @@ class RequestLoanResource(Resource):
 
 			if(idShareType==2):
 				numberExtra = countExtraMonths
-			print(totalShares)
-			print(numberExtra)
 			pot = totalShares + numberExtra
 			auxTem = tem + 1
 			shareBase = round(	(amount * ( (1+tem) ** (totalShares + numberExtra) ) * tem) / ( ((1+tem) ** (totalShares + numberExtra)) - 1 ), 2)
-			print(shareBase)
 			initialDebt = amount
 			day = today
 			totalAmortization = 0
@@ -110,13 +106,11 @@ class RequestLoanResource(Resource):
 			for i in range(totalShares):
 				auxShareBase = shareBase
 				interest = round(initialDebt * tem,2)
-				print('Interest' , interest) 
 				day = day + timedelta(days=30)
 				if(idShareType == 2):
 					if(day.month==7 or day.month==12):
 						auxShareBase = round(shareBase*2,2)
 				amortization = auxShareBase - interest
-				print('Amortization', amortization)
 				if(i == totalShares-1):
 					amortization = initialDebt
 				feeAmount = amortization + commission + interest
