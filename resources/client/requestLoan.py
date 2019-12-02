@@ -66,6 +66,7 @@ class RequestLoanResource(Resource):
 			if(idShareType==2):
 				numberExtra = countExtraMonths
 			shareBase = round((amount* ( (1+tem)  ** (totalShares + numberExtra) )) * tem / (( (1+tem)  ** (totalShares + numberExtra) ) - 1),2)
+			print(shareBase)
 			initialDebt = amount
 			day = today
 			totalAmortization = 0
@@ -105,19 +106,21 @@ class RequestLoanResource(Resource):
 			for i in range(totalShares):
 				auxShareBase = shareBase
 				interest = round(initialDebt * tem,2)
+				print('Interest' , interest) 
 				day = day + timedelta(days=30)
 				if(idShareType==2 and day.month==7 or day.month==12):
 					auxShareBase = round(shareBase*2,2)
 				amortization = auxShareBase - interest
+				print('Amortization', amortization)
 				if(i == totalShares-1):
 					amortization = initialDebt
 				feeAmount = amortization + commission + interest
-				initialDebt = initialDebt - amortization
 				totalAmortization+=amortization
 				totalInterest+=interest
 				totalShare+=feeAmount
 				share = Share(initialBalance=initialDebt,amortization=amortization,interest=interest,commission=commission,feeAmount=feeAmount,dueDate=day,idLoan=loan.id,shareNumber=i+1)
 				share.add(share)
+				initialDebt = initialDebt - amortization
 
 			#Insert in transaction
 			transaction = Transaction(datetime=today,amount=amount,idAccount=idAccount,idBankAccount=campaign.idCurrency,active=1)
