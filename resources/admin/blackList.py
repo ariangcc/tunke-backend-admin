@@ -8,7 +8,7 @@ from flask_restful import Resource
 from sqlalchemy.exc import SQLAlchemyError
 from flask import request
 from werkzeug.utils import secure_filename
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 import status
 import pandas as pd
 import logging
@@ -134,16 +134,23 @@ class BlackListListResource(AuthRequiredResource):
                             documentNumber = str(int(documentNumber))
                             documentNumber = fixDocumentNumber(documentNumber)
                     else:
-                        documentNumber = fixDocumentNumber(documentNumber)                        
+                        documentNumber = fixDocumentNumber(documentNumber) 
+
+                    logging.debug(birthDate, type(birthDate))                    
 
                     if isinstance(birthDate, float):
                         if np.isnan(birthDate):
-                            birthDate = date(2000,1,1)
+                            birthDate = datetime.now() - timedelta(years=20)
+                    
+                    logging.debug(birthDate.strftime('%d-%m-%Y'))
                     
                     if isinstance(birthDate, str):
                         lstDate = birthDate.split("/")
                         dd, mm, yyyy = lstDate[0], lstDate[1], lstDate[2]
                         birthDate = date(yyyy, mm, dd)
+
+                    if not isinstance(birthDate, datetime):
+                        birthDate = 
                         
                     if documentNumber:
                         blacklist = Blacklist.query.filter_by(documentNumber=documentNumber).first()
