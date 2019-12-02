@@ -112,6 +112,7 @@ class SalesRecordResource(AuthRequiredResource):
                 currency = currency.toJson()
                 aux = account.toJson()
                 client = Client.query.get_or_404(loan['idClient'])
+                prospectiveClient = ProspectiveClient.query.get_or_404(client['idProspectiveClient'])
                 bankAccount = BankAccount.query.get_or_404(aux['idCurrency'])
                 if state == 1:#aprobado
                     salesRecord.idRecordStatus = 1
