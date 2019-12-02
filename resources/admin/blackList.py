@@ -153,6 +153,8 @@ class BlackListListResource(AuthRequiredResource):
 
                     if birthDate == pd.NaT:
                         birthDate = None
+                    
+                    logging.debug(birthDate)
                         
                     if documentNumber:
                         blacklist = Blacklist.query.filter_by(documentNumber=documentNumber).first()
