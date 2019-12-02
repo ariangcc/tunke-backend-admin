@@ -142,7 +142,8 @@ class BlackListListResource(AuthRequiredResource):
                         if np.isnan(birthDate):
                             birthDate = datetime.now() - timedelta(years=20)
                     
-                    logging.debug(birthDate.strftime('%d-%m-%Y'))
+                    if isinstance(birthDate, datetime):
+                        logging.debug(birthDate.strftime('%d-%m-%Y'))
                     
                     if isinstance(birthDate, str):
                         lstDate = birthDate.split("/")
