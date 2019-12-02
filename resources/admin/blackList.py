@@ -140,10 +140,8 @@ class BlackListListResource(AuthRequiredResource):
 
                     if isinstance(birthDate, float):
                         if np.isnan(birthDate):
-                            birthDate = datetime.now() - timedelta(years=20)
-                    
-                    if isinstance(birthDate, datetime):
-                        logging.debug(birthDate.strftime('%d-%m-%Y'))
+                            logging.debug("isnan")
+                            birthDate = datetime.now() - timedelta(days=7300)
                     
                     if isinstance(birthDate, str):
                         lstDate = birthDate.split("/")
@@ -151,7 +149,7 @@ class BlackListListResource(AuthRequiredResource):
                         birthDate = date(yyyy, mm, dd)
 
                     if not isinstance(birthDate, datetime):
-                        birthDate = datetime.now() - timedelta(years=20)
+                        birthDate = datetime.now() - timedelta(days=7300)
                         
                     if documentNumber:
                         blacklist = Blacklist.query.filter_by(documentNumber=documentNumber).first()
