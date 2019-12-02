@@ -153,7 +153,7 @@ class BlackListListResource(AuthRequiredResource):
 
                     if pd.isnull(birthDate):
                         logging.debug("ES NAT")
-                        birthDate = None
+                        birthDate = birthDate = datetime.now() - timedelta(days=7300)
                     logging.debug("IMPRIMIENTO BD")
                     logging.debug(birthDate)
 
