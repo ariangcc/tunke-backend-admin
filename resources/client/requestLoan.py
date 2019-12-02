@@ -112,8 +112,9 @@ class RequestLoanResource(Resource):
 				interest = round(initialDebt * tem,2)
 				print('Interest' , interest) 
 				day = day + timedelta(days=30)
-				if(idShareType==2 and day.month==7 or day.month==12):
-					auxShareBase = round(shareBase*2,2)
+				if(idShareType == 2):
+					if(day.month==7 or day.month==12):
+						auxShareBase = round(shareBase*2,2)
 				amortization = auxShareBase - interest
 				print('Amortization', amortization)
 				if(i == totalShares-1):
