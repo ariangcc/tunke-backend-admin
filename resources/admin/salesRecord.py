@@ -139,7 +139,7 @@ class SalesRecordResource(AuthRequiredResource):
                 if state==1:
                     msg = Message("Tunke - Prestamo aprobado", sender="tunkestaff@gmail.com", recipients=[prospectiveClient.email1])
                     msg.body = 'Hola'
-                    sharesA = Share.query.filter_by(idLoan=loan['id'])
+                    sharesA = Share.query.filter_by(idLoan=loan['idLoan'])
                     shares = []
                     totalAmortization = 0
                     totalInterest = 0
