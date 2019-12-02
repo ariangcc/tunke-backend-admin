@@ -10,12 +10,16 @@ from models.account import Account
 from models.loan import Loan
 from models.bankAccount import BankAccount
 from models.transaction import Transaction
+from models.share import Share
+from models.currency import Currency
 from flask_restful import Resource
 from sqlalchemy.exc import SQLAlchemyError
-from flask import request
+from flask import request, render_template
 import status
 from datetime import datetime, timedelta
 import requests, json
+from flask_mail import Message
+import pdfkit
 
 class SalesRecordListResource(AuthRequiredResource):
     def get(self):
@@ -104,6 +108,8 @@ class SalesRecordResource(AuthRequiredResource):
                 loan = Loan.query.filter_by(idSalesRecord=id).first()
                 loan = loan.toJson()
                 account = Account.query.get_or_404(loan['idAccount'])
+                currency = Currency.query.filter_by(account.idCurrency)
+                currency = currency.toJson()
                 aux = account.toJson()
                 client = Client.query.get_or_404(loan['idClient'])
                 bankAccount = BankAccount.query.get_or_404(aux['idCurrency'])
@@ -126,15 +132,45 @@ class SalesRecordResource(AuthRequiredResource):
                 account.update()
                 db.session.commit()
                 response = {'ok': 'Prestamo actualizado satisfactoriamente.'}
+
+                from mailing import mail
+
+                if state==1:
+                    msg = Message("Tunke - Prestamo aprobado", sender="tunkestaff@gmail.com", recipients=[prospectiveClient.email1])
+                    msg.body = 'Hola'
+                    sharesA = Share.query.filter_by(idLoan=loan.id)
+                    shares = []
+                    totalAmortization = 0
+                    totalInterest = 0
+                    totalComission = 0
+                    totalShare = 0
+                    for sha in sharesA:
+                        e = sha.toJson()
+                        shares.append(e)
+                        totalAmortization+=e['amortization']
+                        totalInterest+=e['interest']
+                        totalComission+=e['commission']
+                        totalShare+=e['feeAmount']
+                    currencySymbol = currency['currencySymbol']
+                    rendered = render_template('calendar.html', shares=shares, currencySymbol=currencySymbol,totalAmortization=str(round(totalAmortization, 2)),totalInterest=str(round(totalInterest,2)),totalComission=str(round(totalComission,2)),totalShare=str(round(totalShare,2)))
+                    pdf = pdfkit.from_string(rendered , False)
+                    msg.attach("Calendario.pdf","application/pdf",pdf)
+                    loan['id']
+                elif state==2:
+                    msg = Message("Tunke - Prestamo rechazado", sender="tunkestaff@gmail.com", recipients=[prospectiveClient.email1])
+                    msg.body = 'Hola'
+                mail.send(msg)	
                 return response, status.HTTP_200_OK
 
             except SQLAlchemyError as e:
                 db.session.rollback()
                 response = {'error': str(e)}
+                print(e)
                 return response, status.HTTP_400_BAD_REQUEST
 
             except Exception as e:
                 db.session.rollback()
                 response = {'error': str(e)}
+                print(e)
                 return response, status.HTTP_400_BAD_REQUEST
 
