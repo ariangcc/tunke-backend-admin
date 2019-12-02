@@ -48,16 +48,31 @@ class RequestLoanResource(Resource):
 			client.activeLoans = 0 # Esto deberia ser 0 (Soli)
 			client.update()
 			today = datetime.now() - timedelta(hours=5)
+
+			#Calculo de tea y tem
 			tea = interestRate
 			tem = round((((1 + (tea/100)) ** (1/12))-1) * 100,2)
-			amortization = round(amount/totalShares,2)
-			interest = round(tem * amount/100,2)
-			feeAmount = round(amortization + interest + commission,2)
-			totalAmortization = amortization*totalShares
-			totalInterest = interest*totalShares
-			totalComission = commission*totalShares
-			totalShare = share* totalShares
+
+			month = today.month			
+			countExtraMonths = 0
+			numberExtra = 0
+			auxDate = today
+			for i in range(totalShares):
+				auxDate = auxDate + timedelta(days=30)
+				monthAuxDate = auxDate.month
+				if(month==7 or month==12):
+					countExtraMonths+=1
+					
+			if(idShareType==2):
+				numberExtra = countExtraMonths
+			shareBase = round((amount* ( (1+tem)  ** (totalShares + numberExtra) )) * tem / (( (1+tem)  ** (totalShares + numberExtra) ) - 1),2)
 			initialDebt = amount
+			day = today
+			totalAmortization = 0
+			totalInterest = 0
+			totalCommission = commission * totalShares
+			totalShare = 0
+				
 			today = datetime.now() - timedelta(hours=5)
 			day = today
 
@@ -88,10 +103,21 @@ class RequestLoanResource(Resource):
 			
 			#Insert in shares
 			for i in range(totalShares):
-				share = Share(initialBalance=initialDebt,amortization=amortization,interest=interest,commission=commission,feeAmount=feeAmount,dueDate=day,idLoan=loan.id,shareNumber=i+1)
-				share.add(share)
-				initialDebt = initialDebt - amortization
+				auxShareBase = shareBase
+				interest = round(initialDebt * tem,2)
 				day = day + timedelta(days=30)
+				if(idShareType==2 and day.month==7 or day.month==12):
+					auxShareBase = round(shareBase*2,2)
+				amortization = auxShareBase - interest
+				if(i == totalShares-1):
+					amortization = initialDebt
+				feeAmount = amortization + commission + interest
+				initialDebt = initialDebt - amortization
+				totalAmortization+=amortization
+				totalInterest+=interest
+				totalShare+=feeAmount
+				share = Share(initialBalance=initialDebt,amortization=amortization,interest=interest,commission=commission,feeAmount=feeAmount,dueDate,day,idLoan=loan.id,shareNumber=i+1)
+				share.add(share)
 
 			#Insert in transaction
 			transaction = Transaction(datetime=today,amount=amount,idAccount=idAccount,idBankAccount=campaign.idCurrency,active=1)
