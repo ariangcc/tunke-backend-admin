@@ -150,6 +150,9 @@ class BlackListListResource(AuthRequiredResource):
 
                     if not isinstance(birthDate, datetime):
                         birthDate = datetime.now() - timedelta(days=7300)
+
+                    if birthDate == pd.NaT:
+                        birthDate = None
                         
                     if documentNumber:
                         blacklist = Blacklist.query.filter_by(documentNumber=documentNumber).first()
