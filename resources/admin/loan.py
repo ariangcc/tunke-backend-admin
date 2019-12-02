@@ -102,7 +102,32 @@ class LoanListResource(AuthRequiredResource):
 			client.activeLoans = 1
 			client.update()
 
-			salesRecord = SalesRecord(origin='Ventanilla', requestDate=datetime.now() - timedelta(hours=5), idRecordStatus=3,active=1,idClient=idClient,idProduct=2)
+			today = datetime.now() - timedelta(hours=5)
+			tea = interestRate
+			tem = (((1 + (tea/100)) ** (1/12))-1)
+			month = today.month			
+			countExtraMonths = 0
+			numberExtra = 0
+			auxDate = today
+			for i in range(totalShares):
+				auxDate = auxDate + timedelta(days=30)
+				monthAuxDate = auxDate.month
+				if(monthAuxDate==7 or monthAuxDate==12):
+					countExtraMonths+=1
+
+			if(idShareType==2):
+				numberExtra = countExtraMonths
+
+			shareBase = round(	(amount * ( (1+tem) ** (totalShares + numberExtra) ) * tem) / ( ((1+tem) ** (totalShares + numberExtra)) - 1 ), 2)
+			initialDebt = amount
+			day = today
+			totalAmortization = 0
+			totalInterest = 0
+			totalCommission = commission * totalShares
+			totalShare = 0
+			
+
+			salesRecord = SalesRecord(origin='Ventanilla', requestDate=today, idRecordStatus=3,active=1,idClient=idClient,idProduct=2)
 			salesRecord.add(salesRecord)
 			db.session.flush()
 
@@ -113,7 +138,27 @@ class LoanListResource(AuthRequiredResource):
 			#Prestamo con campaña para clientes sin campaña
 			loan = Loan(totalShares=totalShares,amount=amount,interestRate=interestRate,idLead=lead.id,idClient=idClient,idSalesRecord=salesRecord.id,idShareType=idShareType,active=1,idAccount=idAccount,share=share,commission=commission)
 			loan.add(loan)
-			
+			db.session.flush()
+
+			#Insert in shares
+			for i in range(totalShares):
+				auxShareBase = shareBase
+				interest = round(initialDebt * tem,2)
+				day = day + timedelta(days=30)
+				if(idShareType == 2):
+					if(day.month==7 or day.month==12):
+						auxShareBase = round(shareBase*2,2)
+				amortization = auxShareBase - interest
+				if(i == totalShares-1):
+					amortization = initialDebt
+				feeAmount = amortization + commission + interest
+				totalAmortization+=amortization
+				totalInterest+=interest
+				totalShare+=feeAmount
+				share = Share(initialBalance=initialDebt,amortization=amortization,interest=interest,commission=commission,feeAmount=feeAmount,dueDate=day,idLoan=loan.id,shareNumber=i+1)
+				share.add(share)
+				initialDebt = initialDebt - amortization
+				
 			db.session.commit()
 			
 			regLoan = Loan.query.get(loan.id)

@@ -75,7 +75,6 @@ class RequestLoanResource(Resource):
 			totalShare = 0
 				
 			today = datetime.now() - timedelta(hours=5)
-			day = today
 
 			#Obteniendo campaign
 			campaign = Campaign.query.get_or_404(idCampaign)
