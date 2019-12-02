@@ -62,7 +62,7 @@ class RequestLoanResource(Resource):
 				monthAuxDate = auxDate.month
 				if(month==7 or month==12):
 					countExtraMonths+=1
-					
+
 			if(idShareType==2):
 				numberExtra = countExtraMonths
 			shareBase = round((amount* ( (1+tem)  ** (totalShares + numberExtra) )) * tem / (( (1+tem)  ** (totalShares + numberExtra) ) - 1),2)
@@ -116,7 +116,7 @@ class RequestLoanResource(Resource):
 				totalAmortization+=amortization
 				totalInterest+=interest
 				totalShare+=feeAmount
-				share = Share(initialBalance=initialDebt,amortization=amortization,interest=interest,commission=commission,feeAmount=feeAmount,dueDate,day,idLoan=loan.id,shareNumber=i+1)
+				share = Share(initialBalance=initialDebt,amortization=amortization,interest=interest,commission=commission,feeAmount=feeAmount,dueDate=day,idLoan=loan.id,shareNumber=i+1)
 				share.add(share)
 
 			#Insert in transaction
