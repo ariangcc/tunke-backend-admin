@@ -60,7 +60,7 @@ class RequestLoanResource(Resource):
 			for i in range(totalShares):
 				auxDate = auxDate + timedelta(days=30)
 				monthAuxDate = auxDate.month
-				if(month==7 or month==12):
+				if(monthAuxDate==7 or monthAuxDate==12):
 					countExtraMonths+=1
 
 			if(idShareType==2):
