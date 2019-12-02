@@ -139,7 +139,7 @@ class SalesRecordResource(AuthRequiredResource):
                 if state==1:
                     msg = Message("Tunke - Prestamo aprobado", sender="tunkestaff@gmail.com", recipients=[prospectiveClient.email1])
                     msg.body = 'Hola'
-                    sharesA = Share.query.filter_by(idLoan=loan.id)
+                    sharesA = Share.query.filter_by(idLoan=loan['id'])
                     shares = []
                     totalAmortization = 0
                     totalInterest = 0
@@ -156,7 +156,6 @@ class SalesRecordResource(AuthRequiredResource):
                     rendered = render_template('calendar.html', shares=shares, currencySymbol=currencySymbol,totalAmortization=str(round(totalAmortization, 2)),totalInterest=str(round(totalInterest,2)),totalComission=str(round(totalComission,2)),totalShare=str(round(totalShare,2)))
                     pdf = pdfkit.from_string(rendered , False)
                     msg.attach("Calendario.pdf","application/pdf",pdf)
-                    loan['id']
                 elif state==2:
                     msg = Message("Tunke - Prestamo rechazado", sender="tunkestaff@gmail.com", recipients=[prospectiveClient.email1])
                     msg.body = 'Hola'
