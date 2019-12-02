@@ -184,7 +184,7 @@ class LeadListResource(AuthRequiredResource):
                     response['badReasons'].append("Esta tasa de interes es invalida")
                     continue
                 
-                leads = Lead.query.filter_by(idClient=idClient)
+                leads = Lead.query.filter_by(idClient=client.id)
                 maxLoan = float(maximumAmount)
                 for lead in leads:
                     maxLoan = max(maxLoan, lead.maximumLoan)
