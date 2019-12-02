@@ -65,7 +65,7 @@ class RequestLoanResource(Resource):
 
 			if(idShareType==2):
 				numberExtra = countExtraMonths
-			shareBase = round((amount* ( (1+tem)  ** (totalShares + numberExtra) )) * tem / (( (1+tem)  ** (totalShares + numberExtra) ) - 1),2)
+			shareBase = round(	(amount * ( (1+tem) ** (totalShares + numberExtra) ) * tem) / ( ((1+tem) ** (totalShares + numberExtra)) - 1 ), 2)
 			print(shareBase)
 			initialDebt = amount
 			day = today
