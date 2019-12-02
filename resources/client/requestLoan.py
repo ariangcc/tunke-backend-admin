@@ -51,7 +51,7 @@ class RequestLoanResource(Resource):
 
 			#Calculo de tea y tem
 			tea = interestRate
-			tem = round((((1 + (tea/100)) ** (1/12))-1) ,2)
+			tem = (((1 + (tea/100)) ** (1/12))-1)
 			print('Tem' , tem)
 			month = today.month			
 			countExtraMonths = 0
