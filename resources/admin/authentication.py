@@ -20,6 +20,7 @@ class SignupResource(Resource):
 		email = requestDict['email']
 		password = requestDict['password']
 		idProfile = requestDict['idProfile']
+		name = requestDict['name']
 
 		user = User.query.filter_by(email=email).first()
 		
@@ -33,7 +34,7 @@ class SignupResource(Resource):
 			resp = {"error": "Please check password strength. It should have at least 5 characters, 1 uppercase letter, 1 number and 1 special character."}
 			return resp, status.HTTP_400_BAD_REQUEST
 
-		newUser = User(email=email, password=generate_password_hash(password, method='sha256'), idProfile=idProfile)
+		newUser = User(email=email, password=generate_password_hash(password, method='sha256'), idProfile=idProfile, name=name)
 
 		try:
 			db.session.add(newUser)
