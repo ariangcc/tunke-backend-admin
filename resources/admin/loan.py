@@ -85,15 +85,15 @@ class LoanListResource(AuthRequiredResource):
 				response = {'error': 'No input data provided'}
 				return response, status.HTTP_400_BAD_REQUEST
 
-			idClient = requestDict['idClient']
-			totalShares = requestDict['totalShares']
-			amount = requestDict['amount']
-			interestRate = requestDict['interestRate']
-			idShareType = requestDict['idShareType']
-			idAccount = requestDict['idAccount']
-			share = requestDict['share']
-			commission = requestDict['commission']
-			idCampaign = requestDict['idCampaign']
+			idClient = int(requestDict['idClient'])
+			totalShares = int(requestDict['totalShares'])
+			amount = float(requestDict['amount'])
+			interestRate = float(requestDict['interestRate'])
+			idShareType = int(requestDict['idShareType'])
+			idAccount = int(requestDict['idAccount'])
+			share = float(requestDict['share'])
+			commission = float(requestDict['commission'])
+			idCampaign = int(requestDict['idCampaign'])
 
 			client = Client.query.get_or_404(idClient)
 			if client.activeLoans==1:
