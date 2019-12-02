@@ -138,7 +138,7 @@ class SalesRecordResource(AuthRequiredResource):
 
                 if state==1:
                     msg = Message("Tunke - Prestamo aprobado", sender="tunkestaff@gmail.com", recipients=[prospectiveClient.email1])
-                    msg.body = 'Hola'
+                    msg.body = 'Enhorabuena, tu prestamo fue aprobado'
                     sharesA = Share.query.filter_by(idLoan=loan['idLoan'])
                     shares = []
                     totalAmortization = 0
@@ -158,7 +158,7 @@ class SalesRecordResource(AuthRequiredResource):
                     msg.attach("Calendario.pdf","application/pdf",pdf)
                 elif state==2:
                     msg = Message("Tunke - Prestamo rechazado", sender="tunkestaff@gmail.com", recipients=[prospectiveClient.email1])
-                    msg.body = 'Hola'
+                    msg.body = 'Lo sentimos, tu prestamo fue rechazado. Acercarse a las oficinas para mas informacion'
                 mail.send(msg)	
                 return response, status.HTTP_200_OK
 

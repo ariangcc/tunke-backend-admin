@@ -151,7 +151,7 @@ class RequestLoanResource(Resource):
 				shares.append(e)
 			from mailing import mail
 			msg = Message("Tunke - Prestamo exitoso", sender="tunkestaff@gmail.com", recipients=[prospectiveClient.email1])
-			msg.body = 'Hola'
+			msg.body = 'Enhorabuena, tu prestamo se realizo satisfactoriamente'
 			fullName = person.firstName + ' ' + person.fatherLastname
 			accNumber = str(account.accountNumber)
 			curName = str(currency.currencyName)
