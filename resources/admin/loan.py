@@ -158,7 +158,7 @@ class LoanListResource(AuthRequiredResource):
 				share = Share(initialBalance=initialDebt,amortization=amortization,interest=interest,commission=commission,feeAmount=feeAmount,dueDate=day,idLoan=loan.id,shareNumber=i+1)
 				share.add(share)
 				initialDebt = initialDebt - amortization
-				
+
 			db.session.commit()
 			
 			regLoan = Loan.query.get(loan.id)
@@ -182,6 +182,7 @@ class LoanListResource(AuthRequiredResource):
 		except Exception as e:
 			db.session.rollback()
 			response = {'error': str(e)}
+			print(e)
 			return response, status.HTTP_400_BAD_REQUEST
 
 
