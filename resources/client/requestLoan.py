@@ -71,7 +71,7 @@ class RequestLoanResource(Resource):
 			day = today
 			totalAmortization = 0
 			totalInterest = 0
-			totalCommission = commission * totalShares
+			totalComission = commission * totalShares
 			totalShare = 0
 				
 			today = datetime.now() - timedelta(hours=5)
