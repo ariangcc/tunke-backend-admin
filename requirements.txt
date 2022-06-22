@@ -38,7 +38,7 @@ marshmallow-validators==3.0.0
 mysqlclient==1.4.4
 nexmo==2.4.0
 nose2==0.9.1
-numpy==1.17.4
+numpy==1.22.0
 pandas==0.25.3
 passlib==1.7.1
 password-strength==0.0.3.post2
